@@ -15,8 +15,8 @@ window.onload = function() {
     let bullets = [];
     let mouseX = agent.x;
     let mouseY = agent.y;
-    let agentAngle = 0;          // угол поворота агента (в радианах)
-    let lastMuzzle = { x: agent.x, y: agent.y }; // координаты дула для выстрела
+    let agentAngle = 0;
+    let lastMuzzle = { x: agent.x, y: agent.y };
 
     const MAX_RICOCHETS = 8;
 
@@ -48,7 +48,7 @@ window.onload = function() {
         playSound(1000, 'triangle', 0.04, 0.08);
     }
 
-    // --- УРОВНИ (три штуки) ---
+    // --- УРОВНИ ---
     const levels = [
         // Уровень 1
         {
@@ -64,7 +64,7 @@ window.onload = function() {
                 { x: 100, y: canvas.height / 2 - 60, width: 12, height: 120 },
                 { x: canvas.width - 112, y: canvas.height / 2 - 60, width: 12, height: 120 }
             ],
-            bullets: 5,
+            bullets: 3,
             agent: { x: canvas.width / 2, y: canvas.height - 40 }
         },
         // Уровень 2
@@ -84,7 +84,7 @@ window.onload = function() {
                 { x: 200, y: 300, width: 12, height: 80 },
                 { x: canvas.width - 212, y: 300, width: 12, height: 80 }
             ],
-            bullets: 4,
+            bullets: 3,
             agent: { x: canvas.width / 2, y: canvas.height - 40 }
         },
         // Уровень 3
@@ -103,7 +103,7 @@ window.onload = function() {
                 { x: 160, y: 250, width: 12, height: 100 },
                 { x: canvas.width - 172, y: 250, width: 12, height: 100 }
             ],
-            bullets: 4,
+            bullets: 2,
             agent: { x: canvas.width / 2, y: canvas.height - 40 }
         }
     ];
@@ -119,7 +119,8 @@ window.onload = function() {
 
     function loadLevel(levelIndex) {
         if (levelIndex >= levels.length) {
-            alert('АГЕНТ 67 ВЫПОЛНИЛ МИССИЮ. МЕМ СПАСЁН.');
+            // Все уровни пройдены - победа!
+            alert('AGENT 67 WINS!');
             currentLevel = 0;
             loadLevel(0);
             return;
@@ -141,7 +142,6 @@ window.onload = function() {
         }
 
         restartButton.style.display = 'none';
-        // сбросим угол и дуло на случай перезапуска
         agentAngle = 0;
         lastMuzzle = { x: agent.x, y: agent.y };
     }
@@ -176,10 +176,9 @@ window.onload = function() {
         mouseX = e.clientX - rect.left;
         mouseY = e.clientY - rect.top;
 
-        // Вычисляем угол к мыши (с учётом инверсии Y)
         const dx = mouseX - agent.x;
         const dy = mouseY - agent.y;
-        agentAngle = Math.atan2(-dy, dx); // 0 вправо, растёт против часовой
+        agentAngle = Math.atan2(-dy, dx);
     });
 
     canvas.addEventListener('click', function(e) {
@@ -191,7 +190,6 @@ window.onload = function() {
         const clickX = e.clientX - rect.left;
         const clickY = e.clientY - rect.top;
 
-        // Используем lastMuzzle как точку старта пули
         const dx = clickX - lastMuzzle.x;
         const dy = clickY - lastMuzzle.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
@@ -216,7 +214,7 @@ window.onload = function() {
         fireSound();
     });
 
-    // --- ФИЗИКА СТОЛКНОВЕНИЯ С ПРЯМОУГОЛЬНИКОМ (без изменений) ---
+    // --- ФИЗИКА СТОЛКНОВЕНИЯ ---
     function handleWallCollision(bullet, wall) {
         const closestX = Math.max(wall.x, Math.min(bullet.x, wall.x + wall.width));
         const closestY = Math.max(wall.y, Math.min(bullet.y, wall.y + wall.height));
@@ -297,7 +295,7 @@ window.onload = function() {
         ctx.lineTo(handX, handY);
         ctx.stroke();
 
-        // Пистолет (ствол)
+        // Ствол пистолета
         const barrelLength = 20;
         const barrelEndX = handX + Math.cos(angle) * barrelLength;
         const barrelEndY = handY - Math.sin(angle) * barrelLength;
@@ -322,7 +320,21 @@ window.onload = function() {
         ctx.fillRect(-silencerLength / 2, -silencerWidth / 2, silencerLength, silencerWidth);
         ctx.restore();
 
-        // Координаты дула (кончик глушителя)
+        // Рукоятка пистолета (перпендикулярно стволу вниз)
+        const gripLength = 15;
+        const gripWidth = 5;
+        const gripAngle = angle + Math.PI / 2; // направление вниз
+        const gripCenterX = handX + Math.cos(gripAngle) * gripLength / 2;
+        const gripCenterY = handY - Math.sin(gripAngle) * gripLength / 2;
+
+        ctx.save();
+        ctx.translate(gripCenterX, gripCenterY);
+        ctx.rotate(-gripAngle);
+        ctx.fillStyle = '#444';
+        ctx.fillRect(-gripLength / 2, -gripWidth / 2, gripLength, gripWidth);
+        ctx.restore();
+
+        // Координаты дула
         const muzzleX = barrelEndX + Math.cos(angle) * silencerLength;
         const muzzleY = barrelEndY - Math.sin(angle) * silencerLength;
 
@@ -345,7 +357,7 @@ window.onload = function() {
         ctx.moveTo(x, y - size * 0.3);
         ctx.lineTo(x, y + size * 0.5);
         ctx.stroke();
-        // Руки (в стороны)
+        // Руки
         ctx.beginPath();
         ctx.moveTo(x, y - size * 0.1);
         ctx.lineTo(x - 10, y + size * 0.2);
@@ -361,7 +373,6 @@ window.onload = function() {
 
     // --- ГЛАВНЫЙ ИГРОВОЙ ЦИКЛ ---
     function gameLoop() {
-        // Фон
         ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -386,11 +397,11 @@ window.onload = function() {
             drawEnemy(enemy.x, enemy.y, enemy.size);
         }
 
-        // Агент и получение координат дула
+        // Агент
         const muzzle = drawAgent();
-        lastMuzzle = muzzle;  // запоминаем для выстрела
+        lastMuzzle = muzzle;
 
-        // Прицел (от дула)
+        // Прицел
         if (bulletsLeft > 0 && !levelComplete && !gameOver) {
             ctx.strokeStyle = '#0f0';
             ctx.lineWidth = 2;
@@ -412,17 +423,16 @@ window.onload = function() {
             bullet.x += bullet.vx;
             bullet.y += bullet.vy;
 
-            // Трейл
             bullet.trail.push({ x: bullet.x, y: bullet.y });
             if (bullet.trail.length > 12) bullet.trail.shift();
 
-            // Враги
+            // Попадание во врагов
             for (let enemy of enemies) {
                 if (!enemy.active) continue;
                 const dx = bullet.x - enemy.x;
                 const dy = bullet.y - enemy.y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < bullet.radius + enemy.size * 0.4) { // подгоняем под размер врага
+                if (dist < bullet.radius + enemy.size * 0.4) {
                     enemy.active = false;
                     bullet.ricochets++;
                     ricochetSound();
@@ -458,7 +468,7 @@ window.onload = function() {
                 if (bullet.ricochets > MAX_RICOCHETS) bullet.active = false;
             }
 
-            // Рисуем след
+            // Отрисовка следа
             if (bullet.trail.length > 1) {
                 ctx.strokeStyle = '#0f0';
                 ctx.lineWidth = 2;
@@ -470,7 +480,7 @@ window.onload = function() {
                 ctx.lineTo(bullet.x, bullet.y);
                 ctx.stroke();
             }
-            // Рисуем пулю
+            // Отрисовка пули
             ctx.fillStyle = '#0f0';
             ctx.beginPath();
             ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
