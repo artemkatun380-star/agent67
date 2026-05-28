@@ -64,7 +64,7 @@ window.onload = function() {
                 { x: 100, y: canvas.height / 2 - 60, width: 12, height: 120 },
                 { x: canvas.width - 112, y: canvas.height / 2 - 60, width: 12, height: 120 }
             ],
-            bullets: 3,
+            bullets: 5,
             agent: { x: canvas.width / 2, y: canvas.height - 40 }
         },
         // Уровень 2
@@ -84,7 +84,7 @@ window.onload = function() {
                 { x: 200, y: 300, width: 12, height: 80 },
                 { x: canvas.width - 212, y: 300, width: 12, height: 80 }
             ],
-            bullets: 3,
+            bullets: 4,
             agent: { x: canvas.width / 2, y: canvas.height - 40 }
         },
         // Уровень 3
@@ -103,7 +103,7 @@ window.onload = function() {
                 { x: 160, y: 250, width: 12, height: 100 },
                 { x: canvas.width - 172, y: 250, width: 12, height: 100 }
             ],
-            bullets: 2,
+            bullets: 4,
             agent: { x: canvas.width / 2, y: canvas.height - 40 }
         }
     ];
