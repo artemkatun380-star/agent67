@@ -1,0 +1,49 @@
+/* Сброс */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Courier New', monospace;
+}
+
+canvas {
+    border: 2px solid #0f0;
+    box-shadow: 0 0 20px #0f0;
+    display: block;
+    image-rendering: pixelated; /* Для пиксельного стиля */
+}
+
+#restartButton {
+    position: absolute;
+    top: calc(50% + 60px);
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 12px 32px;
+    font-size: 20px;
+    background: #111;
+    color: #0f0;
+    border: 2px solid #0f0;
+    border-radius: 0;
+    cursor: pointer;
+    display: none;
+    z-index: 10;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 8px #0f0;
+    box-shadow: 0 0 12px #0f0;
+    letter-spacing: 2px;
+}
+
+#restartButton:hover {
+    background: #0f0;
+    color: #000;
+    box-shadow: 0 0 24px #0f0;
+}
