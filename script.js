@@ -491,7 +491,7 @@ window.onload = function() {
                 const dx = bullet.x - enemy.x;
                 const dy = bullet.y - enemy.y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < bullet.radius + enemy.size * 0.4) {
+                if (dist < bullet.radius + enemy.size * 0.5) {
                     enemy.active = false;
                     bullet.ricochets++;
                     ricochetSound();
