@@ -105,7 +105,66 @@ window.onload = function() {
             ],
             bullets: 4,
             agent: { x: canvas.width / 2, y: canvas.height - 40 }
-        }
+        },
+            // Уровень 4: "Треугольник" (сложность 7/10)
+    {
+        enemies: [
+            { x: 180, y: 100, size: 22 },
+            { x: canvas.width - 180, y: 100, size: 22 },
+            { x: canvas.width / 2, y: 200, size: 26 },
+            { x: 120, y: 300, size: 20 },
+            { x: canvas.width - 120, y: 300, size: 20 }
+        ],
+        walls: [
+            // Вертикальная стойка слева, закрывает нижнего левого врага
+            { x: 80, y: 250, width: 12, height: 80 },
+            // Вертикальная стойка справа, закрывает нижнего правого врага
+            { x: canvas.width - 92, y: 250, width: 12, height: 80 },
+            // Горизонтальная балка над центральным врагом — нужно бить рикошетом от верхней границы
+            { x: canvas.width / 2 - 80, y: 160, width: 160, height: 12 }
+        ],
+        bullets: 4,
+        agent: { x: canvas.width / 2, y: canvas.height - 40 }
+    },
+    // Уровень 5: "Коридор смерти" (сложность 7/10)
+    {
+        enemies: [
+            { x: 140, y: 110, size: 22 },
+            { x: canvas.width - 140, y: 110, size: 22 },
+            { x: canvas.width / 2, y: 200, size: 24 },
+            { x: 100, y: 320, size: 20 },
+            { x: canvas.width - 100, y: 320, size: 20 }
+        ],
+        walls: [
+            // Две вертикальные стены образуют узкий коридор, в котором сидит центральный враг
+            { x: canvas.width / 2 - 50, y: 140, width: 12, height: 120 },
+            { x: canvas.width / 2 + 38, y: 140, width: 12, height: 120 },
+            // Горизонтальная перекладина внизу, прикрывает нижних врагов от прямых выстрелов
+            { x: canvas.width / 2 - 100, y: 280, width: 200, height: 12 }
+        ],
+        bullets: 4,
+        agent: { x: canvas.width / 2, y: canvas.height - 40 }
+    },
+    // Уровень 6: "Змейка" (сложность 7/10)
+    {
+        enemies: [
+            { x: 130, y: 80, size: 20 },
+            { x: canvas.width - 130, y: 80, size: 20 },
+            { x: 200, y: 220, size: 24 },
+            { x: canvas.width - 200, y: 220, size: 24 },
+            { x: canvas.width / 2, y: 320, size: 28 }
+        ],
+        walls: [
+            // Левая "ступенька"
+            { x: 100, y: 120, width: 80, height: 12 },
+            // Правая "ступенька" (чуть ниже)
+            { x: canvas.width - 180, y: 150, width: 80, height: 12 },
+            // Центральная перегородка, заставляющая стрелять по сложной траектории
+            { x: canvas.width / 2 - 6, y: 100, width: 12, height: 140 }
+        ],
+        bullets: 3,
+        agent: { x: canvas.width / 2, y: canvas.height - 40 }
+    }
     ];
 
     let currentLevel = 0;
