@@ -24,9 +24,7 @@ window.onload = function () {
       // После изменения размеров перезагружаем текущий уровень,
       // чтобы координаты стен и врагов пересчитались под новый размер.
       // Функция loadLevel определена ниже, поэтому на момент ресайза она доступна.
-      if (typeof loadLevel === 'function' && typeof currentLevel !== 'undefined') {
-          loadLevel(currentLevel);
-      }
+      
   }
 
   // Применяем начальный размер
@@ -35,6 +33,7 @@ window.onload = function () {
   // Слушаем поворот экрана и изменение размера окна
   window.addEventListener('resize', () => {
       adaptCanvasSize();
+      loadLevel(currentLevel);
   });
 
   // --- Агент 67 ---
