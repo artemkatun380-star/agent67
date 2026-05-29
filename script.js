@@ -18,7 +18,7 @@ window.onload = function () {
       } else {
           // ПК или портрет — 80% окна
           canvas.width = window.innerWidth * 0.8;
-          canvas.height = window.innerHeight * 0.8; 
+          canvas.height = window.innerHeight * 0.8;
       }
   }
 
