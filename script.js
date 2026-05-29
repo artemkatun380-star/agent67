@@ -2,6 +2,7 @@ window.onload = function () {
   const canvas = document.getElementById("gameCanvas");
   const ctx = canvas.getContext("2d");
 
+  // --- Объявление игровых переменных (до их использования) ---
   let currentLevel = 0;
   let enemies = [];
   let walls = [];
@@ -9,29 +10,31 @@ window.onload = function () {
   let levelComplete = false;
   let gameOver = false;
 
-    // Функция установки размеров canvas в зависимости от экрана
-  function setCanvasSize() {
+  // --- Адаптивная установка размеров canvas ---
+  function adaptCanvasSize() {
       if (window.innerWidth <= 800 && window.innerWidth > window.innerHeight) {
-          // Телефон в ландшафте — во весь экран
+          // Телефон в ландшафтной ориентации — во весь экран
           canvas.width = window.innerWidth;
           canvas.height = window.innerHeight;
       } else {
-          // ПК или портрет — 80% окна
+          // ПК или портрет — занимаем 80% окна
           canvas.width = window.innerWidth * 0.8;
           canvas.height = window.innerHeight * 0.8;
+      }
+      // После изменения размеров перезагружаем текущий уровень,
+      // чтобы координаты стен и врагов пересчитались под новый размер.
+      // Функция loadLevel определена ниже, поэтому на момент ресайза она доступна.
+      if (typeof loadLevel === 'function' && typeof currentLevel !== 'undefined') {
+          loadLevel(currentLevel);
       }
   }
 
   // Применяем начальный размер
-  setCanvasSize();
+  adaptCanvasSize();
 
-  // Слушаем поворот экрана / ресайз
+  // Слушаем поворот экрана и изменение размера окна
   window.addEventListener('resize', () => {
-      setCanvasSize();
-      // После изменения размеров перезагружаем текущий уровень,
-      // чтобы координаты стен и врагов пересчитались под новый размер.
-      // loadLevel определена ниже, поэтому вызов безопасен.
-      loadLevel(currentLevel);
+      adaptCanvasSize();
   });
 
   // --- Агент 67 ---
@@ -50,7 +53,6 @@ window.onload = function () {
   let lastMuzzle = { x: agent.x, y: agent.y };
 
   const MAX_RICOCHETS = 8;
-
   // --- ЗВУКИ ---
   let audioCtx = null;
   function initAudio() {

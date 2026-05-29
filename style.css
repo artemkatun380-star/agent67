@@ -12,34 +12,19 @@ body {
     height: 100vh;
     overflow: hidden;
     font-family: 'Courier New', monospace;
+    touch-action: none;
 }
 
+/* Стили canvas по умолчанию (для ПК) */
 canvas {
     border: 2px solid #0f0;
     box-shadow: 0 0 20px #0f0;
     display: block;
     image-rendering: pixelated;
+    /* Размеры задаются через canvas.width/height в JS */
 }
 
-/* --- Мобильная адаптация --- */
-@media (max-width: 800px) and (orientation: portrait) {
-    canvas {
-        display: none;          /* скрываем игру в портрете */
-    }
-    #rotateHint {
-        display: flex;          /* показываем подсказку */
-    }
-}
-
-@media (max-width: 800px) and (orientation: landscape) {
-    canvas {
-        display: block;
-        width: 100vw !important;
-        height: 100vh !important;
-    }
-}
-
-/* Стили подсказки */
+/* Подсказка перевернуть телефон (изначально скрыта) */
 #rotateHint {
     position: absolute;
     top: 0;
@@ -48,7 +33,7 @@ canvas {
     height: 100%;
     background: rgba(0, 0, 0, 0.9);
     color: #0f0;
-    display: none;          /* по умолчанию скрыта */
+    display: none;          /* Скрыта по умолчанию */
     justify-content: center;
     align-items: center;
     z-index: 20;
@@ -58,6 +43,32 @@ canvas {
     padding: 20px;
 }
 
+/* Мобильная адаптация (экраны шириной до 800px) */
+@media (max-width: 800px) {
+    /* Вертикальная ориентация: скрываем игру, показываем подсказку */
+    @media (orientation: portrait) {
+        canvas {
+            display: none;
+        }
+        #rotateHint {
+            display: flex;
+        }
+    }
+
+    /* Горизонтальная ориентация: растягиваем canvas на весь экран */
+    @media (orientation: landscape) {
+        canvas {
+            display: block;
+            width: 100vw !important;
+            height: 100vh !important;
+        }
+        #rotateHint {
+            display: none;
+        }
+    }
+}
+
+/* Кнопка "ЗАНОВО" (без изменений) */
 #restartButton {
     position: absolute;
     top: calc(50% + 60px);
