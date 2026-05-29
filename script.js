@@ -2,16 +2,37 @@ window.onload = function () {
   const canvas = document.getElementById("gameCanvas");
   const ctx = canvas.getContext("2d");
 
-  // Адаптивный размер canvas
-if (window.innerWidth <= 800 && window.innerWidth > window.innerHeight) {
-    // Телефон в ландшафтной ориентации — холст на весь экран
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-} else {
-    // ПК или портрет — стандартный размер 80% окна
-    canvas.width = window.innerWidth * 0.8;
-    canvas.height = window.innerHeight * 0.8;
-}
+  let currentLevel = 0;
+  let enemies = [];
+  let walls = [];
+  let bulletsLeft = 0;
+  let levelComplete = false;
+  let gameOver = false;
+
+    // Функция установки размеров canvas в зависимости от экрана
+  function setCanvasSize() {
+      if (window.innerWidth <= 800 && window.innerWidth > window.innerHeight) {
+          // Телефон в ландшафте — во весь экран
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+      } else {
+          // ПК или портрет — 80% окна
+          canvas.width = window.innerWidth * 0.8;
+          canvas.height = window.innerHeight * 0.8;
+      }
+  }
+
+  // Применяем начальный размер
+  setCanvasSize();
+
+  // Слушаем поворот экрана / ресайз
+  window.addEventListener('resize', () => {
+      setCanvasSize();
+      // После изменения размеров перезагружаем текущий уровень,
+      // чтобы координаты стен и врагов пересчитались под новый размер.
+      // loadLevel определена ниже, поэтому вызов безопасен.
+      loadLevel(currentLevel);
+  });
 
   // --- Агент 67 ---
   const agent = {
@@ -218,12 +239,6 @@ if (window.innerWidth <= 800 && window.innerWidth > window.innerHeight) {
     },
   ];
 
-  let currentLevel = 0;
-  let enemies = [];
-  let walls = [];
-  let bulletsLeft = 0;
-  let levelComplete = false;
-  let gameOver = false;
 
   const restartButton = document.getElementById("restartButton");
 

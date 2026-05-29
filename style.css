@@ -1,4 +1,3 @@
-/* Сброс */
 * {
     margin: 0;
     padding: 0;
@@ -20,33 +19,27 @@ canvas {
     box-shadow: 0 0 20px #0f0;
     display: block;
     image-rendering: pixelated;
-    /* На ПК и в горизонтальном положении телефона canvas будет иметь размеры, заданные в JS */
 }
 
-/* --- Мобильная адаптация (ширина экрана ≤ 800px) --- */
-@media (max-width: 800px) {
-    /* В портретной ориентации показываем подсказку, canvas скрываем */
-    @media (orientation: portrait) {
-        canvas {
-            display: none;  /* прячем игру, чтобы не мешала */
-        }
-        #rotateHint {
-            display: flex;  /* показываем подсказку */
-        }
+/* --- Мобильная адаптация --- */
+@media (max-width: 800px) and (orientation: portrait) {
+    canvas {
+        display: none;          /* скрываем игру в портрете */
     }
-
-    /* В горизонтальной ориентации показываем canvas на весь экран */
-    @media (orientation: landscape) {
-        canvas {
-            display: block;
-            width: 100vw !important;
-            height: 100vh !important;
-            /* Рамка и тень остаются */
-        }
+    #rotateHint {
+        display: flex;          /* показываем подсказку */
     }
 }
 
-/* Стили подсказки (общие) */
+@media (max-width: 800px) and (orientation: landscape) {
+    canvas {
+        display: block;
+        width: 100vw !important;
+        height: 100vh !important;
+    }
+}
+
+/* Стили подсказки */
 #rotateHint {
     position: absolute;
     top: 0;
@@ -55,7 +48,7 @@ canvas {
     height: 100%;
     background: rgba(0, 0, 0, 0.9);
     color: #0f0;
-    display: none;          /* скрыта по умолчанию */
+    display: none;          /* по умолчанию скрыта */
     justify-content: center;
     align-items: center;
     z-index: 20;
