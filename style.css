@@ -1,3 +1,4 @@
+/* Сброс */
 * {
     margin: 0;
     padding: 0;
@@ -18,17 +19,50 @@ canvas {
     border: 2px solid #0f0;
     box-shadow: 0 0 20px #0f0;
     display: block;
-    image-rendering: pixelated; /* Для пиксельного стиля */
-    /* По умолчанию размеры определяются атрибутами canvas.width/height, заданными в JS */
+    image-rendering: pixelated;
+    /* На ПК и в горизонтальном положении телефона canvas будет иметь размеры, заданные в JS */
 }
 
-/* На маленьких экранах (ширина до 800px) растягиваем canvas на всю ширину */
+/* --- Мобильная адаптация (ширина экрана ≤ 800px) --- */
 @media (max-width: 800px) {
-    canvas {
-        width: 100% !important;
-        height: auto !important;
-        max-height: 100vh; /* чтобы не вылезал за экран */
+    /* В портретной ориентации показываем подсказку, canvas скрываем */
+    @media (orientation: portrait) {
+        canvas {
+            display: none;  /* прячем игру, чтобы не мешала */
+        }
+        #rotateHint {
+            display: flex;  /* показываем подсказку */
+        }
     }
+
+    /* В горизонтальной ориентации показываем canvas на весь экран */
+    @media (orientation: landscape) {
+        canvas {
+            display: block;
+            width: 100vw !important;
+            height: 100vh !important;
+            /* Рамка и тень остаются */
+        }
+    }
+}
+
+/* Стили подсказки (общие) */
+#rotateHint {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    color: #0f0;
+    display: none;          /* скрыта по умолчанию */
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+    font-family: 'Courier New', monospace;
+    font-size: 24px;
+    text-align: center;
+    padding: 20px;
 }
 
 #restartButton {
@@ -49,31 +83,6 @@ canvas {
     text-shadow: 0 0 8px #0f0;
     box-shadow: 0 0 12px #0f0;
     letter-spacing: 2px;
-}
-/* Подсказка повернуть телефон (видна только в портрете на мобильных) */
-#rotateHint {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    color: #0f0;
-    display: none;               /* скрыт по умолчанию */
-    justify-content: center;
-    align-items: center;
-    z-index: 20;
-    font-family: 'Courier New', monospace;
-    font-size: 24px;
-    text-align: center;
-    padding: 20px;
-}
-
-/* Показываем подсказку только в портретной ориентации на маленьких экранах */
-@media (orientation: portrait) and (max-width: 800px) {
-    #rotateHint {
-        display: flex;           /* включаем видимость */
-    }
 }
 
 #restartButton:hover {

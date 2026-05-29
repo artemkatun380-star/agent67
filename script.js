@@ -2,8 +2,16 @@ window.onload = function () {
   const canvas = document.getElementById("gameCanvas");
   const ctx = canvas.getContext("2d");
 
-  canvas.width = window.innerWidth * 0.8;
-  canvas.height = window.innerHeight * 0.8;
+  // Адаптивный размер canvas
+if (window.innerWidth <= 800 && window.innerWidth > window.innerHeight) {
+    // Телефон в ландшафтной ориентации — холст на весь экран
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+} else {
+    // ПК или портрет — стандартный размер 80% окна
+    canvas.width = window.innerWidth * 0.8;
+    canvas.height = window.innerHeight * 0.8;
+}
 
   // --- Агент 67 ---
   const agent = {
