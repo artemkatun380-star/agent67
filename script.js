@@ -12,9 +12,9 @@ window.onload = function () {
     const levelSelectButton = document.getElementById("levelSelectButton");
 
     // --- Состояние игры ---
-    const TOTAL_LEVELS = 67;  // Максимальное количество уровней
-    let gameState = 'menu';   // 'menu', 'levelSelect', 'playing'
-    let unlockedLevels = [];  // Индексы пройденных уровней (из localStorage)
+    const TOTAL_LEVELS = 67;
+    let gameState = 'menu';
+    let unlockedLevels = [];
 
     // --- Прогресс ---
     function loadProgress() {
@@ -22,7 +22,7 @@ window.onload = function () {
         if (saved) {
             unlockedLevels = JSON.parse(saved);
         } else {
-            unlockedLevels = [];  // Ничего не пройдено
+            unlockedLevels = [];
         }
     }
 
@@ -31,10 +31,9 @@ window.onload = function () {
     }
 
     function isLevelUnlocked(index) {
-        // Уровень доступен, если он есть в массиве levels и либо это первый уровень, либо предыдущий пройден
-        if (index >= levels.length) return false;  // Уровень ещё не создан
-        if (index === 0) return true;              // Первый уровень доступен всегда
-        return unlockedLevels.includes(index - 1); // Предыдущий пройден?
+        if (index >= levels.length) return false;
+        if (index === 0) return true;
+        return unlockedLevels.includes(index - 1);
     }
 
     // --- Управление видимостью экранов ---
@@ -76,7 +75,6 @@ window.onload = function () {
             btn.className = 'level-btn';
             btn.textContent = i + 1;
             if (i >= levels.length) {
-                // Уровень ещё не создан (заглушка)
                 btn.textContent = '?';
                 btn.classList.add('coming-soon');
                 btn.disabled = true;
@@ -91,7 +89,7 @@ window.onload = function () {
         }
     }
 
-    // --- Игровые переменные (оставлены как в "домашней" версии) ---
+    // --- Игровые переменные ---
     canvas.width = window.innerWidth * 0.8;
     canvas.height = window.innerHeight * 0.8;
 
@@ -118,35 +116,48 @@ window.onload = function () {
 
     const MAX_RICOCHETS = 8;
 
-    // --- ЗВУКИ (без изменений) ---
-    let audioCtx = null;
-    function initAudio() {
-        if (!audioCtx) {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-    }
-    function playSound(freq, type, duration, vol = 0.08) {
-        if (!audioCtx) return;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
-    }
-    function fireSound() {
-        playSound(150, "square", 0.08, 0.12);
-        setTimeout(() => playSound(60, "sawtooth", 0.12, 0.08), 30);
-    }
-    function ricochetSound() {
-        playSound(1000, "triangle", 0.04, 0.08);
+    // =============================================
+    // ЗВУКИ (mp3) — общая громкость 30%
+    // =============================================
+    const masterVolume = 0.3;   // <-- ИЗМЕНИ ЭТО ЧИСЛО, ЕСЛИ ЗАХОЧЕШЬ ДРУГУЮ ГРОМКОСТЬ (0.0 – тишина, 1.0 – максимум)
+
+    const soundCache = {};
+
+    function loadSound(name, url) {
+        const audio = new Audio();
+        audio.src = url;
+        audio.preload = 'auto';
+        soundCache[name] = audio;
     }
 
-    // --- КЛАСС ЧАСТИЦЫ (как было) ---
+    function playSound(name, volume = 1.0) {
+        const audio = soundCache[name];
+        if (!audio) return;
+        const clone = audio.cloneNode();
+        clone.volume = volume * masterVolume;   // применяем общую громкость
+        clone.play().catch(e => {
+            // Игнорируем ошибку автовоспроизведения (политика браузера)
+        });
+    }
+
+    // Загружаем файлы (пути относительно index.html)
+    loadSound('shot', 'sounds/shot.mp3');
+    loadSound('ricochet', 'sounds/ricochet.mp3');
+    loadSound('death', 'sounds/death.mp3');
+
+    function fireSound() {
+        playSound('shot', 0.8);
+    }
+
+    function ricochetSound() {
+        playSound('ricochet', 0.5);
+    }
+
+    function deathSound() {
+        playSound('death', 0.9);
+    }
+
+    // --- КЛАСС ЧАСТИЦЫ ---
     class Particle {
         constructor(x, y, color, speed, life, size = 3) {
             this.x = x;
@@ -180,7 +191,7 @@ window.onload = function () {
         }
     }
 
-    // --- УРОВНИ (те самые, что у тебя были) ---
+    // --- УРОВНИ ---
     const levels = [
         // Уровень 1
         {
@@ -326,12 +337,10 @@ window.onload = function () {
         const allDead = enemies.every((enemy) => !enemy.active);
         if (allDead && !levelComplete) {
             levelComplete = true;
-            // Сохраняем прогресс
             if (!unlockedLevels.includes(currentLevel)) {
                 unlockedLevels.push(currentLevel);
                 saveProgress();
             }
-            // Через паузу возвращаемся к выбору уровней
             setTimeout(() => {
                 showLevelSelect();
             }, 1500);
@@ -363,7 +372,7 @@ window.onload = function () {
         showMenu();
     });
 
-    // --- МЫШЬ (без изменений) ---
+    // --- МЫШЬ ---
     canvas.addEventListener("mousemove", function (e) {
         if (gameState !== 'playing') return;
         const rect = canvas.getBoundingClientRect();
@@ -376,7 +385,6 @@ window.onload = function () {
 
     canvas.addEventListener("click", function (e) {
         if (gameState !== 'playing') return;
-        initAudio();
         if (levelComplete || gameOver) return;
         if (bulletsLeft <= 0) return;
 
@@ -408,11 +416,10 @@ window.onload = function () {
         fireSound();
     });
 
-    // --- TOUCH УПРАВЛЕНИЕ (как раньше, только с проверкой gameState) ---
+    // --- TOUCH УПРАВЛЕНИЕ ---
     canvas.addEventListener('touchstart', function(e) {
         if (gameState !== 'playing') return;
         e.preventDefault();
-        initAudio();
         const touch = e.touches[0];
         const rect = canvas.getBoundingClientRect();
         mouseX = touch.clientX - rect.left;
@@ -463,7 +470,7 @@ window.onload = function () {
         mouseY = agent.y;
     }, {passive: false});
 
-    // --- ФИЗИКА (без изменений) ---
+    // --- ФИЗИКА ---
     function handleWallCollision(bullet, wall) {
         const closestX = Math.max(wall.x, Math.min(bullet.x, wall.x + wall.width));
         const closestY = Math.max(wall.y, Math.min(bullet.y, wall.y + wall.height));
@@ -502,7 +509,7 @@ window.onload = function () {
         return false;
     }
 
-    // --- ОТРИСОВКА (функции drawAgent и drawEnemy без изменений) ---
+    // --- ОТРИСОВКА ---
     function drawAgent() {
         const size = agent.size;
         const x = agent.x;
@@ -610,7 +617,7 @@ window.onload = function () {
         ctx.fill();
     }
 
-    // --- ГЛАВНЫЙ ИГРОВОЙ ЦИКЛ (только отрисовка, если игра активна) ---
+    // --- ГЛАВНЫЙ ИГРОВОЙ ЦИКЛ ---
     function gameLoop() {
         if (gameState !== 'playing') {
             requestAnimationFrame(gameLoop);
@@ -671,6 +678,7 @@ window.onload = function () {
                 const dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < bullet.radius + enemy.size * 0.5) {
                     enemy.active = false;
+                    deathSound();
                     for (let j = 0; j < 12; j++) {
                         explosionParticles.push(new Particle(enemy.x, enemy.y, "#ff0044", 3, 15 + Math.random() * 10, 4));
                     }
