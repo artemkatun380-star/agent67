@@ -7,13 +7,24 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="rotateHint">
-        <p>📱 Пожалуйста, переверните телефон<br>в горизонтальное положение</p>
+    <!-- Главное меню -->
+    <div id="menuScreen">
+        <h1>AGENT 67</h1>
+        <button id="playButton">ИГРАТЬ</button>
     </div>
-    <!-- Остальное содержимое: canvas и button -->
 
-    <canvas id="gameCanvas"></canvas>
+    <!-- Выбор уровня -->
+    <div id="levelSelectScreen" style="display: none;">
+        <h2>ВЫБОР УРОВНЯ</h2>
+        <div id="levelGrid"></div>
+        <button id="backButton">НАЗАД</button>
+    </div>
+
+    <!-- Игровой экран -->
+    <canvas id="gameCanvas" style="display: none;"></canvas>
     <button id="restartButton">🔄 ЗАНОВО</button>
+    <button id="levelSelectButton" style="display: none;">📋 ВЫБОР УРОВНЕЙ</button>
+
     <script src="script.js"></script>
 </body>
 </html>

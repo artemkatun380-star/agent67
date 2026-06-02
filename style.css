@@ -12,64 +12,126 @@ body {
     height: 100vh;
     overflow: hidden;
     font-family: 'Courier New', monospace;
-    touch-action: none;
+    color: #0f0;
+    user-select: none;  /* Запрещаем выделение текста */
 }
 
-/* Стили canvas по умолчанию (для ПК) */
+/* Главное меню */
+#menuScreen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+#menuScreen h1 {
+    font-size: 64px;
+    text-shadow: 0 0 20px #0f0;
+    letter-spacing: 8px;
+}
+
+#playButton {
+    font-family: inherit;
+    font-size: 28px;
+    padding: 12px 48px;
+    background: #111;
+    color: #0f0;
+    border: 2px solid #0f0;
+    box-shadow: 0 0 15px #0f0;
+    cursor: pointer;
+    text-shadow: 0 0 8px #0f0;
+    transition: background 0.2s;
+}
+
+#playButton:hover {
+    background: #0f0;
+    color: #000;
+}
+
+/* Экран выбора уровней */
+#levelSelectScreen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+#levelSelectScreen h2 {
+    font-size: 36px;
+    text-shadow: 0 0 10px #0f0;
+}
+
+#levelGrid {
+    display: grid;
+    grid-template-columns: repeat(10, 50px);
+    gap: 8px;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.level-btn {
+    width: 50px;
+    height: 50px;
+    font-family: 'Courier New', monospace;
+    font-size: 18px;
+    background: #111;
+    color: #0f0;
+    border: 1px solid #0f0;
+    box-shadow: 0 0 5px #0f0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.level-btn:hover:not(:disabled) {
+    background: #0f0;
+    color: #000;
+}
+
+.level-btn:disabled {
+    color: #555;
+    border-color: #333;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+.level-btn.coming-soon {
+    color: #333;
+    border-color: #333;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+#backButton {
+    font-family: inherit;
+    font-size: 24px;
+    padding: 10px 40px;
+    background: #111;
+    color: #0f0;
+    border: 2px solid #0f0;
+    box-shadow: 0 0 10px #0f0;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#backButton:hover {
+    background: #0f0;
+    color: #000;
+}
+
+/* Игровой холст */
 canvas {
     border: 2px solid #0f0;
     box-shadow: 0 0 20px #0f0;
     display: block;
     image-rendering: pixelated;
-    /* Размеры задаются через canvas.width/height в JS */
 }
 
-/* Подсказка перевернуть телефон (изначально скрыта) */
-#rotateHint {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    color: #0f0;
-    display: none;          /* Скрыта по умолчанию */
-    justify-content: center;
-    align-items: center;
-    z-index: 20;
-    font-family: 'Courier New', monospace;
-    font-size: 24px;
-    text-align: center;
-    padding: 20px;
-}
-
-/* Мобильная адаптация (экраны шириной до 800px) */
-@media (max-width: 800px) {
-    /* Вертикальная ориентация: скрываем игру, показываем подсказку */
-    @media (orientation: portrait) {
-        canvas {
-            display: none;
-        }
-        #rotateHint {
-            display: flex;
-        }
-    }
-
-    /* Горизонтальная ориентация: растягиваем canvas на весь экран */
-    @media (orientation: landscape) {
-        canvas {
-            display: block;
-            width: 100vw !important;
-            height: 100vh !important;
-        }
-        #rotateHint {
-            display: none;
-        }
-    }
-}
-
-/* Кнопка "ЗАНОВО" (без изменений) */
-#restartButton {
+/* Кнопки в игре */
+#restartButton,
+#levelSelectButton {
     position: absolute;
     top: calc(50% + 60px);
     left: 50%;
@@ -89,7 +151,12 @@ canvas {
     letter-spacing: 2px;
 }
 
-#restartButton:hover {
+#levelSelectButton {
+    top: calc(50% + 120px);  /* Ниже кнопки "Заново" */
+}
+
+#restartButton:hover,
+#levelSelectButton:hover {
     background: #0f0;
     color: #000;
     box-shadow: 0 0 24px #0f0;
