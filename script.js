@@ -97,6 +97,7 @@ window.onload = function () {
   let enemies = [];
   let walls = [];
   let bulletsLeft = 0;
+  let killCount = 0;   // счётчик убийств на уровне
   let levelComplete = false;
   let gameOver = false;
 
@@ -143,7 +144,10 @@ window.onload = function () {
   // Загружаем файлы (пути относительно index.html)
   loadSound("shot", "sounds/shot.mp3");
   loadSound("ricochet", "sounds/ricochet.mp3");
-  loadSound("death", "sounds/death.mp3");
+  // Загружаем звуки убийств
+for (let k = 1; k <= 5; k++) {
+    loadSound('kill' + k, 'sounds/kill' + k + '.mp3');
+}
 
   function fireSound() {
     playSound("shot", 0.8);
@@ -153,9 +157,7 @@ window.onload = function () {
     playSound("ricochet", 0.5);
   }
 
-  function deathSound() {
-    playSound("death", 0.9);
-  }
+  
 
   // --- КЛАСС ЧАСТИЦЫ ---
   class Particle {
@@ -323,6 +325,7 @@ window.onload = function () {
     bullets = [];
     explosionParticles = [];
     sparkParticles = [];
+    killCount = 0;
 
     if (level.agent) {
       agent.x = level.agent.x;
@@ -722,7 +725,10 @@ window.onload = function () {
         // Столкновение окружности пули с прямоугольником
         if (circleRectCollision(bullet, rect)) {
           enemy.active = false;
-          deathSound();
+                              // Звук убийства с порядковым номером
+                    killCount++;
+                    const killSoundName = 'kill' + Math.min(killCount, 5); // если вдруг врагов больше 5, всё равно играем 5-й
+                    playSound(killSoundName, 0.9);
           for (let j = 0; j < 12; j++) {
             explosionParticles.push(
               new Particle(
