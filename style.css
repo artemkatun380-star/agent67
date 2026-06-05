@@ -12,8 +12,8 @@ body {
     height: 100vh;
     overflow: hidden;
     font-family: 'Courier New', monospace;
-    color: #0f0;
-    user-select: none;  /* Запрещаем выделение текста */
+    color: #fff;
+    user-select: none;
 }
 
 /* Главное меню */
@@ -26,25 +26,30 @@ body {
 
 #menuScreen h1 {
     font-size: 64px;
-    text-shadow: 0 0 20px #0f0;
     letter-spacing: 8px;
+    color: #fff;
+    text-shadow: 0 0 10px #888;
 }
 
-#playButton {
+#playButton,
+#backButton,
+#restartButton,
+#levelSelectButton {
     font-family: inherit;
     font-size: 28px;
     padding: 12px 48px;
-    background: #111;
-    color: #0f0;
-    border: 2px solid #0f0;
-    box-shadow: 0 0 15px #0f0;
+    background: #000;
+    color: #fff;
+    border: 2px solid #fff;
     cursor: pointer;
-    text-shadow: 0 0 8px #0f0;
-    transition: background 0.2s;
+    transition: background 0.2s, color 0.2s;
 }
 
-#playButton:hover {
-    background: #0f0;
+#playButton:hover,
+#backButton:hover,
+#restartButton:hover,
+#levelSelectButton:hover {
+    background: #ff0;
     color: #000;
 }
 
@@ -58,7 +63,8 @@ body {
 
 #levelSelectScreen h2 {
     font-size: 36px;
-    text-shadow: 0 0 10px #0f0;
+    color: #fff;
+    text-shadow: 0 0 10px #888;
 }
 
 #levelGrid {
@@ -74,62 +80,42 @@ body {
     height: 50px;
     font-family: 'Courier New', monospace;
     font-size: 18px;
-    background: #111;
-    color: #0f0;
-    border: 1px solid #0f0;
-    box-shadow: 0 0 5px #0f0;
+    background: #000;
+    color: #fff;
+    border: 1px solid #fff;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.2s;
+    transition: background 0.2s, color 0.2s;
 }
 
 .level-btn:hover:not(:disabled) {
-    background: #0f0;
+    background: #ff0;
     color: #000;
 }
 
 .level-btn:disabled {
     color: #555;
-    border-color: #333;
-    box-shadow: none;
+    border-color: #555;
     cursor: not-allowed;
 }
 
 .level-btn.coming-soon {
-    color: #333;
-    border-color: #333;
-    box-shadow: none;
+    color: #555;
+    border-color: #555;
     cursor: not-allowed;
-}
-
-#backButton {
-    font-family: inherit;
-    font-size: 24px;
-    padding: 10px 40px;
-    background: #111;
-    color: #0f0;
-    border: 2px solid #0f0;
-    box-shadow: 0 0 10px #0f0;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-#backButton:hover {
-    background: #0f0;
-    color: #000;
 }
 
 /* Игровой холст */
 canvas {
-    border: 2px solid #0f0;
-    box-shadow: 0 0 20px #0f0;
+    border: 2px solid #fff;
+    box-shadow: 0 0 10px #888;
     display: block;
-    image-rendering: pixelated;
+    image-rendering: auto;
 }
 
-/* Кнопки в игре */
+/* Игровые кнопки (Заново, Выбор уровней) */
 #restartButton,
 #levelSelectButton {
     position: absolute;
@@ -138,26 +124,10 @@ canvas {
     transform: translate(-50%, -50%);
     padding: 12px 32px;
     font-size: 20px;
-    background: #111;
-    color: #0f0;
-    border: 2px solid #0f0;
-    border-radius: 0;
-    cursor: pointer;
     display: none;
     z-index: 10;
-    font-family: 'Courier New', monospace;
-    text-shadow: 0 0 8px #0f0;
-    box-shadow: 0 0 12px #0f0;
-    letter-spacing: 2px;
 }
 
 #levelSelectButton {
-    top: calc(50% + 120px);  /* Ниже кнопки "Заново" */
-}
-
-#restartButton:hover,
-#levelSelectButton:hover {
-    background: #0f0;
-    color: #000;
-    box-shadow: 0 0 24px #0f0;
+    top: calc(50% + 120px);
 }

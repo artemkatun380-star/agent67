@@ -97,15 +97,20 @@ window.onload = function () {
   let enemies = [];
   let walls = [];
   let bulletsLeft = 0;
-  let killCount = 0;   // счётчик убийств на уровне
   let levelComplete = false;
   let gameOver = false;
+  let killCount = 0; // счётчик убийств на уровне
 
+  // Агент: его высота (размер по вертикали), ширина вычисляется по пропорции 1024/1536 ≈ 2/3
   const agent = {
     x: canvas.width / 2,
     y: canvas.height - 40,
-    size: 28,
+    height: 250, // можешь изменить высоту агента здесь
   };
+
+  // Соотношения сторон спрайтов
+  const AGENT_ASPECT = 1024 / 1536; // ширина / высота ≈ 0.6667
+  const ENEMY_ASPECT = 1023 / 1536; // ≈ 0.6660
 
   let bullets = [];
   let explosionParticles = [];
@@ -118,10 +123,9 @@ window.onload = function () {
   const MAX_RICOCHETS = 8;
 
   // =============================================
-  // ЗВУКИ (mp3) — общая громкость 30%
+  // ЗВУКИ (mp3)
   // =============================================
-  const masterVolume = 0.3; // <-- ИЗМЕНИ ЭТО ЧИСЛО, ЕСЛИ ЗАХОЧЕШЬ ДРУГУЮ ГРОМКОСТЬ (0.0 – тишина, 1.0 – максимум)
-
+  const masterVolume = 0.3;
   const soundCache = {};
 
   function loadSound(name, url) {
@@ -135,29 +139,40 @@ window.onload = function () {
     const audio = soundCache[name];
     if (!audio) return;
     const clone = audio.cloneNode();
-    clone.volume = volume * masterVolume; // применяем общую громкость
-    clone.play().catch((e) => {
-      // Игнорируем ошибку автовоспроизведения (политика браузера)
-    });
+    clone.volume = volume * masterVolume;
+    clone.play().catch((e) => {});
   }
 
-  // Загружаем файлы (пути относительно index.html)
   loadSound("shot", "sounds/shot.mp3");
   loadSound("ricochet", "sounds/ricochet.mp3");
-  // Загружаем звуки убийств
-for (let k = 1; k <= 5; k++) {
-    loadSound('kill' + k, 'sounds/kill' + k + '.mp3');
-}
+  for (let k = 1; k <= 5; k++) {
+    loadSound("kill" + k, "sounds/kill" + k + ".mp3");
+  }
 
   function fireSound() {
     playSound("shot", 0.8);
   }
-
   function ricochetSound() {
     playSound("ricochet", 0.5);
   }
 
-  
+  // =============================================
+  // ЗАГРУЗКА ИЗОБРАЖЕНИЙ
+  // =============================================
+  const images = {
+    agent: new Image(),
+    enemy: new Image(),
+    wall: new Image(),
+    background: new Image(),
+    agentBody: new Image(), // <-- ДОБАВЬ ЭТО
+    agentArm: new Image(), // <-- ДОБАВЬ ЭТО
+  };
+  images.agentBody.src = "images/agent_body.png";
+  images.agentArm.src = "images/agent_arm.png";
+  images.agent.src = "images/agent.png";
+  images.enemy.src = "images/enemy.png";
+  images.wall.src = "images/wall.png";
+  images.background.src = "images/bg.png";
 
   // --- КЛАСС ЧАСТИЦЫ ---
   class Particle {
@@ -193,16 +208,16 @@ for (let k = 1; k <= 5; k++) {
     }
   }
 
-  // --- УРОВНИ ---
+  // --- УРОВНИ (size у врагов теперь означает высоту) ---
   const levels = [
     // Уровень 1
     {
       enemies: [
-        { x: 200, y: 100, size: 24 },
-        { x: canvas.width - 200, y: 100, size: 24 },
-        { x: canvas.width / 2, y: 200, size: 28 },
-        { x: 140, y: canvas.height - 150, size: 20 },
-        { x: canvas.width - 140, y: canvas.height - 150, size: 20 },
+        { x: 200, y: 100, size: 120 },
+        { x: canvas.width - 200, y: 100, size: 120 },
+        { x: canvas.width / 2, y: 200, size: 120 },
+        { x: 140, y: canvas.height - 150, size: 120 },
+        { x: canvas.width - 140, y: canvas.height - 150, size: 120 },
       ],
       walls: [
         { x: canvas.width / 2 - 120, y: 140, width: 240, height: 12 },
@@ -220,11 +235,11 @@ for (let k = 1; k <= 5; k++) {
     // Уровень 2
     {
       enemies: [
-        { x: 150, y: 80, size: 20 },
-        { x: canvas.width - 150, y: 80, size: 20 },
-        { x: canvas.width / 2 - 40, y: 200, size: 26 },
-        { x: canvas.width / 2 + 40, y: 200, size: 26 },
-        { x: canvas.width / 2, y: 320, size: 30 },
+        { x: 150, y: 80, size: 120 },
+        { x: canvas.width - 150, y: 80, size: 120 },
+        { x: canvas.width / 2 - 40, y: 200, size: 120 },
+        { x: canvas.width / 2 + 40, y: 200, size: 120 },
+        { x: canvas.width / 2, y: 320, size: 120 },
       ],
       walls: [
         { x: 80, y: 120, width: 100, height: 12 },
@@ -240,11 +255,11 @@ for (let k = 1; k <= 5; k++) {
     // Уровень 3
     {
       enemies: [
-        { x: 120, y: 90, size: 22 },
-        { x: canvas.width - 120, y: 90, size: 22 },
-        { x: 200, y: 220, size: 26 },
-        { x: canvas.width - 200, y: 220, size: 26 },
-        { x: canvas.width / 2, y: 300, size: 30 },
+        { x: 120, y: 90, size: 120 },
+        { x: canvas.width - 120, y: 90, size: 120 },
+        { x: 200, y: 220, size: 120 },
+        { x: canvas.width - 200, y: 220, size: 120 },
+        { x: canvas.width / 2, y: 300, size: 120 },
       ],
       walls: [
         { x: 60, y: 140, width: 140, height: 12 },
@@ -259,11 +274,11 @@ for (let k = 1; k <= 5; k++) {
     // Уровень 4
     {
       enemies: [
-        { x: 180, y: 100, size: 22 },
-        { x: canvas.width - 180, y: 100, size: 22 },
-        { x: canvas.width / 2, y: 200, size: 26 },
-        { x: 120, y: 300, size: 20 },
-        { x: canvas.width - 120, y: 300, size: 20 },
+        { x: 180, y: 100, size: 120 },
+        { x: canvas.width - 180, y: 100, size: 120 },
+        { x: canvas.width / 2, y: 200, size: 120 },
+        { x: 120, y: 300, size: 120 },
+        { x: canvas.width - 120, y: 300, size: 120 },
       ],
       walls: [
         { x: 80, y: 250, width: 12, height: 80 },
@@ -276,11 +291,11 @@ for (let k = 1; k <= 5; k++) {
     // Уровень 5
     {
       enemies: [
-        { x: 140, y: 110, size: 22 },
-        { x: canvas.width - 140, y: 110, size: 22 },
-        { x: canvas.width / 2, y: 200, size: 24 },
-        { x: 100, y: 320, size: 20 },
-        { x: canvas.width - 100, y: 320, size: 20 },
+        { x: 140, y: 110, size: 120 },
+        { x: canvas.width - 140, y: 110, size: 120 },
+        { x: canvas.width / 2, y: 200, size: 120 },
+        { x: 100, y: 320, size: 120 },
+        { x: canvas.width - 100, y: 320, size: 120 },
       ],
       walls: [
         { x: canvas.width / 2 - 50, y: 140, width: 12, height: 120 },
@@ -293,11 +308,11 @@ for (let k = 1; k <= 5; k++) {
     // Уровень 6
     {
       enemies: [
-        { x: 130, y: 80, size: 20 },
-        { x: canvas.width - 130, y: 80, size: 20 },
-        { x: 200, y: 220, size: 24 },
-        { x: canvas.width - 200, y: 220, size: 24 },
-        { x: canvas.width / 2, y: 320, size: 28 },
+        { x: 130, y: 80, size: 120 },
+        { x: canvas.width - 130, y: 80, size: 120 },
+        { x: 200, y: 220, size: 120 },
+        { x: canvas.width - 200, y: 220, size: 120 },
+        { x: canvas.width / 2, y: 320, size: 120 },
       ],
       walls: [
         { x: 100, y: 120, width: 80, height: 12 },
@@ -371,7 +386,6 @@ for (let k = 1; k <= 5; k++) {
     showLevelSelect();
   });
 
-  // --- Кнопки меню ---
   playButton.addEventListener("click", () => {
     showLevelSelect();
   });
@@ -535,119 +549,88 @@ for (let k = 1; k <= 5; k++) {
     return false;
   }
 
-  // --- ОТРИСОВКА ---
-  function drawAgent() {
-    const size = agent.size;
-    const x = agent.x;
-    const y = agent.y;
-    const angle = agentAngle;
+  // --- ОТРИСОВКА АГЕНТА (с учётом пропорций) ---
+  function drawAgentWithArm() {
+    const bodyImg = images.agentBody;
+    const armImg = images.agentArm;
+    const agentHeight = agent.height;
+    const agentWidth = agentHeight * AGENT_ASPECT;
 
-    ctx.strokeStyle = "#0f0";
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(x, y - size * 0.3);
-    ctx.lineTo(x, y + size * 0.5);
-    ctx.stroke();
+    if (!bodyImg.complete || !armImg.complete) {
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(
+        agent.x - agentWidth / 2,
+        agent.y - agentHeight / 2,
+        agentWidth,
+        agentHeight,
+      );
+      return { x: agent.x + agentWidth / 2, y: agent.y };
+    }
 
-    ctx.beginPath();
-    ctx.moveTo(x, y + size * 0.5);
-    ctx.lineTo(x - 8, y + size * 0.9);
-    ctx.moveTo(x, y + size * 0.5);
-    ctx.lineTo(x + 8, y + size * 0.9);
-    ctx.stroke();
-
-    ctx.fillStyle = "#0f0";
-    ctx.beginPath();
-    ctx.arc(x, y - size * 0.5, size * 0.25, 0, Math.PI * 2);
-    ctx.fill();
-
-    const shoulderX = x + Math.cos(angle) * 8;
-    const shoulderY = y - Math.sin(angle) * 8 - size * 0.1;
-    const handX = shoulderX + Math.cos(angle) * 15;
-    const handY = shoulderY - Math.sin(angle) * 15;
-
-    ctx.strokeStyle = "#0f0";
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(shoulderX, shoulderY);
-    ctx.lineTo(handX, handY);
-    ctx.stroke();
-
-    const barrelLength = 20;
-    const barrelEndX = handX + Math.cos(angle) * barrelLength;
-    const barrelEndY = handY - Math.sin(angle) * barrelLength;
-
-    ctx.strokeStyle = "#aaa";
-    ctx.lineWidth = 4;
-    ctx.beginPath();
-    ctx.moveTo(handX, handY);
-    ctx.lineTo(barrelEndX, barrelEndY);
-    ctx.stroke();
-
-    const silencerLength = 12;
-    const silencerWidth = 6;
-    const silencerX = barrelEndX + (Math.cos(angle) * silencerLength) / 2;
-    const silencerY = barrelEndY - (Math.sin(angle) * silencerLength) / 2;
-
-    ctx.save();
-    ctx.translate(silencerX, silencerY);
-    ctx.rotate(-angle);
-    ctx.fillStyle = "#555";
-    ctx.fillRect(
-      -silencerLength / 2,
-      -silencerWidth / 2,
-      silencerLength,
-      silencerWidth,
+    // --- Тело ---
+    ctx.drawImage(
+      bodyImg,
+      agent.x - agentWidth / 2,
+      agent.y - agentHeight / 2,
+      agentWidth,
+      agentHeight,
     );
-    ctx.restore();
 
-    const gripLength = 15;
-    const gripWidth = 5;
-    const gripAngle = angle + Math.PI / 2;
-    const gripCenterX = handX + (Math.cos(gripAngle) * gripLength) / 2;
-    const gripCenterY = handY - (Math.sin(gripAngle) * gripLength) / 2;
+    // --- Плечо (точка, вокруг которой вращается рука) ---
+    const shoulderX = agent.x + agentWidth * -0.05; // 25% ширины вправо от центра
+    const shoulderY = agent.y - agentHeight * 0.12; // 15% высоты вверх от центра
 
+    // --- Реальные размеры arm.png (замени на свои!) ---
+    const realArmWidth = 1024;
+    const realArmHeight = 1536;
+
+    // --- Желаемый размер руки на экране ---
+    const armWidth = agentHeight * 0.55; // длина руки (35% от высоты агента)
+    const armHeight = armWidth * (realArmHeight / realArmWidth); // сохраняем пропорции
+
+    // --- Координаты сустава в оригинале (ты замерил: 312, 787) ---
+    const jointX = 312;
+    const jointY = 787;
+
+    // --- Пересчитываем смещения для масштабированного изображения ---
+    const offsetX = jointX * (armWidth / realArmWidth);
+    const offsetY = jointY * (armHeight / realArmHeight);
+
+    // --- Рисуем руку с поворотом ---
     ctx.save();
-    ctx.translate(gripCenterX, gripCenterY);
-    ctx.rotate(-gripAngle);
-    ctx.fillStyle = "#444";
-    ctx.fillRect(-gripLength / 2, -gripWidth / 2, gripLength, gripWidth);
+    ctx.translate(shoulderX, shoulderY);
+    ctx.rotate(-agentAngle);
+    ctx.drawImage(armImg, -offsetX, -offsetY, armWidth, armHeight);
     ctx.restore();
 
-    const muzzleX = barrelEndX + Math.cos(angle) * silencerLength;
-    const muzzleY = barrelEndY - Math.sin(angle) * silencerLength;
+    // --- Положение дула (конец ствола) ---
+    const muzzleRelX = armWidth - offsetX + 8; // +5 значит прицел сдвинется дальше от плеча
+    const muzzleRelY = armHeight / 2 - offsetY + 24; // -10 поднимет прицел выше  // центр руки по вертикали
+    const cos = Math.cos(agentAngle);
+    const sin = Math.sin(agentAngle);
+    const muzzleX = shoulderX + muzzleRelX * cos - muzzleRelY * sin;
+    const muzzleY = shoulderY - muzzleRelX * sin - muzzleRelY * cos;
 
     return { x: muzzleX, y: muzzleY };
   }
 
-  function drawEnemy(x, y, size) {
-    ctx.strokeStyle = "#ff0044";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(x, y + size * 0.5);
-    ctx.lineTo(x - 6, y + size * 0.9);
-    ctx.moveTo(x, y + size * 0.5);
-    ctx.lineTo(x + 6, y + size * 0.9);
-    ctx.stroke();
+  // --- ОТРИСОВКА ВРАГА (с учётом пропорций) ---
+  function drawEnemySprite(enemy) {
+    const img = images.enemy;
+    const height = enemy.size;
+    const width = height * ENEMY_ASPECT;
+    const x = enemy.x;
+    const y = enemy.y;
 
-    ctx.beginPath();
-    ctx.moveTo(x, y - size * 0.3);
-    ctx.lineTo(x, y + size * 0.5);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(x, y - size * 0.1);
-    ctx.lineTo(x - 10, y + size * 0.2);
-    ctx.moveTo(x, y - size * 0.1);
-    ctx.lineTo(x + 10, y + size * 0.2);
-    ctx.stroke();
-
-    ctx.fillStyle = "#ff0044";
-    ctx.beginPath();
-    ctx.arc(x, y - size * 0.5, size * 0.25, 0, Math.PI * 2);
-    ctx.fill();
+    if (!img.complete) {
+      ctx.fillStyle = "#888";
+      ctx.fillRect(x - width / 2, y - height / 2, width, height);
+      return;
+    }
+    ctx.drawImage(img, x - width / 2, y - height / 2, width, height);
   }
-  // Проверка столкновения окружности (пули) и прямоугольника (врага)
+
+  // --- ПРОВЕРКА СТОЛКНОВЕНИЯ (прямоугольный хитбокс) ---
   function circleRectCollision(bullet, rect) {
     const closestX = Math.max(rect.x, Math.min(bullet.x, rect.x + rect.width));
     const closestY = Math.max(rect.y, Math.min(bullet.y, rect.y + rect.height));
@@ -663,43 +646,61 @@ for (let k = 1; k <= 5; k++) {
       return;
     }
 
-    ctx.fillStyle = "#000";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = "rgba(0, 20, 0, 0.15)";
-    for (let y = 0; y < canvas.height; y += 4) {
-      ctx.fillRect(0, y, canvas.width, 2);
+    // Фон
+    if (images.background.complete) {
+      ctx.drawImage(images.background, 0, 0, canvas.width, canvas.height);
+    } else {
+      ctx.fillStyle = "#000";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    ctx.fillStyle = "#1a1a1a";
-    ctx.strokeStyle = "#0f0";
-    ctx.lineWidth = 2;
-    for (let wall of walls) {
-      ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
-      ctx.strokeRect(wall.x + 1, wall.y + 1, wall.width - 2, wall.height - 2);
+    // Стены с повторяющейся текстурой (уменьшенной)
+    if (images.wall.complete) {
+      for (let wall of walls) {
+        // Создаём временный canvas для масштабирования текстуры
+        const tileSize = 64; // размер плитки (можно менять: 64, 128 и т.д.)
+        const tileCanvas = document.createElement("canvas");
+        tileCanvas.width = tileSize;
+        tileCanvas.height = tileSize;
+        const tileCtx = tileCanvas.getContext("2d");
+        tileCtx.drawImage(images.wall, 0, 0, tileSize, tileSize);
+
+        const pattern = ctx.createPattern(tileCanvas, "repeat");
+        ctx.fillStyle = pattern;
+        ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
+      }
+    } else {
+      for (let wall of walls) {
+        ctx.fillStyle = "#444";
+        ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
+      }
     }
 
+    // Враги
     for (let enemy of enemies) {
       if (!enemy.active) continue;
-      drawEnemy(enemy.x, enemy.y, enemy.size);
+      drawEnemySprite(enemy);
     }
 
-    const muzzle = drawAgent();
+    // Агент
+    const muzzle = drawAgentWithArm();
     lastMuzzle = muzzle;
 
+    // Прицел (жёлтый пунктир, без точки)
     if (bulletsLeft > 0 && !levelComplete && !gameOver) {
-      ctx.strokeStyle = "#0f0";
+      ctx.save();
+      ctx.strokeStyle = "#ff0";
       ctx.lineWidth = 2;
+      ctx.setLineDash([8, 8]);
       ctx.beginPath();
       ctx.moveTo(muzzle.x, muzzle.y);
       ctx.lineTo(mouseX, mouseY);
       ctx.stroke();
-      ctx.fillStyle = "#0f0";
-      ctx.beginPath();
-      ctx.arc(mouseX, mouseY, 5, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.setLineDash([]);
+      ctx.restore();
     }
 
+    // Пули
     for (let i = 0; i < bullets.length; i++) {
       const bullet = bullets[i];
       if (!bullet.active) continue;
@@ -710,31 +711,36 @@ for (let k = 1; k <= 5; k++) {
       bullet.trail.push({ x: bullet.x, y: bullet.y });
       if (bullet.trail.length > 12) bullet.trail.shift();
 
-      // Проверка попадания во врагов (прямоугольный хитбокс)
+      // Попадание во врагов
       for (let enemy of enemies) {
         if (!enemy.active) continue;
 
-        // Прямоугольник врага (подогнан под фигуру)
+        // Ширина врага в пикселях (с учётом пропорций)
+        const enemyWidth = enemy.size * ENEMY_ASPECT;
+        const enemyHeight = enemy.size;
+
+        // Хитбокс: прямоугольник, плотно облегающий фигуру (без лишнего пространства над головой)
         const rect = {
-          x: enemy.x - enemy.size * 0.35,
-          y: enemy.y - enemy.size * 0.6,
-          width: enemy.size * 0.7,
-          height: enemy.size * 1.5,
+          x: enemy.x - enemyWidth * 0.3, // левая граница (чуть уже)
+          y: enemy.y - enemyHeight * 0.25, // верхняя граница (ниже макушки)
+          width: enemyWidth * 0.6, // 60% ширины спрайта
+          height: enemyHeight * 0.8, // 80% высоты (не достаёт до самых ног, но это и не нужно)
         };
 
-        // Столкновение окружности пули с прямоугольником
         if (circleRectCollision(bullet, rect)) {
           enemy.active = false;
-                              // Звук убийства с порядковым номером
-                    killCount++;
-                    const killSoundName = 'kill' + Math.min(killCount, 5); // если вдруг врагов больше 5, всё равно играем 5-й
-                    playSound(killSoundName, 0.9);
+
+          killCount++;
+          const killSoundName = "kill" + Math.min(killCount, 5);
+          playSound(killSoundName, 0.9);
+
+          // Жёлтые частицы взрыва
           for (let j = 0; j < 12; j++) {
             explosionParticles.push(
               new Particle(
                 enemy.x,
                 enemy.y,
-                "#ff0044",
+                "rgb(207, 31, 0)",
                 3,
                 15 + Math.random() * 10,
                 4,
@@ -749,9 +755,9 @@ for (let k = 1; k <= 5; k++) {
           break;
         }
       }
-
       if (!bullet.active) continue;
 
+      // Стены
       for (let wall of walls) {
         if (handleWallCollision(bullet, wall)) {
           bullet.ricochets++;
@@ -762,6 +768,7 @@ for (let k = 1; k <= 5; k++) {
       }
       if (!bullet.active) continue;
 
+      // Границы
       let bounced = false;
       if (bullet.x - bullet.radius <= 0) {
         bullet.x = bullet.radius;
@@ -788,8 +795,9 @@ for (let k = 1; k <= 5; k++) {
         if (bullet.ricochets > MAX_RICOCHETS) bullet.active = false;
       }
 
+      // След пули (жёлтый)
       if (bullet.trail.length > 1) {
-        ctx.strokeStyle = "#0f0";
+        ctx.strokeStyle = "#ff0";
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(bullet.trail[0].x, bullet.trail[0].y);
@@ -799,16 +807,18 @@ for (let k = 1; k <= 5; k++) {
         ctx.lineTo(bullet.x, bullet.y);
         ctx.stroke();
       }
-      ctx.fillStyle = "#0f0";
+      // Пуля (жёлтая)
+      ctx.fillStyle = "#ff0";
       ctx.beginPath();
       ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
       ctx.fill();
-      ctx.shadowColor = "#0f0";
+      ctx.shadowColor = "#ff0";
       ctx.shadowBlur = 8;
       ctx.fill();
       ctx.shadowBlur = 0;
     }
 
+    // Частицы
     for (let i = explosionParticles.length - 1; i >= 0; i--) {
       const p = explosionParticles[i];
       p.update();
@@ -825,21 +835,26 @@ for (let k = 1; k <= 5; k++) {
     bullets = bullets.filter((b) => b.active);
     checkGameOver();
 
-    ctx.fillStyle = "#0f0";
-    ctx.font = '18px "Courier New", monospace';
+    // UI
+    ctx.fillStyle = "#fff";
+    ctx.font = 'bold 20px "Courier New", monospace';
+    ctx.shadowColor = "#000"; // чёрная тень для контраста
+    ctx.shadowBlur = 4;
     ctx.textAlign = "left";
     ctx.fillText(`УРОВЕНЬ ${currentLevel + 1}`, 20, 35);
-    ctx.fillText(`ПАТРОНЫ ${bulletsLeft}`, 20, 60);
+    ctx.fillText(`ПАТРОНЫ ${bulletsLeft}`, 20, 65); // чуть раздвинул, чтобы не слипались
+    ctx.shadowColor = "transparent"; // убираем тень, чтобы не мешала остальному
+    ctx.shadowBlur = 0;
 
     if (levelComplete) {
-      ctx.fillStyle = "#0f0";
-      ctx.font = '36px "Courier New", monospace';
+      ctx.fillStyle = "rgb(0, 212, 0)"; // ярко-зелёный
+      ctx.font = 'bold 48px "Courier New", monospace'; // жирный и крупный
       ctx.textAlign = "center";
       ctx.fillText("УРОВЕНЬ ПРОЙДЕН", canvas.width / 2, canvas.height / 2 - 20);
     }
     if (gameOver) {
-      ctx.fillStyle = "#ff0044";
-      ctx.font = '36px "Courier New", monospace';
+      ctx.fillStyle = "rgb(202, 0, 0)"; // ярко-красный
+      ctx.font = 'bold 48px "Courier New", monospace';
       ctx.textAlign = "center";
       ctx.fillText("ПРОВАЛ", canvas.width / 2, canvas.height / 2 - 20);
     }
