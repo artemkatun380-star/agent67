@@ -349,6 +349,7 @@ window.onload = function () {
       agent.x = canvas.width / 2;
       agent.y = canvas.height - 40;
     }
+    agent.y -= 30;   // поднять агента выше
 
     restartButton.style.display = "none";
     levelSelectButton.style.display = "none";
