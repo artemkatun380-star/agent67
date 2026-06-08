@@ -349,7 +349,7 @@ window.onload = function () {
       agent.x = canvas.width / 2;
       agent.y = canvas.height - 40;
     }
-    agent.y -= 30;   // поднять агента выше
+    agent.y -= 30; // поднять агента выше
 
     restartButton.style.display = "none";
     levelSelectButton.style.display = "none";
@@ -722,10 +722,10 @@ window.onload = function () {
 
         // Хитбокс: прямоугольник, плотно облегающий фигуру (без лишнего пространства над головой)
         const rect = {
-          x: enemy.x - enemyWidth * 0.3, // левая граница (чуть уже)
-          y: enemy.y - enemyHeight * 0.25, // верхняя граница (ниже макушки)
-          width: enemyWidth * 0.6, // 60% ширины спрайта
-          height: enemyHeight * 0.8, // 80% высоты (не достаёт до самых ног, но это и не нужно)
+          x: enemy.x - enemyWidth * 0.28,
+          y: enemy.y - enemyHeight * 0.33,
+          width: enemyWidth * 0.53,
+          height: enemyHeight * 0.72,
         };
 
         if (circleRectCollision(bullet, rect)) {
