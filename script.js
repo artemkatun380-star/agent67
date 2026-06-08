@@ -80,7 +80,10 @@ window.onload = function () {
         btn.disabled = true;
       } else if (isLevelUnlocked(i)) {
         btn.disabled = false;
-        btn.addEventListener("click", () => startLevel(i));
+        btn.addEventListener("click", () => {
+          playClickSound(); // ← звук клика
+          startLevel(i);
+        });
       } else {
         btn.textContent = "🔒";
         btn.disabled = true;
@@ -147,6 +150,10 @@ window.onload = function () {
   loadSound("ricochet", "sounds/ricochet.mp3");
   for (let k = 1; k <= 5; k++) {
     loadSound("kill" + k, "sounds/kill" + k + ".mp3");
+  }
+  loadSound("click", "sounds/click.mp3");
+  function playClickSound() {
+    playSound("click", 0.7); // громкость можно менять (0.7 = 70%)
   }
 
   function fireSound() {
@@ -220,12 +227,12 @@ window.onload = function () {
         { x: canvas.width - 140, y: canvas.height - 150, size: 120 },
       ],
       walls: [
-        { x: canvas.width / 2 - 120, y: 140, width: 240, height: 12 },
-        { x: 100, y: canvas.height / 2 - 60, width: 12, height: 120 },
+        { x: canvas.width / 2 - 120, y: 140, width: 240, height: 15 },
+        { x: 100, y: canvas.height / 2 - 60, width: 15, height: 120 },
         {
           x: canvas.width - 112,
           y: canvas.height / 2 - 60,
-          width: 12,
+          width: 15,
           height: 120,
         },
       ],
@@ -242,12 +249,12 @@ window.onload = function () {
         { x: canvas.width / 2, y: 320, size: 120 },
       ],
       walls: [
-        { x: 80, y: 120, width: 100, height: 12 },
-        { x: canvas.width - 180, y: 120, width: 100, height: 12 },
-        { x: canvas.width / 2 - 6, y: 160, width: 12, height: 100 },
-        { x: canvas.width / 2 - 80, y: 260, width: 160, height: 12 },
-        { x: 200, y: 300, width: 12, height: 80 },
-        { x: canvas.width - 212, y: 300, width: 12, height: 80 },
+        { x: 80, y: 120, width: 100, height: 15 },
+        { x: canvas.width - 180, y: 120, width: 100, height: 15 },
+        { x: canvas.width / 2 - 6, y: 160, width: 15, height: 100 },
+        { x: canvas.width / 2 - 80, y: 260, width: 160, height: 15 },
+        { x: 200, y: 300, width: 15, height: 80 },
+        { x: canvas.width - 212, y: 300, width: 15, height: 80 },
       ],
       bullets: 4,
       agent: { x: canvas.width / 2, y: canvas.height - 40 },
@@ -262,11 +269,11 @@ window.onload = function () {
         { x: canvas.width / 2, y: 300, size: 120 },
       ],
       walls: [
-        { x: 60, y: 140, width: 140, height: 12 },
-        { x: canvas.width - 200, y: 140, width: 140, height: 12 },
-        { x: canvas.width / 2 - 6, y: 100, width: 12, height: 150 },
-        { x: 160, y: 250, width: 12, height: 100 },
-        { x: canvas.width - 172, y: 250, width: 12, height: 100 },
+        { x: 60, y: 140, width: 140, height: 15 },
+        { x: canvas.width - 200, y: 140, width: 140, height: 15 },
+        { x: canvas.width / 2 - 6, y: 100, width: 15, height: 150 },
+        { x: 160, y: 250, width: 15, height: 100 },
+        { x: canvas.width - 172, y: 250, width: 15, height: 100 },
       ],
       bullets: 4,
       agent: { x: canvas.width / 2, y: canvas.height - 40 },
@@ -281,9 +288,9 @@ window.onload = function () {
         { x: canvas.width - 120, y: 300, size: 120 },
       ],
       walls: [
-        { x: 80, y: 250, width: 12, height: 80 },
-        { x: canvas.width - 92, y: 250, width: 12, height: 80 },
-        { x: canvas.width / 2 - 80, y: 160, width: 160, height: 12 },
+        { x: 80, y: 250, width: 15, height: 80 },
+        { x: canvas.width - 92, y: 250, width: 15, height: 80 },
+        { x: canvas.width / 2 - 80, y: 160, width: 160, height: 15 },
       ],
       bullets: 4,
       agent: { x: canvas.width / 2, y: canvas.height - 40 },
@@ -298,9 +305,9 @@ window.onload = function () {
         { x: canvas.width - 100, y: 320, size: 120 },
       ],
       walls: [
-        { x: canvas.width / 2 - 50, y: 140, width: 12, height: 120 },
-        { x: canvas.width / 2 + 38, y: 140, width: 12, height: 120 },
-        { x: canvas.width / 2 - 100, y: 280, width: 200, height: 12 },
+        { x: canvas.width / 2 - 50, y: 140, width: 15, height: 120 },
+        { x: canvas.width / 2 + 38, y: 140, width: 15, height: 120 },
+        { x: canvas.width / 2 - 100, y: 280, width: 200, height: 15 },
       ],
       bullets: 4,
       agent: { x: canvas.width / 2, y: canvas.height - 40 },
@@ -315,9 +322,9 @@ window.onload = function () {
         { x: canvas.width / 2, y: 320, size: 120 },
       ],
       walls: [
-        { x: 100, y: 120, width: 80, height: 12 },
-        { x: canvas.width - 180, y: 150, width: 80, height: 12 },
-        { x: canvas.width / 2 - 6, y: 100, width: 12, height: 140 },
+        { x: 100, y: 120, width: 80, height: 15 },
+        { x: canvas.width - 180, y: 150, width: 80, height: 15 },
+        { x: canvas.width / 2 - 6, y: 100, width: 15, height: 140 },
       ],
       bullets: 4,
       agent: { x: canvas.width / 2, y: canvas.height - 40 },
@@ -380,18 +387,22 @@ window.onload = function () {
   }
 
   restartButton.addEventListener("click", () => {
+    playClickSound();
     loadLevel(currentLevel);
   });
 
   levelSelectButton.addEventListener("click", () => {
+    playClickSound();
     showLevelSelect();
   });
 
   playButton.addEventListener("click", () => {
+    playClickSound();
     showLevelSelect();
   });
 
   backButton.addEventListener("click", () => {
+    playClickSound();
     showMenu();
   });
 
@@ -657,8 +668,8 @@ window.onload = function () {
 
     // Стены с повторяющейся текстурой (уменьшенной)
     // Стены с повторяющейся текстурой и контуром
-if (images.wall.complete) {
-    for (let wall of walls) {
+    if (images.wall.complete) {
+      for (let wall of walls) {
         // Тайлинг (как и было)
         const tileSize = 64;
         const tileCanvas = document.createElement("canvas");
@@ -669,22 +680,22 @@ if (images.wall.complete) {
         const pattern = ctx.createPattern(tileCanvas, "repeat");
         ctx.fillStyle = pattern;
         ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
-        
+
         // Чёрный контур (тонкий)
         ctx.strokeStyle = "#000";
-        ctx.lineWidth = 2;          // 2 пикселя — не жирный, но заметный
+        ctx.lineWidth = 2; // 2 пикселя — не жирный, но заметный
         ctx.strokeRect(wall.x, wall.y, wall.width, wall.height);
-    }
-} else {
-    for (let wall of walls) {
+      }
+    } else {
+      for (let wall of walls) {
         ctx.fillStyle = "#444";
         ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
         // Контур и для серых стен
         ctx.strokeStyle = "#000";
         ctx.lineWidth = 2;
         ctx.strokeRect(wall.x, wall.y, wall.width, wall.height);
+      }
     }
-}
 
     // Враги
     for (let enemy of enemies) {
@@ -715,8 +726,27 @@ if (images.wall.complete) {
       const bullet = bullets[i];
       if (!bullet.active) continue;
 
-      bullet.x += bullet.vx;
-      bullet.y += bullet.vy;
+      // Субстеппинг для точных столкновений
+      const substeps = 4; // можно 3 или 5, чем больше — тем точнее, но чуть медленнее
+      let collided = false;
+      for (let s = 0; s < substeps; s++) {
+        bullet.x += bullet.vx / substeps;
+        bullet.y += bullet.vy / substeps;
+
+        // Проверка стен
+        for (let wall of walls) {
+          if (handleWallCollision(bullet, wall)) {
+            bullet.ricochets++;
+            ricochetSound();
+            if (bullet.ricochets > MAX_RICOCHETS) {
+              bullet.active = false;
+            }
+            collided = true;
+            break;
+          }
+        }
+        if (!bullet.active || collided) break;
+      }
 
       bullet.trail.push({ x: bullet.x, y: bullet.y });
       if (bullet.trail.length > 12) bullet.trail.shift();
