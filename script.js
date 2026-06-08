@@ -656,26 +656,35 @@ window.onload = function () {
     }
 
     // Стены с повторяющейся текстурой (уменьшенной)
-    if (images.wall.complete) {
-      for (let wall of walls) {
-        // Создаём временный canvas для масштабирования текстуры
-        const tileSize = 64; // размер плитки (можно менять: 64, 128 и т.д.)
+    // Стены с повторяющейся текстурой и контуром
+if (images.wall.complete) {
+    for (let wall of walls) {
+        // Тайлинг (как и было)
+        const tileSize = 64;
         const tileCanvas = document.createElement("canvas");
         tileCanvas.width = tileSize;
         tileCanvas.height = tileSize;
         const tileCtx = tileCanvas.getContext("2d");
         tileCtx.drawImage(images.wall, 0, 0, tileSize, tileSize);
-
         const pattern = ctx.createPattern(tileCanvas, "repeat");
         ctx.fillStyle = pattern;
         ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
-      }
-    } else {
-      for (let wall of walls) {
+        
+        // Чёрный контур (тонкий)
+        ctx.strokeStyle = "#000";
+        ctx.lineWidth = 2;          // 2 пикселя — не жирный, но заметный
+        ctx.strokeRect(wall.x, wall.y, wall.width, wall.height);
+    }
+} else {
+    for (let wall of walls) {
         ctx.fillStyle = "#444";
         ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
-      }
+        // Контур и для серых стен
+        ctx.strokeStyle = "#000";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(wall.x, wall.y, wall.width, wall.height);
     }
+}
 
     // Враги
     for (let enemy of enemies) {
