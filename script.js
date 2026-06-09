@@ -1,6 +1,9 @@
 window.onload = function () {
   const canvas = document.getElementById("gameCanvas");
   const ctx = canvas.getContext("2d");
+  let shakeAmount = 0;
+  const SHAKE_DECAY = 0.8; // скорость затухания
+  const INITIAL_SHAKE = 8; // начальная сила (пиксели)
 
   // --- Элементы интерфейса ---
   const menuScreen = document.getElementById("menuScreen");
@@ -447,6 +450,7 @@ window.onload = function () {
     });
 
     bulletsLeft--;
+    shakeAmount = INITIAL_SHAKE;
     fireSound();
   });
 
@@ -513,6 +517,7 @@ window.onload = function () {
             trail: [],
           });
           bulletsLeft--;
+          shakeAmount = INITIAL_SHAKE;
           fireSound();
         }
       }
@@ -639,6 +644,38 @@ window.onload = function () {
       ctx.fillRect(x - width / 2, y - height / 2, width, height);
       return;
     }
+
+    const outlineColor = "#dd0000"; // красный
+    const outlineWidth = 1; // толщина контура (можно менять)
+
+    // Рисуем контур: многократно рисуем спрайт с небольшим сдвигом, залитый красным
+    for (let dx = -outlineWidth; dx <= outlineWidth; dx += 2) {
+      for (let dy = -outlineWidth; dy <= outlineWidth; dy += 2) {
+        // Пропускаем центр, чтобы не рисовать лишнего
+        if (dx === 0 && dy === 0) continue;
+
+        // Создаём временный canvas для окрашивания спрайта в красный
+        const tmpCanvas = document.createElement("canvas");
+        tmpCanvas.width = width;
+        tmpCanvas.height = height;
+        const tmpCtx = tmpCanvas.getContext("2d");
+        tmpCtx.drawImage(img, 0, 0, width, height);
+        tmpCtx.globalCompositeOperation = "source-in";
+        tmpCtx.fillStyle = outlineColor;
+        tmpCtx.fillRect(0, 0, width, height);
+
+        // Рисуем окрашенный спрайт со сдвигом
+        ctx.drawImage(
+          tmpCanvas,
+          x - width / 2 + dx,
+          y - height / 2 + dy,
+          width,
+          height,
+        );
+      }
+    }
+
+    // Сверху рисуем оригинальный спрайт (он перекроет внутреннюю часть контура)
     ctx.drawImage(img, x - width / 2, y - height / 2, width, height);
   }
 
@@ -657,7 +694,16 @@ window.onload = function () {
       requestAnimationFrame(gameLoop);
       return;
     }
-
+    // Обновление тряски камеры (всего canvas)
+    if (shakeAmount > 0.5) {
+      const shakeX = (Math.random() - 0.5) * shakeAmount * 2;
+      const shakeY = (Math.random() - 0.5) * shakeAmount * 2;
+      canvas.style.transform = `translate(${shakeX}px, ${shakeY}px)`;
+      shakeAmount *= SHAKE_DECAY;
+    } else {
+      canvas.style.transform = "translate(0, 0)";
+      shakeAmount = 0;
+    }
     // Фон
     if (images.background.complete) {
       ctx.drawImage(images.background, 0, 0, canvas.width, canvas.height);
