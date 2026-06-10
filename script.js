@@ -126,7 +126,7 @@ window.onload = function () {
   let agentAngle = 0;
   let lastMuzzle = { x: agent.x, y: agent.y };
 
-  const MAX_RICOCHETS = 8;
+  const MAX_RICOCHETS = 5;
 
   // =============================================
   // ЗВУКИ (mp3)
@@ -245,22 +245,24 @@ window.onload = function () {
     // Уровень 2
     {
       enemies: [
-        { x: 150, y: 80, size: 120 },
-        { x: canvas.width - 150, y: 80, size: 120 },
-        { x: canvas.width / 2 - 40, y: 200, size: 120 },
-        { x: canvas.width / 2 + 40, y: 200, size: 120 },
-        { x: canvas.width / 2, y: 320, size: 120 },
+        { x: 180, y: 90, size: 120 },
+        { x: canvas.width - 180, y: 90, size: 120 },
+        { x: canvas.width / 2, y: 210, size: 120 },
+        { x: 160, y: canvas.height - 130, size: 120 },
+        { x: canvas.width - 160, y: canvas.height - 130, size: 120 },
       ],
       walls: [
-        { x: 80, y: 120, width: 100, height: 15 },
-        { x: canvas.width - 180, y: 120, width: 100, height: 15 },
-        { x: canvas.width / 2 - 6, y: 160, width: 15, height: 100 },
-        { x: canvas.width / 2 - 80, y: 260, width: 160, height: 15 },
-        { x: 200, y: 300, width: 15, height: 80 },
-        { x: canvas.width - 212, y: 300, width: 15, height: 80 },
+        { x: canvas.width / 2 - 100, y: 130, width: 200, height: 15 },
+        { x: 110, y: canvas.height / 2 - 40, width: 15, height: 100 },
+        {
+          x: canvas.width - 125,
+          y: canvas.height / 2 - 40,
+          width: 15,
+          height: 100,
+        },
       ],
       bullets: 4,
-      agent: { x: canvas.width / 2, y: canvas.height - 40 },
+      agent: { x: canvas.width / 2 - 200, y: canvas.height - 60 },
     },
     // Уровень 3
     {
@@ -284,19 +286,24 @@ window.onload = function () {
     // Уровень 4
     {
       enemies: [
-        { x: 180, y: 100, size: 120 },
-        { x: canvas.width - 180, y: 100, size: 120 },
-        { x: canvas.width / 2, y: 200, size: 120 },
-        { x: 120, y: 300, size: 120 },
-        { x: canvas.width - 120, y: 300, size: 120 },
+        { x: 200, y: 100, size: 120 }, // верхний левый
+        { x: canvas.width - 200, y: 100, size: 120 }, // верхний правый
+        { x: canvas.width / 2, y: 260, size: 120 }, // центральный под балкой
+        { x: 150, y: canvas.height - 130, size: 120 }, // нижний левый
+        { x: canvas.width - 150, y: canvas.height - 130, size: 120 }, // нижний правый
       ],
       walls: [
-        { x: 80, y: 250, width: 15, height: 80 },
-        { x: canvas.width - 92, y: 250, width: 15, height: 80 },
-        { x: canvas.width / 2 - 80, y: 160, width: 160, height: 15 },
+        { x: 100, y: canvas.height / 2 - 60, width: 15, height: 120 }, // левая вертикальная стойка
+        {
+          x: canvas.width - 115,
+          y: canvas.height / 2 - 60,
+          width: 15,
+          height: 120,
+        }, // правая вертикальная стойка
+        { x: canvas.width / 2 - 100, y: 170, width: 200, height: 15 }, // горизонтальная балка по центру
       ],
       bullets: 4,
-      agent: { x: canvas.width / 2, y: canvas.height - 40 },
+      agent: { x: canvas.width / 2, y: canvas.height - 60 },
     },
     // Уровень 5
     {
@@ -331,6 +338,74 @@ window.onload = function () {
       ],
       bullets: 4,
       agent: { x: canvas.width / 2, y: canvas.height - 40 },
+    },
+    // Уровень 7
+    {
+      enemies: [
+        { x: 250, y: 80, size: 120 }, // верхний левый
+        { x: canvas.width - 250, y: 80, size: 120 }, // верхний правый
+        { x: canvas.width / 2, y: 220, size: 120 }, // центральный
+        { x: 290, y: canvas.height - 150, size: 120 }, // нижний левый
+        { x: canvas.width - 250, y: canvas.height - 150, size: 120 }, // нижний правый
+      ],
+      walls: [
+        { x: 100, y: 130, width: 15, height: 100 }, // левая стойка
+        { x: canvas.width - 115, y: 130, width: 15, height: 100 }, // правая стойка
+        { x: canvas.width / 2 - 100, y: 170, width: 200, height: 15 }, // горизонтальная балка
+      ],
+      bullets: 4,
+      agent: { x: 160, y: canvas.height - 60 },
+    },
+    // Уровень 8
+    {
+      enemies: [
+        { x: 130, y: 90, size: 120 },
+        { x: canvas.width - 130, y: 90, size: 120 },
+        { x: canvas.width / 2 - 60, y: 210, size: 120 },
+        { x: canvas.width / 2 + 60, y: 210, size: 120 },
+        { x: canvas.width / 2, y: 350, size: 120 },
+      ],
+      walls: [
+        { x: canvas.width / 2 - 6, y: 120, width: 15, height: 150 },
+        { x: 80, y: 250, width: 120, height: 15 },
+        { x: canvas.width - 200, y: 250, width: 120, height: 15 },
+      ],
+      bullets: 5,
+      agent: { x: canvas.width / 2 - 100, y: canvas.height - 60 },
+    },
+    // Уровень 9
+    {
+      enemies: [
+        { x: 220, y: 90, size: 120 }, // левый верхний
+        { x: canvas.width - 220, y: 90, size: 120 }, // правый верхний
+        { x: 220, y: canvas.height - 150, size: 120 }, // левый нижний
+        { x: canvas.width - 220, y: canvas.height - 150, size: 120 }, // правый нижний
+        { x: canvas.width / 2, y: 250, size: 120 }, // центральный
+      ],
+      walls: [
+        { x: canvas.width / 2 - 150, y: 140, width: 300, height: 15 }, // верхняя балка
+        { x: canvas.width / 2 - 150, y: 300, width: 300, height: 15 }, // нижняя балка
+      ],
+      bullets: 4,
+      agent: { x: canvas.width / 2 - 150, y: canvas.height - 60 },
+    },
+    // Уровень 10
+    {
+      enemies: [
+        { x: 320, y: 90, size: 120 }, // левый верхний
+        { x: canvas.width - 320, y: 90, size: 120 }, // правый верхний
+        { x: canvas.width / 2, y: 210, size: 120 }, // центральный
+        { x: 320, y: canvas.height - 150, size: 120 }, // левый нижний
+        { x: canvas.width - 320, y: canvas.height - 150, size: 120 }, // правый нижний
+      ],
+      walls: [
+        { x: 150, y: 120, width: 15, height: 100 }, // левая стойка
+        { x: canvas.width - 165, y: 120, width: 15, height: 100 }, // правая стойка
+        { x: canvas.width / 2 - 6, y: 120, width: 15, height: 100 }, // центральная стойка
+        { x: canvas.width / 2 - 120, y: 270, width: 240, height: 15 }, // горизонтальная балка
+      ],
+      bullets: 5,
+      agent: { x: 180, y: canvas.height - 60 },
     },
   ];
 
