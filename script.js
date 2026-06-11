@@ -162,7 +162,7 @@ window.onload = function () {
     playSound("click", 0.7); // громкость можно менять (0.7 = 70%)
   }
   function playVictorySound() {
-    playSound("victory", 0.7);
+    playSound("victory", 0.6);
   }
   function fireSound() {
     playSound("shot", 0.8);
