@@ -8,6 +8,8 @@ window.onload = function () {
   // --- Элементы интерфейса ---
   const menuScreen = document.getElementById("menuScreen");
   const levelSelectScreen = document.getElementById("levelSelectScreen");
+  const victoryScreen = document.getElementById("victoryScreen");
+  const victoryImage = document.getElementById("victoryImage");
   const levelGrid = document.getElementById("levelGrid");
   const playButton = document.getElementById("playButton");
   const backButton = document.getElementById("backButton");
@@ -151,6 +153,7 @@ window.onload = function () {
 
   loadSound("shot", "sounds/shot.mp3");
   loadSound("ricochet", "sounds/ricochet.mp3");
+  loadSound("victory", "sounds/victory.mp3");
   for (let k = 1; k <= 5; k++) {
     loadSound("kill" + k, "sounds/kill" + k + ".mp3");
   }
@@ -158,7 +161,9 @@ window.onload = function () {
   function playClickSound() {
     playSound("click", 0.7); // громкость можно менять (0.7 = 70%)
   }
-
+  function playVictorySound() {
+    playSound("victory", 0.7);
+  }
   function fireSound() {
     playSound("shot", 0.8);
   }
@@ -407,13 +412,891 @@ window.onload = function () {
       bullets: 5,
       agent: { x: 180, y: canvas.height - 60 },
     },
+    // Уровни 11–20
+    // 11
+    {
+      enemies: [
+        { x: 200, y: 100, size: 120 },
+        { x: canvas.width - 200, y: 100, size: 120 },
+        { x: canvas.width / 2, y: 200, size: 120 },
+        { x: 200, y: canvas.height - 300, size: 120 },
+        { x: canvas.width - 200, y: canvas.height - 300, size: 120 },
+      ],
+      walls: [
+        { x: canvas.width / 2 - 100, y: 150, width: 200, height: 15 },
+        { x: 150, y: canvas.height / 2 - 50, width: 15, height: 100 },
+        {
+          x: canvas.width - 165,
+          y: canvas.height / 2 - 50,
+          width: 15,
+          height: 100,
+        },
+      ],
+      bullets: 4,
+      agent: { x: canvas.width / 2, y: canvas.height - 40 },
+    },
+    // 12
+    {
+      enemies: [
+        { x: 250, y: 80, size: 120 },
+        { x: canvas.width - 250, y: 80, size: 120 },
+        { x: canvas.width / 2, y: 180, size: 120 },
+        { x: 250, y: canvas.height - 280, size: 120 },
+        { x: canvas.width - 250, y: canvas.height - 280, size: 120 },
+      ],
+      walls: [
+        { x: 100, y: 130, width: 15, height: 80 },
+        { x: canvas.width - 115, y: 130, width: 15, height: 80 },
+      ],
+      bullets: 4,
+      agent: { x: 170, y: canvas.height - 40 },
+    },
+    // 13
+    {
+      enemies: [
+        { x: 300, y: 110, size: 120 },
+        { x: canvas.width - 300, y: 110, size: 120 },
+        { x: canvas.width / 2, y: 220, size: 120 },
+        { x: 300, y: canvas.height - 270, size: 120 },
+        { x: canvas.width - 300, y: canvas.height - 270, size: 120 },
+      ],
+      walls: [
+        { x: canvas.width / 2 - 80, y: 160, width: 160, height: 15 },
+        { x: 200, y: 250, width: 15, height: 80 },
+        { x: canvas.width - 215, y: 250, width: 15, height: 80 },
+      ],
+      bullets: 4,
+      agent: { x: canvas.width / 2 - 120, y: canvas.height - 40 },
+    },
+    // 14
+    {
+      enemies: [
+        { x: 220, y: 90, size: 120 },
+        { x: canvas.width - 220, y: 90, size: 120 },
+        { x: canvas.width / 2, y: 190, size: 120 },
+        { x: 220, y: canvas.height - 290, size: 120 },
+        { x: canvas.width - 220, y: canvas.height - 290, size: 120 },
+      ],
+      walls: [
+        { x: 120, y: 140, width: 15, height: 90 },
+        { x: canvas.width - 135, y: 140, width: 15, height: 90 },
+        { x: canvas.width / 2 - 90, y: 230, width: 180, height: 15 },
+      ],
+      bullets: 4,
+      agent: { x: 160, y: canvas.height - 40 },
+    },
+    // 15
+    {
+      enemies: [
+        { x: 180, y: 80, size: 120 },
+        { x: canvas.width - 180, y: 80, size: 120 },
+        { x: canvas.width / 2, y: 200, size: 120 },
+        { x: 180, y: canvas.height - 300, size: 120 },
+        { x: canvas.width - 180, y: canvas.height - 300, size: 120 },
+      ],
+      walls: [
+        { x: canvas.width / 2 - 110, y: 150, width: 220, height: 15 },
+        { x: 80, y: 200, width: 15, height: 100 },
+        { x: canvas.width - 95, y: 200, width: 15, height: 100 },
+      ],
+      bullets: 5,
+      agent: { x: canvas.width / 2, y: canvas.height - 40 },
+    },
+    // 16
+    {
+      enemies: [
+        { x: 280, y: 100, size: 120 },
+        { x: canvas.width - 280, y: 100, size: 120 },
+        { x: canvas.width / 2, y: 210, size: 120 },
+        { x: 280, y: canvas.height - 280, size: 120 },
+        { x: canvas.width - 280, y: canvas.height - 280, size: 120 },
+      ],
+      walls: [
+        { x: 150, y: 150, width: 15, height: 80 },
+        { x: canvas.width - 165, y: 150, width: 15, height: 80 },
+      ],
+      bullets: 4,
+      agent: { x: 180, y: canvas.height - 40 },
+    },
+    // 17
+    {
+      enemies: [
+        { x: 200, y: 120, size: 120 },
+        { x: canvas.width - 200, y: 120, size: 120 },
+        { x: canvas.width / 2, y: 240, size: 120 },
+        { x: 200, y: canvas.height - 260, size: 120 },
+        { x: canvas.width - 200, y: canvas.height - 260, size: 120 },
+      ],
+      walls: [
+        { x: canvas.width / 2 - 130, y: 170, width: 260, height: 15 },
+        { x: 100, y: 100, width: 15, height: 80 },
+      ],
+      bullets: 4,
+      agent: { x: canvas.width / 2 - 100, y: canvas.height - 40 },
+    },
+    // 18
+    {
+      enemies: [
+        { x: 320, y: 80, size: 120 },
+        { x: canvas.width - 320, y: 80, size: 120 },
+        { x: canvas.width / 2, y: 180, size: 120 },
+        { x: 320, y: canvas.height - 290, size: 120 },
+        { x: canvas.width - 320, y: canvas.height - 290, size: 120 },
+      ],
+      walls: [
+        { x: 200, y: 130, width: 15, height: 80 },
+        { x: canvas.width - 215, y: 130, width: 15, height: 80 },
+      ],
+      bullets: 4,
+      agent: { x: 150, y: canvas.height - 40 },
+    },
+    // 19
+    {
+      enemies: [
+        { x: 250, y: 100, size: 120 },
+        { x: canvas.width - 250, y: 100, size: 120 },
+        { x: canvas.width / 2, y: 220, size: 120 },
+        { x: 250, y: canvas.height - 270, size: 120 },
+        { x: canvas.width - 250, y: canvas.height - 270, size: 120 },
+      ],
+      walls: [{ x: canvas.width / 2 - 90, y: 160, width: 180, height: 15 }],
+      bullets: 4,
+      agent: { x: canvas.width / 2, y: canvas.height - 40 },
+    },
+    // 20
+    {
+      enemies: [
+        { x: 180, y: 90, size: 120 },
+        { x: canvas.width - 180, y: 90, size: 120 },
+        { x: canvas.width / 2, y: 200, size: 120 },
+        { x: 180, y: canvas.height - 310, size: 120 },
+        { x: canvas.width - 180, y: canvas.height - 310, size: 120 },
+      ],
+      walls: [
+        { x: 100, y: 140, width: 15, height: 80 },
+        { x: canvas.width - 115, y: 140, width: 15, height: 80 },
+        { x: canvas.width / 2 - 80, y: 240, width: 160, height: 15 },
+      ],
+      bullets: 5,
+      agent: { x: 160, y: canvas.height - 40 },
+    },
+    // Уровни 21–30
+    // 21
+    {
+      enemies: [
+        { x: 220, y: 110, size: 120 },
+        { x: canvas.width - 220, y: 110, size: 120 },
+        { x: canvas.width / 2, y: 230, size: 120 },
+        { x: 220, y: canvas.height - 280, size: 120 },
+        { x: canvas.width - 220, y: canvas.height - 280, size: 120 },
+      ],
+      walls: [
+        { x: 140, y: 160, width: 15, height: 80 },
+        { x: canvas.width - 155, y: 160, width: 15, height: 80 },
+      ],
+      bullets: 4,
+      agent: { x: canvas.width / 2 - 80, y: canvas.height - 40 },
+    },
+    // 22
+    {
+      enemies: [
+        { x: 300, y: 80, size: 120 },
+        { x: canvas.width - 300, y: 80, size: 120 },
+        { x: canvas.width / 2, y: 190, size: 120 },
+        { x: 300, y: canvas.height - 300, size: 120 },
+        { x: canvas.width - 300, y: canvas.height - 300, size: 120 },
+      ],
+      walls: [{ x: canvas.width / 2 - 100, y: 140, width: 200, height: 15 }],
+      bullets: 4,
+      agent: { x: 180, y: canvas.height - 40 },
+    },
+    // 23
+    {
+      enemies: [
+        { x: 200, y: 100, size: 120 },
+        { x: canvas.width - 200, y: 100, size: 120 },
+        { x: canvas.width / 2, y: 210, size: 120 },
+        { x: 200, y: canvas.height - 290, size: 120 },
+        { x: canvas.width - 200, y: canvas.height - 290, size: 120 },
+      ],
+      walls: [
+        { x: 100, y: 150, width: 15, height: 80 },
+        { x: canvas.width - 115, y: 150, width: 15, height: 80 },
+        { x: canvas.width / 2 - 110, y: 250, width: 220, height: 15 },
+      ],
+      bullets: 4,
+      agent: { x: canvas.width / 2, y: canvas.height - 40 },
+    },
+    // 24
+    {
+      enemies: [
+        { x: 260, y: 90, size: 120 },
+        { x: canvas.width - 260, y: 90, size: 120 },
+        { x: canvas.width / 2, y: 200, size: 120 },
+        { x: 260, y: canvas.height - 280, size: 120 },
+        { x: canvas.width - 260, y: canvas.height - 280, size: 120 },
+      ],
+      walls: [{ x: 160, y: 140, width: 15, height: 80 }],
+      bullets: 4,
+      agent: { x: 170, y: canvas.height - 40 },
+    },
+    // 25
+    {
+      enemies: [
+        { x: 180, y: 120, size: 120 },
+        { x: canvas.width - 180, y: 120, size: 120 },
+        { x: canvas.width / 2, y: 240, size: 120 },
+        { x: 180, y: canvas.height - 270, size: 120 },
+        { x: canvas.width - 180, y: canvas.height - 270, size: 120 },
+      ],
+      walls: [
+        { x: canvas.width / 2 - 120, y: 170, width: 240, height: 15 },
+        { x: 80, y: 100, width: 15, height: 80 },
+      ],
+      bullets: 5,
+      agent: { x: canvas.width / 2 - 60, y: canvas.height - 40 },
+    },
+    // 26
+    {
+      enemies: [
+        { x: 320, y: 80, size: 120 },
+        { x: canvas.width - 320, y: 80, size: 120 },
+        { x: canvas.width / 2, y: 180, size: 120 },
+        { x: 320, y: canvas.height - 310, size: 120 },
+        { x: canvas.width - 320, y: canvas.height - 310, size: 120 },
+      ],
+      walls: [{ x: 200, y: 130, width: 15, height: 80 }],
+      bullets: 4,
+      agent: { x: 150, y: canvas.height - 40 },
+    },
+    // 27
+    {
+      enemies: [
+        { x: 240, y: 100, size: 120 },
+        { x: canvas.width - 240, y: 100, size: 120 },
+        { x: canvas.width / 2, y: 220, size: 120 },
+        { x: 240, y: canvas.height - 290, size: 120 },
+        { x: canvas.width - 240, y: canvas.height - 290, size: 120 },
+      ],
+      walls: [
+        { x: canvas.width / 2 - 80, y: 160, width: 160, height: 15 },
+        { x: 140, y: 200, width: 15, height: 80 },
+        { x: canvas.width - 155, y: 200, width: 15, height: 80 },
+      ],
+      bullets: 4,
+      agent: { x: canvas.width / 2, y: canvas.height - 40 },
+    },
+    // 28
+    {
+      enemies: [
+        { x: 200, y: 110, size: 120 },
+        { x: canvas.width - 200, y: 110, size: 120 },
+        { x: canvas.width / 2, y: 230, size: 120 },
+        { x: 200, y: canvas.height - 280, size: 120 },
+        { x: canvas.width - 200, y: canvas.height - 280, size: 120 },
+      ],
+      walls: [
+        { x: 120, y: 160, width: 15, height: 80 },
+        { x: canvas.width - 135, y: 160, width: 15, height: 80 },
+      ],
+      bullets: 4,
+      agent: { x: 160, y: canvas.height - 40 },
+    },
+    // 29
+    {
+      enemies: [
+        { x: 280, y: 80, size: 120 },
+        { x: canvas.width - 280, y: 80, size: 120 },
+        { x: canvas.width / 2, y: 190, size: 120 },
+        { x: 280, y: canvas.height - 300, size: 120 },
+        { x: canvas.width - 280, y: canvas.height - 300, size: 120 },
+      ],
+      walls: [{ x: canvas.width / 2 - 100, y: 140, width: 200, height: 15 }],
+      bullets: 4,
+      agent: { x: canvas.width / 2 - 110, y: canvas.height - 40 },
+    },
+    // 30
+    {
+      enemies: [
+        { x: 220, y: 100, size: 120 },
+        { x: canvas.width - 220, y: 100, size: 120 },
+        { x: canvas.width / 2, y: 210, size: 120 },
+        { x: 220, y: canvas.height - 290, size: 120 },
+        { x: canvas.width - 220, y: canvas.height - 290, size: 120 },
+      ],
+      walls: [
+        { x: 100, y: 150, width: 15, height: 80 },
+        { x: canvas.width - 115, y: 150, width: 15, height: 80 },
+        { x: canvas.width / 2 - 90, y: 240, width: 180, height: 15 },
+      ],
+      bullets: 5,
+      agent: { x: 180, y: canvas.height - 40 },
+    },
+    // Уровни 31–40
+    // 31
+    {
+      enemies: [
+        { x: 200, y: 90, size: 120 },
+        { x: canvas.width - 200, y: 90, size: 120 },
+        { x: canvas.width / 2, y: 200, size: 120 },
+        { x: 200, y: canvas.height - 310, size: 120 },
+        { x: canvas.width - 200, y: canvas.height - 310, size: 120 },
+      ],
+      walls: [
+        { x: canvas.width / 2 - 110, y: 150, width: 220, height: 15 },
+        { x: 80, y: 200, width: 15, height: 80 },
+      ],
+      bullets: 4,
+      agent: { x: canvas.width / 2, y: canvas.height - 40 },
+    },
+    // 32
+    {
+      enemies: [
+        { x: 250, y: 80, size: 120 },
+        { x: canvas.width - 250, y: 80, size: 120 },
+        { x: canvas.width / 2, y: 180, size: 120 },
+        { x: 250, y: canvas.height - 290, size: 120 },
+        { x: canvas.width - 250, y: canvas.height - 290, size: 120 },
+      ],
+      walls: [{ x: 150, y: 130, width: 15, height: 80 }],
+      bullets: 4,
+      agent: { x: 170, y: canvas.height - 40 },
+    },
+    // 33
+    {
+      enemies: [
+        { x: 300, y: 100, size: 120 },
+        { x: canvas.width - 300, y: 100, size: 120 },
+        { x: canvas.width / 2, y: 220, size: 120 },
+        { x: 300, y: canvas.height - 280, size: 120 },
+        { x: canvas.width - 300, y: canvas.height - 280, size: 120 },
+      ],
+      walls: [{ x: canvas.width / 2 - 80, y: 160, width: 160, height: 15 }],
+      bullets: 4,
+      agent: { x: canvas.width / 2 - 130, y: canvas.height - 40 },
+    },
+    // 34
+    {
+      enemies: [
+        { x: 220, y: 110, size: 120 },
+        { x: canvas.width - 220, y: 110, size: 120 },
+        { x: canvas.width / 2, y: 230, size: 120 },
+        { x: 220, y: canvas.height - 270, size: 120 },
+        { x: canvas.width - 220, y: canvas.height - 270, size: 120 },
+      ],
+      walls: [
+        { x: 120, y: 160, width: 15, height: 80 },
+        { x: canvas.width - 135, y: 160, width: 15, height: 80 },
+        { x: canvas.width / 2 - 100, y: 250, width: 200, height: 15 },
+      ],
+      bullets: 4,
+      agent: { x: 160, y: canvas.height - 40 },
+    },
+    // 35
+    {
+      enemies: [
+        { x: 180, y: 80, size: 120 },
+        { x: canvas.width - 180, y: 80, size: 120 },
+        { x: canvas.width / 2, y: 200, size: 120 },
+        { x: 180, y: canvas.height - 300, size: 120 },
+        { x: canvas.width - 180, y: canvas.height - 300, size: 120 },
+      ],
+      walls: [
+        { x: canvas.width / 2 - 120, y: 150, width: 240, height: 15 },
+        { x: 100, y: 200, width: 15, height: 80 },
+        { x: canvas.width - 115, y: 200, width: 15, height: 80 },
+      ],
+      bullets: 5,
+      agent: { x: canvas.width / 2, y: canvas.height - 40 },
+    },
+    // 36
+    {
+      enemies: [
+        { x: 280, y: 90, size: 120 },
+        { x: canvas.width - 280, y: 90, size: 120 },
+        { x: canvas.width / 2, y: 190, size: 120 },
+        { x: 280, y: canvas.height - 290, size: 120 },
+        { x: canvas.width - 280, y: canvas.height - 290, size: 120 },
+      ],
+      walls: [{ x: 180, y: 140, width: 15, height: 80 }],
+      bullets: 4,
+      agent: { x: 170, y: canvas.height - 40 },
+    },
+    // 37
+    {
+      enemies: [
+        { x: 200, y: 120, size: 120 },
+        { x: canvas.width - 200, y: 120, size: 120 },
+        { x: canvas.width / 2, y: 240, size: 120 },
+        { x: 200, y: canvas.height - 260, size: 120 },
+        { x: canvas.width - 200, y: canvas.height - 260, size: 120 },
+      ],
+      walls: [{ x: canvas.width / 2 - 90, y: 170, width: 180, height: 15 }],
+      bullets: 4,
+      agent: { x: canvas.width / 2 - 70, y: canvas.height - 40 },
+    },
+    // 38
+    {
+      enemies: [
+        { x: 320, y: 80, size: 120 },
+        { x: canvas.width - 320, y: 80, size: 120 },
+        { x: canvas.width / 2, y: 180, size: 120 },
+        { x: 320, y: canvas.height - 310, size: 120 },
+        { x: canvas.width - 320, y: canvas.height - 310, size: 120 },
+      ],
+      walls: [{ x: 200, y: 130, width: 15, height: 80 }],
+      bullets: 4,
+      agent: { x: 150, y: canvas.height - 40 },
+    },
+    // 39
+    {
+      enemies: [
+        { x: 240, y: 100, size: 120 },
+        { x: canvas.width - 240, y: 100, size: 120 },
+        { x: canvas.width / 2, y: 220, size: 120 },
+        { x: 240, y: canvas.height - 290, size: 120 },
+        { x: canvas.width - 240, y: canvas.height - 290, size: 120 },
+      ],
+      walls: [
+        { x: canvas.width / 2 - 110, y: 160, width: 220, height: 15 },
+        { x: 140, y: 210, width: 15, height: 80 },
+        { x: canvas.width - 155, y: 210, width: 15, height: 80 },
+      ],
+      bullets: 4,
+      agent: { x: canvas.width / 2, y: canvas.height - 40 },
+    },
+    // 40
+    {
+      enemies: [
+        { x: 200, y: 110, size: 120 },
+        { x: canvas.width - 200, y: 110, size: 120 },
+        { x: canvas.width / 2, y: 230, size: 120 },
+        { x: 200, y: canvas.height - 280, size: 120 },
+        { x: canvas.width - 200, y: canvas.height - 280, size: 120 },
+      ],
+      walls: [
+        { x: 120, y: 160, width: 15, height: 80 },
+        { x: canvas.width - 135, y: 160, width: 15, height: 80 },
+      ],
+      bullets: 4,
+      agent: { x: 160, y: canvas.height - 40 },
+    },
+    // Уровни 41–50
+    // 41
+    {
+      enemies: [
+        { x: 280, y: 80, size: 120 },
+        { x: canvas.width - 280, y: 80, size: 120 },
+        { x: canvas.width / 2, y: 190, size: 120 },
+        { x: 280, y: canvas.height - 300, size: 120 },
+        { x: canvas.width - 280, y: canvas.height - 300, size: 120 },
+      ],
+      walls: [{ x: canvas.width / 2 - 100, y: 140, width: 200, height: 15 }],
+      bullets: 4,
+      agent: { x: canvas.width / 2 - 110, y: canvas.height - 40 },
+    },
+    // 42
+    {
+      enemies: [
+        { x: 220, y: 100, size: 120 },
+        { x: canvas.width - 220, y: 100, size: 120 },
+        { x: canvas.width / 2, y: 210, size: 120 },
+        { x: 220, y: canvas.height - 290, size: 120 },
+        { x: canvas.width - 220, y: canvas.height - 290, size: 120 },
+      ],
+      walls: [
+        { x: 100, y: 150, width: 15, height: 80 },
+        { x: canvas.width - 115, y: 150, width: 15, height: 80 },
+        { x: canvas.width / 2 - 90, y: 240, width: 180, height: 15 },
+      ],
+      bullets: 5,
+      agent: { x: 180, y: canvas.height - 40 },
+    },
+    // 43
+    {
+      enemies: [
+        { x: 200, y: 90, size: 120 },
+        { x: canvas.width - 200, y: 90, size: 120 },
+        { x: canvas.width / 2, y: 200, size: 120 },
+        { x: 200, y: canvas.height - 310, size: 120 },
+        { x: canvas.width - 200, y: canvas.height - 310, size: 120 },
+      ],
+      walls: [
+        { x: canvas.width / 2 - 110, y: 150, width: 220, height: 15 },
+        { x: 80, y: 200, width: 15, height: 80 },
+      ],
+      bullets: 4,
+      agent: { x: canvas.width / 2, y: canvas.height - 40 },
+    },
+    // 44
+    {
+      enemies: [
+        { x: 250, y: 80, size: 120 },
+        { x: canvas.width - 250, y: 80, size: 120 },
+        { x: canvas.width / 2, y: 180, size: 120 },
+        { x: 250, y: canvas.height - 290, size: 120 },
+        { x: canvas.width - 250, y: canvas.height - 290, size: 120 },
+      ],
+      walls: [{ x: 150, y: 130, width: 15, height: 80 }],
+      bullets: 4,
+      agent: { x: 170, y: canvas.height - 40 },
+    },
+    // 45
+    {
+      enemies: [
+        { x: 300, y: 100, size: 120 },
+        { x: canvas.width - 300, y: 100, size: 120 },
+        { x: canvas.width / 2, y: 220, size: 120 },
+        { x: 300, y: canvas.height - 280, size: 120 },
+        { x: canvas.width - 300, y: canvas.height - 280, size: 120 },
+      ],
+      walls: [{ x: canvas.width / 2 - 80, y: 160, width: 160, height: 15 }],
+      bullets: 4,
+      agent: { x: canvas.width / 2 - 130, y: canvas.height - 40 },
+    },
+    // 46
+    {
+      enemies: [
+        { x: 220, y: 110, size: 120 },
+        { x: canvas.width - 220, y: 110, size: 120 },
+        { x: canvas.width / 2, y: 230, size: 120 },
+        { x: 220, y: canvas.height - 270, size: 120 },
+        { x: canvas.width - 220, y: canvas.height - 270, size: 120 },
+      ],
+      walls: [
+        { x: 120, y: 160, width: 15, height: 80 },
+        { x: canvas.width - 135, y: 160, width: 15, height: 80 },
+        { x: canvas.width / 2 - 100, y: 250, width: 200, height: 15 },
+      ],
+      bullets: 4,
+      agent: { x: 160, y: canvas.height - 40 },
+    },
+    // 47
+    {
+      enemies: [
+        { x: 180, y: 80, size: 120 },
+        { x: canvas.width - 180, y: 80, size: 120 },
+        { x: canvas.width / 2, y: 200, size: 120 },
+        { x: 180, y: canvas.height - 300, size: 120 },
+        { x: canvas.width - 180, y: canvas.height - 300, size: 120 },
+      ],
+      walls: [
+        { x: canvas.width / 2 - 120, y: 150, width: 240, height: 15 },
+        { x: 100, y: 200, width: 15, height: 80 },
+        { x: canvas.width - 115, y: 200, width: 15, height: 80 },
+      ],
+      bullets: 5,
+      agent: { x: canvas.width / 2, y: canvas.height - 40 },
+    },
+    // 48
+    {
+      enemies: [
+        { x: 280, y: 90, size: 120 },
+        { x: canvas.width - 280, y: 90, size: 120 },
+        { x: canvas.width / 2, y: 190, size: 120 },
+        { x: 280, y: canvas.height - 290, size: 120 },
+        { x: canvas.width - 280, y: canvas.height - 290, size: 120 },
+      ],
+      walls: [{ x: 180, y: 140, width: 15, height: 80 }],
+      bullets: 4,
+      agent: { x: 170, y: canvas.height - 40 },
+    },
+    // 49
+    {
+      enemies: [
+        { x: 200, y: 120, size: 120 },
+        { x: canvas.width - 200, y: 120, size: 120 },
+        { x: canvas.width / 2, y: 240, size: 120 },
+        { x: 200, y: canvas.height - 260, size: 120 },
+        { x: canvas.width - 200, y: canvas.height - 260, size: 120 },
+      ],
+      walls: [{ x: canvas.width / 2 - 90, y: 170, width: 180, height: 15 }],
+      bullets: 4,
+      agent: { x: canvas.width / 2 - 70, y: canvas.height - 40 },
+    },
+    // 50
+    {
+      enemies: [
+        { x: 320, y: 80, size: 120 },
+        { x: canvas.width - 320, y: 80, size: 120 },
+        { x: canvas.width / 2, y: 180, size: 120 },
+        { x: 320, y: canvas.height - 310, size: 120 },
+        { x: canvas.width - 320, y: canvas.height - 310, size: 120 },
+      ],
+      walls: [{ x: 200, y: 130, width: 15, height: 80 }],
+      bullets: 4,
+      agent: { x: 150, y: canvas.height - 40 },
+    },
+    // Уровни 51–60
+    // 51
+    {
+      enemies: [
+        { x: 240, y: 100, size: 120 },
+        { x: canvas.width - 240, y: 100, size: 120 },
+        { x: canvas.width / 2, y: 220, size: 120 },
+        { x: 240, y: canvas.height - 290, size: 120 },
+        { x: canvas.width - 240, y: canvas.height - 290, size: 120 },
+      ],
+      walls: [
+        { x: canvas.width / 2 - 110, y: 160, width: 220, height: 15 },
+        { x: 140, y: 210, width: 15, height: 80 },
+        { x: canvas.width - 155, y: 210, width: 15, height: 80 },
+      ],
+      bullets: 4,
+      agent: { x: canvas.width / 2, y: canvas.height - 40 },
+    },
+    // 52
+    {
+      enemies: [
+        { x: 200, y: 110, size: 120 },
+        { x: canvas.width - 200, y: 110, size: 120 },
+        { x: canvas.width / 2, y: 230, size: 120 },
+        { x: 200, y: canvas.height - 280, size: 120 },
+        { x: canvas.width - 200, y: canvas.height - 280, size: 120 },
+      ],
+      walls: [
+        { x: 120, y: 160, width: 15, height: 80 },
+        { x: canvas.width - 135, y: 160, width: 15, height: 80 },
+      ],
+      bullets: 4,
+      agent: { x: 160, y: canvas.height - 40 },
+    },
+    // 53
+    {
+      enemies: [
+        { x: 280, y: 80, size: 120 },
+        { x: canvas.width - 280, y: 80, size: 120 },
+        { x: canvas.width / 2, y: 190, size: 120 },
+        { x: 280, y: canvas.height - 300, size: 120 },
+        { x: canvas.width - 280, y: canvas.height - 300, size: 120 },
+      ],
+      walls: [{ x: canvas.width / 2 - 100, y: 140, width: 200, height: 15 }],
+      bullets: 4,
+      agent: { x: canvas.width / 2 - 110, y: canvas.height - 40 },
+    },
+    // 54
+    {
+      enemies: [
+        { x: 220, y: 100, size: 120 },
+        { x: canvas.width - 220, y: 100, size: 120 },
+        { x: canvas.width / 2, y: 210, size: 120 },
+        { x: 220, y: canvas.height - 290, size: 120 },
+        { x: canvas.width - 220, y: canvas.height - 290, size: 120 },
+      ],
+      walls: [
+        { x: 100, y: 150, width: 15, height: 80 },
+        { x: canvas.width - 115, y: 150, width: 15, height: 80 },
+        { x: canvas.width / 2 - 90, y: 240, width: 180, height: 15 },
+      ],
+      bullets: 5,
+      agent: { x: 180, y: canvas.height - 40 },
+    },
+    // 55
+    {
+      enemies: [
+        { x: 200, y: 90, size: 120 },
+        { x: canvas.width - 200, y: 90, size: 120 },
+        { x: canvas.width / 2, y: 200, size: 120 },
+        { x: 200, y: canvas.height - 310, size: 120 },
+        { x: canvas.width - 200, y: canvas.height - 310, size: 120 },
+      ],
+      walls: [
+        { x: canvas.width / 2 - 110, y: 150, width: 220, height: 15 },
+        { x: 80, y: 200, width: 15, height: 80 },
+      ],
+      bullets: 4,
+      agent: { x: canvas.width / 2, y: canvas.height - 40 },
+    },
+    // 56
+    {
+      enemies: [
+        { x: 250, y: 80, size: 120 },
+        { x: canvas.width - 250, y: 80, size: 120 },
+        { x: canvas.width / 2, y: 180, size: 120 },
+        { x: 250, y: canvas.height - 290, size: 120 },
+        { x: canvas.width - 250, y: canvas.height - 290, size: 120 },
+      ],
+      walls: [{ x: 150, y: 130, width: 15, height: 80 }],
+      bullets: 4,
+      agent: { x: 170, y: canvas.height - 40 },
+    },
+    // 57
+    {
+      enemies: [
+        { x: 300, y: 100, size: 120 },
+        { x: canvas.width - 300, y: 100, size: 120 },
+        { x: canvas.width / 2, y: 220, size: 120 },
+        { x: 300, y: canvas.height - 280, size: 120 },
+        { x: canvas.width - 300, y: canvas.height - 280, size: 120 },
+      ],
+      walls: [{ x: canvas.width / 2 - 80, y: 160, width: 160, height: 15 }],
+      bullets: 4,
+      agent: { x: canvas.width / 2 - 130, y: canvas.height - 40 },
+    },
+    // Уровни 61–67
+    // 61
+    {
+      enemies: [
+        { x: 220, y: 110, size: 120 },
+        { x: canvas.width - 220, y: 110, size: 120 },
+        { x: canvas.width / 2, y: 230, size: 120 },
+        { x: 220, y: canvas.height - 270, size: 120 },
+        { x: canvas.width - 220, y: canvas.height - 270, size: 120 },
+      ],
+      walls: [
+        { x: 120, y: 160, width: 15, height: 80 },
+        { x: canvas.width - 135, y: 160, width: 15, height: 80 },
+        { x: canvas.width / 2 - 100, y: 250, width: 200, height: 15 },
+      ],
+      bullets: 4,
+      agent: { x: 160, y: canvas.height - 40 },
+    },
+    // 62
+    {
+      enemies: [
+        { x: 180, y: 80, size: 120 },
+        { x: canvas.width - 180, y: 80, size: 120 },
+        { x: canvas.width / 2, y: 200, size: 120 },
+        { x: 180, y: canvas.height - 300, size: 120 },
+        { x: canvas.width - 180, y: canvas.height - 300, size: 120 },
+      ],
+      walls: [
+        { x: canvas.width / 2 - 120, y: 150, width: 240, height: 15 },
+        { x: 100, y: 200, width: 15, height: 80 },
+        { x: canvas.width - 115, y: 200, width: 15, height: 80 },
+      ],
+      bullets: 5,
+      agent: { x: canvas.width / 2, y: canvas.height - 40 },
+    },
+    // 63
+    {
+      enemies: [
+        { x: 280, y: 90, size: 120 },
+        { x: canvas.width - 280, y: 90, size: 120 },
+        { x: canvas.width / 2, y: 190, size: 120 },
+        { x: 280, y: canvas.height - 290, size: 120 },
+        { x: canvas.width - 280, y: canvas.height - 290, size: 120 },
+      ],
+      walls: [{ x: 180, y: 140, width: 15, height: 80 }],
+      bullets: 4,
+      agent: { x: 170, y: canvas.height - 40 },
+    },
+    // 64
+    {
+      enemies: [
+        { x: 200, y: 120, size: 120 },
+        { x: canvas.width - 200, y: 120, size: 120 },
+        { x: canvas.width / 2, y: 240, size: 120 },
+        { x: 200, y: canvas.height - 260, size: 120 },
+        { x: canvas.width - 200, y: canvas.height - 260, size: 120 },
+      ],
+      walls: [{ x: canvas.width / 2 - 90, y: 170, width: 180, height: 15 }],
+      bullets: 4,
+      agent: { x: canvas.width / 2 - 70, y: canvas.height - 40 },
+    },
+    // 65
+    {
+      enemies: [
+        { x: 320, y: 80, size: 120 },
+        { x: canvas.width - 320, y: 80, size: 120 },
+        { x: canvas.width / 2, y: 180, size: 120 },
+        { x: 320, y: canvas.height - 310, size: 120 },
+        { x: canvas.width - 320, y: canvas.height - 310, size: 120 },
+      ],
+      walls: [{ x: 200, y: 130, width: 15, height: 80 }],
+      bullets: 4,
+      agent: { x: 150, y: canvas.height - 40 },
+    },
+    // 66
+    {
+      enemies: [
+        { x: 240, y: 100, size: 120 },
+        { x: canvas.width - 240, y: 100, size: 120 },
+        { x: canvas.width / 2, y: 220, size: 120 },
+        { x: 240, y: canvas.height - 290, size: 120 },
+        { x: canvas.width - 240, y: canvas.height - 290, size: 120 },
+      ],
+      walls: [
+        { x: canvas.width / 2 - 110, y: 160, width: 220, height: 15 },
+        { x: 140, y: 210, width: 15, height: 80 },
+        { x: canvas.width - 155, y: 210, width: 15, height: 80 },
+      ],
+      bullets: 4,
+      agent: { x: canvas.width / 2, y: canvas.height - 40 },
+    },
+    // 67
+    {
+      enemies: [
+        { x: 200, y: 110, size: 120 },
+        { x: canvas.width - 200, y: 110, size: 120 },
+        { x: canvas.width / 2, y: 230, size: 120 },
+        { x: 200, y: canvas.height - 280, size: 120 },
+        { x: canvas.width - 200, y: canvas.height - 280, size: 120 },
+      ],
+      walls: [
+        { x: 120, y: 160, width: 15, height: 80 },
+        { x: canvas.width - 135, y: 160, width: 15, height: 80 },
+      ],
+      bullets: 4,
+      agent: { x: 160, y: canvas.height - 40 },
+    },
+    // Уровень 65 (агент слева)
+    {
+      enemies: [
+        { x: 200, y: 80, size: 120 },
+        { x: canvas.width - 200, y: 80, size: 120 },
+        { x: canvas.width / 2, y: 180, size: 120 },
+        { x: 200, y: canvas.height - 300, size: 120 },
+        { x: canvas.width - 200, y: canvas.height - 300, size: 120 },
+      ],
+      walls: [
+        { x: 120, y: 130, width: 15, height: 80 },
+        { x: canvas.width - 135, y: 130, width: 15, height: 80 },
+      ],
+      bullets: 4,
+      agent: { x: 160, y: canvas.height - 40 },
+    },
+    // Уровень 66 (агент по центру)
+    {
+      enemies: [
+        { x: 180, y: 100, size: 120 },
+        { x: canvas.width - 180, y: 100, size: 120 },
+        { x: canvas.width / 2, y: 220, size: 120 },
+        { x: 180, y: canvas.height - 280, size: 120 },
+        { x: canvas.width - 180, y: canvas.height - 280, size: 120 },
+      ],
+      walls: [{ x: canvas.width / 2 - 110, y: 160, width: 220, height: 15 }],
+      bullets: 5,
+      agent: { x: canvas.width / 2, y: canvas.height - 40 },
+    },
+    // Уровень 67 (агент левее центра)
+    {
+      enemies: [
+        { x: 250, y: 90, size: 120 },
+        { x: canvas.width - 250, y: 90, size: 120 },
+        { x: canvas.width / 2, y: 200, size: 120 },
+        { x: 250, y: canvas.height - 290, size: 120 },
+        { x: canvas.width - 250, y: canvas.height - 290, size: 120 },
+      ],
+      walls: [
+        { x: 140, y: 140, width: 15, height: 80 },
+        { x: canvas.width - 155, y: 140, width: 15, height: 80 },
+        { x: canvas.width / 2 - 90, y: 240, width: 180, height: 15 },
+      ],
+      bullets: 4,
+      agent: { x: canvas.width / 2 - 120, y: canvas.height - 40 },
+    },
   ];
 
   function loadLevel(levelIndex) {
     if (levelIndex >= levels.length) {
-      alert("AGENT 67 WINS!");
-      currentLevel = 0;
-      loadLevel(0);
+      // Вместо алерта покажем финальный экран
+      gameState = "victory";
+      victoryScreen.style.display = "flex";
+      playVictorySound();
+      canvas.style.display = "none";
+      restartButton.style.display = "none";
+      levelSelectButton.style.display = "none";
       return;
     }
     const level = levels[levelIndex];
@@ -451,7 +1334,17 @@ window.onload = function () {
         saveProgress();
       }
       setTimeout(() => {
-        showLevelSelect();
+        if (currentLevel === levels.length - 1) {
+          // Последний уровень пройден — показываем экран победы
+          gameState = "victory";
+          victoryScreen.style.display = "flex";
+          playVictorySound();
+          canvas.style.display = "none";
+          restartButton.style.display = "none";
+          levelSelectButton.style.display = "none";
+        } else {
+          showLevelSelect();
+        }
       }, 1500);
     }
   }
@@ -1022,6 +1915,18 @@ window.onload = function () {
 
     requestAnimationFrame(gameLoop);
   }
+  // Закрытие финального экрана по клику или нажатию любой клавиши
+  victoryScreen.addEventListener("click", () => {
+    victoryScreen.style.display = "none";
+    showMenu();
+  });
+
+  window.addEventListener("keydown", (e) => {
+    if (gameState === "victory") {
+      victoryScreen.style.display = "none";
+      showMenu();
+    }
+  });
 
   // --- ЗАПУСК ---
   loadProgress();

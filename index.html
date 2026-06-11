@@ -1,30 +1,34 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Agent 67 — Миссия</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <!-- Главное меню -->
     <div id="menuScreen">
-        <h1>AGENT 67</h1>
-        <button id="playButton">ИГРАТЬ</button>
+      <h1>AGENT 67</h1>
+      <button id="playButton">ИГРАТЬ</button>
     </div>
 
     <!-- Выбор уровня -->
-    <div id="levelSelectScreen" style="display: none;">
-        <h2>ВЫБОР УРОВНЯ</h2>
-        <div id="levelGrid"></div>
-        <button id="backButton">НАЗАД</button>
+    <div id="levelSelectScreen" style="display: none">
+      <h2>ВЫБОР УРОВНЯ</h2>
+      <div id="levelGrid"></div>
+      <button id="backButton">НАЗАД</button>
     </div>
 
     <!-- Игровой экран -->
-    <canvas id="gameCanvas" style="display: none;"></canvas>
+    <canvas id="gameCanvas" style="display: none"></canvas>
     <button id="restartButton">ЗАНОВО</button>
-    <button id="levelSelectButton" style="display: none;">ВЫБОР УРОВНЕЙ</button>
+    <button id="levelSelectButton" style="display: none">ВЫБОР УРОВНЕЙ</button>
+    <div id="victoryScreen">
+      <img id="victoryImage" src="images/victory.png" alt="Victory" />
+      <p>АГЕНТ 67 СНОВА СПАС МИР...</p>
+    </div>
 
     <script src="script.js?v=3"></script>
-</body>
+  </body>
 </html>
