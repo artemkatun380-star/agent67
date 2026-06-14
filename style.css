@@ -205,18 +205,19 @@ canvas {
     border: none;
     box-shadow: none;
   }
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.9);
-  color: #ff0;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  font-size: 6vw;
-  z-index: 20;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    color: #ff0;
+    display: none;               /* скрыт по умолчанию */
+    flex-direction: column;      /* ← ВОТ ЭТО ДОБАВЬ */
+    justify-content: center;     /* вертикальное центрирование */
+    align-items: center;         /* горизонтальное центрирование */
+    font-size: 6vw;
+    z-index: 20;
 }
 
 /* Адаптация для маленьких экранов (телефонов) */
