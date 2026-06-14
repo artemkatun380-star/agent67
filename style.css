@@ -179,50 +179,50 @@ canvas {
 
 /* Подсказка перевернуть телефон (скрыта по умолчанию) */
 #rotateHint {
-  /* Текст внутри подсказки */
-  .rotate-text-top {
-    color: #ff0; /* жёлтый */
-    font-family: "Courier New", monospace;
-    font-size: 6vw;
-    margin: 0 0 5px 0; /* небольшой отступ снизу */
-    text-align: center;
-  }
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  color: #ff0;
+  display: none; /* скрыт по умолчанию */
+  flex-direction: column; /* элементы друг под другом */
+  justify-content: center; /* центр по вертикали */
+  align-items: center; /* центр по горизонтали */
+  font-size: 6vw;
+  z-index: 20;
+}
 
-  .rotate-text-bottom {
-    color: #fff; /* белый */
-    font-family: "Courier New", monospace;
-    font-size: 5vw;
-    margin: 0 0 20px 0; /* отступ до картинки */
-    text-align: center;
-  }
+/* Текст внутри подсказки */
+.rotate-text-top {
+  color: #ff0;
+  font-family: "Courier New", monospace;
+  font-size: 6vw;
+  margin: 0 0 5px 0;
+  text-align: center;
+}
 
-  /* Картинка с примером поворота */
-  .rotate-image {
-    max-width: 40vw;
-    max-height: 30vh;
-    height: auto;
-    width: auto;
-    border: none;
-    box-shadow: none;
-  }
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.9);
-    color: #ff0;
-    display: none;               /* скрыт по умолчанию */
-    flex-direction: column;      /* ← ВОТ ЭТО ДОБАВЬ */
-    justify-content: center;     /* вертикальное центрирование */
-    align-items: center;         /* горизонтальное центрирование */
-    font-size: 6vw;
-    z-index: 20;
+.rotate-text-bottom {
+  color: #fff;
+  font-family: "Courier New", monospace;
+  font-size: 5vw;
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+/* Картинка с примером поворота */
+.rotate-image {
+  max-width: 40vw;
+  max-height: 30vh;
+  height: auto;
+  width: auto;
+  border: none;
+  box-shadow: none;
 }
 
 /* Адаптация для маленьких экранов (телефонов) */
 @media (max-width: 800px) {
-  /* Уменьшаем шрифты и кнопки */
   #menuScreen h1 {
     font-size: 8vw;
   }
@@ -264,6 +264,7 @@ canvas {
     }
     #rotateHint {
       display: flex;
+      flex-direction: column; /* гарантируем вертикальную раскладку */
     }
   }
 }
