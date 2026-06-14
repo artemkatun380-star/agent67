@@ -98,8 +98,17 @@ window.onload = function () {
   }
 
   // --- Игровые переменные ---
-  canvas.width = window.innerWidth * 0.8;
-  canvas.height = window.innerHeight * 0.8;
+  canvas.width = 1620;
+  canvas.height = 780;
+  function getCanvasCoords(clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width; // 1620 / реальная ширина
+    const scaleY = canvas.height / rect.height; // 780 / реальная высота
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY,
+    };
+  }
 
   let currentLevel = 0;
   let enemies = [];
@@ -1380,9 +1389,9 @@ window.onload = function () {
   // --- МЫШЬ ---
   canvas.addEventListener("mousemove", function (e) {
     if (gameState !== "playing") return;
-    const rect = canvas.getBoundingClientRect();
-    mouseX = e.clientX - rect.left;
-    mouseY = e.clientY - rect.top;
+    const { x, y } = getCanvasCoords(e.clientX, e.clientY);
+    mouseX = x;
+    mouseY = y;
     const dx = mouseX - agent.x;
     const dy = mouseY - agent.y;
     agentAngle = Math.atan2(-dy, dx);
@@ -1393,10 +1402,8 @@ window.onload = function () {
     if (levelComplete || gameOver) return;
     if (bulletsLeft <= 0) return;
 
-    const rect = canvas.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const clickY = e.clientY - rect.top;
-
+    const { x: clickX, y: clickY } = getCanvasCoords(e.clientX, e.clientY);
+    // --- далее идёт тот же код выстрела, НО больше нет строчек с rect ---
     const dx = clickX - lastMuzzle.x;
     const dy = clickY - lastMuzzle.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
@@ -1420,6 +1427,7 @@ window.onload = function () {
     bulletsLeft--;
     shakeAmount = INITIAL_SHAKE;
     fireSound();
+
   });
 
   // --- TOUCH УПРАВЛЕНИЕ ---
@@ -1429,9 +1437,9 @@ window.onload = function () {
       if (gameState !== "playing") return;
       e.preventDefault();
       const touch = e.touches[0];
-      const rect = canvas.getBoundingClientRect();
-      mouseX = touch.clientX - rect.left;
-      mouseY = touch.clientY - rect.top;
+      const { x, y } = getCanvasCoords(touch.clientX, touch.clientY);
+      mouseX = x;
+      mouseY = y;
       const dx = mouseX - agent.x;
       const dy = mouseY - agent.y;
       agentAngle = Math.atan2(-dy, dx);
@@ -1445,9 +1453,9 @@ window.onload = function () {
       if (gameState !== "playing") return;
       e.preventDefault();
       const touch = e.touches[0];
-      const rect = canvas.getBoundingClientRect();
-      mouseX = touch.clientX - rect.left;
-      mouseY = touch.clientY - rect.top;
+      const { x, y } = getCanvasCoords(touch.clientX, touch.clientY);
+      mouseX = x;
+      mouseY = y;
       const dx = mouseX - agent.x;
       const dy = mouseY - agent.y;
       agentAngle = Math.atan2(-dy, dx);
@@ -1460,15 +1468,12 @@ window.onload = function () {
     function (e) {
       if (gameState !== "playing") return;
       e.preventDefault();
-      if (
-        mouseX !== undefined &&
-        mouseY !== undefined &&
-        bulletsLeft > 0 &&
-        !levelComplete &&
-        !gameOver
-      ) {
-        const dx = mouseX - lastMuzzle.x;
-        const dy = mouseY - lastMuzzle.y;
+      const touch = e.changedTouches[0];
+      const { x, y } = getCanvasCoords(touch.clientX, touch.clientY);
+
+      if (bulletsLeft > 0 && !levelComplete && !gameOver) {
+        const dx = x - lastMuzzle.x;
+        const dy = y - lastMuzzle.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         if (distance >= 5) {
           const dirX = dx / distance;
@@ -1489,6 +1494,7 @@ window.onload = function () {
           fireSound();
         }
       }
+      // Сбрасываем прицел в исходное положение
       mouseX = agent.x;
       mouseY = agent.y;
     },
