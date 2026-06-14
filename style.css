@@ -20,18 +20,10 @@ body {
 
 /* Главное меню */
 #menuScreen {
-    position: absolute;   /* меняем на absolute */
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;  /* центрируем содержимое по вертикали */
-    gap: 40px;
-    z-index: 100;            /* высокий z-index, чтобы быть над всем */
-    background: #000;        /* на всякий случай, чтобы перекрыть canvas */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
 }
 
 #menuScreen h1 {
@@ -132,7 +124,7 @@ canvas {
   max-height: 100vh;
   width: auto;
   height: auto;
-  aspect-ratio: 1620 / 780; /* сохраняет пропорции нового разрешения */ 
+  aspect-ratio: 1620 / 780; /* сохраняет пропорции нового разрешения */
 }
 
 /* Игровые кнопки (Заново, Выбор уровней) */
