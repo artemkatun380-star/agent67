@@ -1427,7 +1427,6 @@ window.onload = function () {
     bulletsLeft--;
     shakeAmount = INITIAL_SHAKE;
     fireSound();
-
   });
 
   // --- TOUCH УПРАВЛЕНИЕ ---
@@ -1931,6 +1930,48 @@ window.onload = function () {
     if (gameState === "victory") {
       victoryScreen.style.display = "none";
       showMenu();
+    }
+  });
+  const fullscreenBtn = document.getElementById("fullscreenBtn");
+
+  // Проверяем поддержку Fullscreen API
+  if (document.fullscreenEnabled || document.webkitFullscreenEnabled) {
+    fullscreenBtn.style.display = "block"; // показываем кнопку
+  }
+
+  // Запрос фулскрина по клику на кнопку
+  fullscreenBtn.addEventListener("click", () => {
+    const el = document.documentElement;
+    if (el.requestFullscreen) {
+      el.requestFullscreen();
+    } else if (el.webkitRequestFullscreen) {
+      el.webkitRequestFullscreen();
+    }
+    fullscreenBtn.style.display = "none"; // прячем кнопку после нажатия
+  });
+
+  // Автоматически запросить фулскрин при первом касании/клике на canvas (для телефонов)
+  let fullscreenRequested = false;
+  canvas.addEventListener("click", () => {
+    if (!fullscreenRequested) {
+      fullscreenRequested = true;
+      const el = document.documentElement;
+      if (el.requestFullscreen) {
+        el.requestFullscreen();
+      } else if (el.webkitRequestFullscreen) {
+        el.webkitRequestFullscreen();
+      }
+    }
+  });
+  canvas.addEventListener("touchstart", () => {
+    if (!fullscreenRequested) {
+      fullscreenRequested = true;
+      const el = document.documentElement;
+      if (el.requestFullscreen) {
+        el.requestFullscreen();
+      } else if (el.webkitRequestFullscreen) {
+        el.webkitRequestFullscreen();
+      }
     }
   });
 
