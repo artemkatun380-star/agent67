@@ -229,22 +229,22 @@ canvas {
   #levelSelectScreen h2 {
     font-size: 5vw;
   }
-  #levelGrid {
-    grid-template-columns: repeat(10, 7vw);
-    gap: 1vw;
+    #levelGrid {
+    grid-template-columns: repeat(10, 6.5vw);
+    gap: 0.9vw;
   }
   .level-btn {
-    width: 7vw;
-    height: 7vw;
-    font-size: 3vw;
+    width: 6.5vw;
+    height: 6.5vw;
+    font-size: 2.8vw;
   }
-  #restartButton,
+    #restartButton,
   #levelSelectButton {
     top: 70%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 4vw;
-    padding: 2vw 6vw;
+    font-size: 3.8vw;
+    padding: 2vw 5vw;
   }
   #levelSelectButton {
     top: 85%;
