@@ -219,33 +219,34 @@ canvas {
   #menuScreen h1 {
     font-size: 7vw;
   }
-  #playButton,
-  #backButton {
+  #playButton {
     font-size: 3.5vw;
     padding: 1.8vw 4vw;
   }
   #levelSelectScreen h2 {
-    font-size: 3.5vw;
-    margin-bottom: 10px; /* опускаем заголовок чуть ниже */
+    font-size: 3.2vw;
+    margin-bottom: 8px;
   }
   #levelGrid {
-    grid-template-columns: repeat(10, 4.8vw);
-    gap: 0.6vw;
-    margin: 3px 0;
+    grid-template-columns: repeat(10, 4.5vw);
+    gap: 0.5vw;
+    margin: 2px 0;
   }
   .level-btn {
-    width: 4.8vw;
-    height: 4.8vw;
-    font-size: 1.8vw;
+    width: 4.5vw;
+    height: 4.5vw;
+    font-size: 1.6vw;
   }
   #levelSelectScreen {
-    gap: 5px;
+    gap: 4px;
   }
-  /* Кнопка НАЗАД – поднимаем чуть выше */
+  /* Кнопка НАЗАД – уменьшена и поднята */
   #backButton {
-    margin-top: 0;
+    font-size: 2.8vw !important;
+    padding: 1.2vw 3vw !important;
     position: relative;
-    top: -15px;  /* можно подкорректировать */
+    top: -18px;
+    margin-top: 0;
   }
 
   /* Кнопки после раунда не трогаем */
