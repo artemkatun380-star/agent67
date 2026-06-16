@@ -214,7 +214,7 @@ canvas {
   box-shadow: none;
 }
 
-/* Адаптация для телефонов (увеличен порог до 1000px) */
+/* Адаптация для телефонов */
 @media (max-width: 1000px) {
   #menuScreen h1 {
     font-size: 7vw;
@@ -227,9 +227,9 @@ canvas {
     padding: 1.8vw 4vw;
   }
   #levelSelectScreen h2 {
-    font-size: 4.5vw;
+    font-size: 4vw;
   }
-    #levelGrid {
+  #levelGrid {
     grid-template-columns: repeat(10, 5.5vw);
     gap: 0.7vw;
     margin: 4px 0;
@@ -241,12 +241,11 @@ canvas {
   }
   #restartButton,
   #levelSelectButton {
-    position: absolute;
+    top: 65%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 3vw;
     padding: 1.5vw 4vw;
-    top: 65%;
   }
   #levelSelectButton {
     top: 82%;
