@@ -220,25 +220,35 @@ canvas {
     font-size: 7vw;
   }
   #playButton,
-  #backButton,
-  #restartButton,
-  #levelSelectButton {
+  #backButton {
     font-size: 3.5vw;
     padding: 1.8vw 4vw;
   }
   #levelSelectScreen h2 {
-    font-size: 4vw;
+    font-size: 3.5vw;
+    margin-bottom: 10px; /* опускаем заголовок чуть ниже */
   }
   #levelGrid {
-    grid-template-columns: repeat(10, 5.5vw);
-    gap: 0.7vw;
-    margin: 4px 0;
+    grid-template-columns: repeat(10, 4.8vw);
+    gap: 0.6vw;
+    margin: 3px 0;
   }
   .level-btn {
-    width: 5.5vw;
-    height: 5.5vw;
-    font-size: 2.2vw;
+    width: 4.8vw;
+    height: 4.8vw;
+    font-size: 1.8vw;
   }
+  #levelSelectScreen {
+    gap: 5px;
+  }
+  /* Кнопка НАЗАД – поднимаем чуть выше */
+  #backButton {
+    margin-top: 0;
+    position: relative;
+    top: -15px;  /* можно подкорректировать */
+  }
+
+  /* Кнопки после раунда не трогаем */
   #restartButton,
   #levelSelectButton {
     top: 65%;
@@ -253,9 +263,6 @@ canvas {
 
   #menuScreen {
     gap: 20px;
-  }
-  #levelSelectScreen {
-    gap: 8px;
   }
 
   @media (orientation: portrait) {
