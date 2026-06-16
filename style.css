@@ -224,25 +224,25 @@ canvas {
 /* Адаптация для маленьких экранов (телефонов) */
 @media (max-width: 800px) {
   #menuScreen h1 {
-    font-size: 8vw;
+    font-size: 7vw;
   }
   #playButton,
   #backButton,
   #restartButton,
   #levelSelectButton {
-    font-size: 4vw;
-    padding: 2vw 6vw;
+    font-size: 3.5vw;
+    padding: 2vw 5vw;
   }
   #levelSelectScreen h2 {
-    font-size: 6vw;
+    font-size: 5vw;
   }
   #levelGrid {
-    grid-template-columns: repeat(10, 8vw);
+    grid-template-columns: repeat(10, 7vw);
     gap: 1vw;
   }
   .level-btn {
-    width: 8vw;
-    height: 8vw;
+    width: 7vw;
+    height: 7vw;
     font-size: 3vw;
   }
   #restartButton,
@@ -250,13 +250,18 @@ canvas {
     top: 70%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 4vw;
-    padding: 2vw 6vw;
+    font-size: 3.5vw;
+    padding: 2vw 5vw;
   }
   #levelSelectButton {
     top: 85%;
   }
-
+  #menuScreen {
+    gap: 20px; /* уменьшаем с 40px до 20px */
+  }
+  #levelSelectScreen {
+    gap: 15px; /* уменьшаем с 20px до 15px */
+  }
   /* В портретной ориентации скрываем игру и показываем подсказку */
   @media (orientation: portrait) {
     canvas {
