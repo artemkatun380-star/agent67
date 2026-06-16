@@ -217,44 +217,46 @@ canvas {
 /* Адаптация для телефонов (увеличен порог до 1000px) */
 @media (max-width: 1000px) {
   #menuScreen h1 {
-    font-size: 8vw;
+    font-size: 7vw;
   }
   #playButton,
   #backButton,
   #restartButton,
   #levelSelectButton {
-    font-size: 4vw;
-    padding: 2vw 6vw;
+    font-size: 3.5vw;
+    padding: 1.8vw 4vw;
   }
   #levelSelectScreen h2 {
-    font-size: 5vw;
+    font-size: 4.5vw;
   }
-    #levelGrid {
-    grid-template-columns: repeat(10, 6.5vw);
-    gap: 0.9vw;
+  #levelGrid {
+    grid-template-columns: repeat(10, 6vw);
+    gap: 0.8vw;
+    margin: 5px 0;
   }
   .level-btn {
-    width: 6.5vw;
-    height: 6.5vw;
-    font-size: 2.8vw;
+    width: 6vw;
+    height: 6vw;
+    font-size: 2.5vw;
   }
-    #restartButton,
+  #restartButton,
   #levelSelectButton {
-    top: 70%;
+    position: absolute;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 3.8vw;
-    padding: 2vw 5vw;
+    font-size: 3vw;
+    padding: 1.5vw 4vw;
+    top: 65%;
   }
   #levelSelectButton {
-    top: 85%;
+    top: 82%;
   }
 
   #menuScreen {
-    gap: 25px;
+    gap: 20px;
   }
   #levelSelectScreen {
-    gap: 15px;
+    gap: 10px;
   }
 
   @media (orientation: portrait) {
