@@ -253,7 +253,7 @@ window.onload = function () {
           height: 120,
         },
       ],
-      bullets: 5,
+      bullets: 10,
       agent: { x: canvas.width / 2, y: canvas.height - 40 },
     },
     // Уровень 2
