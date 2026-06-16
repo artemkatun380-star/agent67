@@ -15,7 +15,7 @@ body {
   color: #fff;
   user-select: none;
   -webkit-user-select: none;
-  touch-action: none; /* убирает стандартные жесты браузера */
+  touch-action: none;
 }
 
 /* Главное меню */
@@ -44,9 +44,7 @@ body {
   color: #fff;
   border: 2px solid #fff;
   cursor: pointer;
-  transition:
-    background 0.2s,
-    color 0.2s;
+  transition: background 0.2s, color 0.2s;
 }
 
 #playButton:hover,
@@ -91,9 +89,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition:
-    background 0.2s,
-    color 0.2s;
+  transition: background 0.2s, color 0.2s;
 }
 
 .level-btn:hover:not(:disabled) {
@@ -119,12 +115,11 @@ canvas {
   box-shadow: 0 0 10px #888;
   display: block;
   image-rendering: auto;
-  /* Адаптивные свойства */
   max-width: 100vw;
   max-height: 100vh;
   width: auto;
   height: auto;
-  aspect-ratio: 1620 / 780; /* сохраняет пропорции нового разрешения */
+  aspect-ratio: 1620 / 780;
 }
 
 /* Игровые кнопки (Заново, Выбор уровней) */
@@ -144,7 +139,7 @@ canvas {
   top: calc(50% + 120px);
 }
 
-/* Экран победы (без изменений) */
+/* Экран победы */
 #victoryScreen {
   position: absolute;
   top: 0;
@@ -177,7 +172,7 @@ canvas {
   margin: 0;
 }
 
-/* Подсказка перевернуть телефон (скрыта по умолчанию) */
+/* Подсказка перевернуть телефон */
 #rotateHint {
   position: absolute;
   top: 0;
@@ -186,15 +181,14 @@ canvas {
   height: 100%;
   background: rgba(0, 0, 0, 0.9);
   color: #ff0;
-  display: none; /* скрыт по умолчанию */
-  flex-direction: column; /* элементы друг под другом */
-  justify-content: center; /* центр по вертикали */
-  align-items: center; /* центр по горизонтали */
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   font-size: 6vw;
   z-index: 20;
 }
 
-/* Текст внутри подсказки */
 .rotate-text-top {
   color: #ff0;
   font-family: "Courier New", monospace;
@@ -211,7 +205,6 @@ canvas {
   text-align: center;
 }
 
-/* Картинка с примером поворота */
 .rotate-image {
   max-width: 40vw;
   max-height: 30vh;
@@ -221,7 +214,7 @@ canvas {
   box-shadow: none;
 }
 
-/* Адаптация для маленьких экранов (телефонов) */
+/* Адаптация для телефонов */
 @media (max-width: 800px) {
   #menuScreen h1 {
     font-size: 7vw;
@@ -234,16 +227,16 @@ canvas {
     padding: 2vw 5vw;
   }
   #levelSelectScreen h2 {
-    font-size: 5vw;
+    font-size: 4vw;
   }
   #levelGrid {
-    grid-template-columns: repeat(10, 7vw);
-    gap: 1vw;
+    grid-template-columns: repeat(10, 6vw);
+    gap: 0.8vw;
   }
   .level-btn {
-    width: 7vw;
-    height: 7vw;
-    font-size: 3vw;
+    width: 6vw;
+    height: 6vw;
+    font-size: 2.5vw;
   }
   #restartButton,
   #levelSelectButton {
@@ -256,25 +249,31 @@ canvas {
   #levelSelectButton {
     top: 85%;
   }
+
   #menuScreen {
-    gap: 20px; /* уменьшаем с 40px до 20px */
+    gap: 20px;
   }
   #levelSelectScreen {
-    gap: 15px; /* уменьшаем с 20px до 15px */
+    gap: 10px;
   }
-  /* В портретной ориентации скрываем игру и показываем подсказку */
+
+  #backButton {
+    font-size: 3.5vw;
+    padding: 1.5vw 4vw;
+  }
+
   @media (orientation: portrait) {
     canvas {
       display: none;
     }
     #rotateHint {
       display: flex;
-      flex-direction: column; /* гарантируем вертикальную раскладку */
+      flex-direction: column;
     }
   }
 }
 
-/* Для больших экранов возвращаем фиксированные размеры кнопок */
+/* Возвращаем фиксированные размеры на больших экранах */
 @media (min-width: 800px) {
   #restartButton,
   #levelSelectButton {
@@ -288,6 +287,8 @@ canvas {
     top: calc(50% + 120px);
   }
 }
+
+/* Кнопка фулскрина */
 #fullscreenBtn {
   position: absolute;
   top: 10px;
@@ -301,6 +302,6 @@ canvas {
   border: 2px solid #ff0;
   border-radius: 8px;
   cursor: pointer;
-  display: none; /* покажем только при возможности фулскрина */
+  display: none;
   z-index: 1000;
 }
