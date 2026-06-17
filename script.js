@@ -1,10 +1,10 @@
 window.onload = function () {
   const canvas = document.getElementById("gameCanvas");
   const ctx = canvas.getContext("2d");
-  const isMobile = window.innerWidth <= 1000; // тот же порог, что в CSS
+  const isMobile = window.innerWidth <= 1000;
   let shakeAmount = 0;
-  const SHAKE_DECAY = 0.8; // скорость затухания
-  const INITIAL_SHAKE = isMobile ? 4 : 8; // начальная сила (пиксели)
+  const SHAKE_DECAY = 0.8;
+  const INITIAL_SHAKE = isMobile ? 4 : 8;
 
   // --- Элементы интерфейса ---
   const menuScreen = document.getElementById("menuScreen");
@@ -87,7 +87,7 @@ window.onload = function () {
       } else if (isLevelUnlocked(i)) {
         btn.disabled = false;
         btn.addEventListener("click", () => {
-          playClickSound(); // ← звук клика
+          playClickSound();
           startLevel(i);
         });
       } else {
@@ -101,10 +101,11 @@ window.onload = function () {
   // --- Игровые переменные ---
   canvas.width = 1620;
   canvas.height = 780;
+
   function getCanvasCoords(clientX, clientY) {
     const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width; // 1620 / реальная ширина
-    const scaleY = canvas.height / rect.height; // 780 / реальная высота
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
     return {
       x: (clientX - rect.left) * scaleX,
       y: (clientY - rect.top) * scaleY,
@@ -117,18 +118,16 @@ window.onload = function () {
   let bulletsLeft = 0;
   let levelComplete = false;
   let gameOver = false;
-  let killCount = 0; // счётчик убийств на уровне
+  let killCount = 0;
 
-  // Агент: его высота (размер по вертикали), ширина вычисляется по пропорции 1024/1536 ≈ 2/3
   const agent = {
     x: canvas.width / 2,
     y: canvas.height - 40,
-    height: 250, // можешь изменить высоту агента здесь
+    height: 250,
   };
 
-  // Соотношения сторон спрайтов
-  const AGENT_ASPECT = 1024 / 1536; // ширина / высота ≈ 0.6667
-  const ENEMY_ASPECT = 1023 / 1536; // ≈ 0.6660
+  const AGENT_ASPECT = 1024 / 1536;
+  const ENEMY_ASPECT = 1023 / 1536;
 
   let bullets = [];
   let explosionParticles = [];
@@ -168,18 +167,11 @@ window.onload = function () {
     loadSound("kill" + k, "sounds/kill" + k + ".mp3");
   }
   loadSound("click", "sounds/click.mp3");
-  function playClickSound() {
-    playSound("click", 0.7); // громкость можно менять (0.7 = 70%)
-  }
-  function playVictorySound() {
-    playSound("victory", 0.6);
-  }
-  function fireSound() {
-    playSound("shot", 0.8);
-  }
-  function ricochetSound() {
-    playSound("ricochet", 0.5);
-  }
+
+  function playClickSound() { playSound("click", 0.7); }
+  function playVictorySound() { playSound("victory", 0.6); }
+  function fireSound() { playSound("shot", 0.8); }
+  function ricochetSound() { playSound("ricochet", 0.5); }
 
   // =============================================
   // ЗАГРУЗКА ИЗОБРАЖЕНИЙ
@@ -189,8 +181,8 @@ window.onload = function () {
     enemy: new Image(),
     wall: new Image(),
     background: new Image(),
-    agentBody: new Image(), // <-- ДОБАВЬ ЭТО
-    agentArm: new Image(), // <-- ДОБАВЬ ЭТО
+    agentBody: new Image(),
+    agentArm: new Image(),
   };
   images.agentBody.src = "images/agent_body.png";
   images.agentArm.src = "images/agent_arm.png";
@@ -247,12 +239,7 @@ window.onload = function () {
       walls: [
         { x: canvas.width / 2 - 120, y: 140, width: 240, height: 15 },
         { x: 100, y: canvas.height / 2 - 60, width: 15, height: 120 },
-        {
-          x: canvas.width - 112,
-          y: canvas.height / 2 - 60,
-          width: 15,
-          height: 120,
-        },
+        { x: canvas.width - 112, y: canvas.height / 2 - 60, width: 15, height: 120 },
       ],
       bullets: 5,
       agent: { x: canvas.width / 2, y: canvas.height - 40 },
@@ -269,12 +256,7 @@ window.onload = function () {
       walls: [
         { x: canvas.width / 2 - 100, y: 130, width: 200, height: 15 },
         { x: 110, y: canvas.height / 2 - 40, width: 15, height: 100 },
-        {
-          x: canvas.width - 125,
-          y: canvas.height / 2 - 40,
-          width: 15,
-          height: 100,
-        },
+        { x: canvas.width - 125, y: canvas.height / 2 - 40, width: 15, height: 100 },
       ],
       bullets: 4,
       agent: { x: canvas.width / 2 - 200, y: canvas.height - 60 },
@@ -301,21 +283,16 @@ window.onload = function () {
     // Уровень 4
     {
       enemies: [
-        { x: 200, y: 100, size: 120 }, // верхний левый
-        { x: canvas.width - 200, y: 100, size: 120 }, // верхний правый
-        { x: canvas.width / 2, y: 260, size: 120 }, // центральный под балкой
-        { x: 150, y: canvas.height - 130, size: 120 }, // нижний левый
-        { x: canvas.width - 150, y: canvas.height - 130, size: 120 }, // нижний правый
+        { x: 200, y: 100, size: 120 },
+        { x: canvas.width - 200, y: 100, size: 120 },
+        { x: canvas.width / 2, y: 260, size: 120 },
+        { x: 150, y: canvas.height - 130, size: 120 },
+        { x: canvas.width - 150, y: canvas.height - 130, size: 120 },
       ],
       walls: [
-        { x: 100, y: canvas.height / 2 - 60, width: 15, height: 120 }, // левая вертикальная стойка
-        {
-          x: canvas.width - 115,
-          y: canvas.height / 2 - 60,
-          width: 15,
-          height: 120,
-        }, // правая вертикальная стойка
-        { x: canvas.width / 2 - 100, y: 170, width: 200, height: 15 }, // горизонтальная балка по центру
+        { x: 100, y: canvas.height / 2 - 60, width: 15, height: 120 },
+        { x: canvas.width - 115, y: canvas.height / 2 - 60, width: 15, height: 120 },
+        { x: canvas.width / 2 - 100, y: 170, width: 200, height: 15 },
       ],
       bullets: 4,
       agent: { x: canvas.width / 2, y: canvas.height - 60 },
@@ -357,16 +334,16 @@ window.onload = function () {
     // Уровень 7
     {
       enemies: [
-        { x: 250, y: 80, size: 120 }, // верхний левый
-        { x: canvas.width - 250, y: 80, size: 120 }, // верхний правый
-        { x: canvas.width / 2, y: 220, size: 120 }, // центральный
-        { x: 290, y: canvas.height - 150, size: 120 }, // нижний левый
-        { x: canvas.width - 250, y: canvas.height - 150, size: 120 }, // нижний правый
+        { x: 250, y: 80, size: 120 },
+        { x: canvas.width - 250, y: 80, size: 120 },
+        { x: canvas.width / 2, y: 220, size: 120 },
+        { x: 290, y: canvas.height - 150, size: 120 },
+        { x: canvas.width - 250, y: canvas.height - 150, size: 120 },
       ],
       walls: [
-        { x: 100, y: 130, width: 15, height: 100 }, // левая стойка
-        { x: canvas.width - 115, y: 130, width: 15, height: 100 }, // правая стойка
-        { x: canvas.width / 2 - 100, y: 170, width: 200, height: 15 }, // горизонтальная балка
+        { x: 100, y: 130, width: 15, height: 100 },
+        { x: canvas.width - 115, y: 130, width: 15, height: 100 },
+        { x: canvas.width / 2 - 100, y: 170, width: 200, height: 15 },
       ],
       bullets: 4,
       agent: { x: 160, y: canvas.height - 60 },
@@ -391,15 +368,15 @@ window.onload = function () {
     // Уровень 9
     {
       enemies: [
-        { x: 220, y: 90, size: 120 }, // левый верхний
-        { x: canvas.width - 220, y: 90, size: 120 }, // правый верхний
-        { x: 220, y: canvas.height - 150, size: 120 }, // левый нижний
-        { x: canvas.width - 220, y: canvas.height - 150, size: 120 }, // правый нижний
-        { x: canvas.width / 2, y: 250, size: 120 }, // центральный
+        { x: 220, y: 90, size: 120 },
+        { x: canvas.width - 220, y: 90, size: 120 },
+        { x: 220, y: canvas.height - 150, size: 120 },
+        { x: canvas.width - 220, y: canvas.height - 150, size: 120 },
+        { x: canvas.width / 2, y: 250, size: 120 },
       ],
       walls: [
-        { x: canvas.width / 2 - 150, y: 140, width: 300, height: 15 }, // верхняя балка
-        { x: canvas.width / 2 - 150, y: 300, width: 300, height: 15 }, // нижняя балка
+        { x: canvas.width / 2 - 150, y: 140, width: 300, height: 15 },
+        { x: canvas.width / 2 - 150, y: 300, width: 300, height: 15 },
       ],
       bullets: 4,
       agent: { x: canvas.width / 2 - 150, y: canvas.height - 60 },
@@ -407,17 +384,17 @@ window.onload = function () {
     // Уровень 10
     {
       enemies: [
-        { x: 320, y: 90, size: 120 }, // левый верхний
-        { x: canvas.width - 320, y: 90, size: 120 }, // правый верхний
-        { x: canvas.width / 2, y: 210, size: 120 }, // центральный
-        { x: 320, y: canvas.height - 150, size: 120 }, // левый нижний
-        { x: canvas.width - 320, y: canvas.height - 150, size: 120 }, // правый нижний
+        { x: 320, y: 90, size: 120 },
+        { x: canvas.width - 320, y: 90, size: 120 },
+        { x: canvas.width / 2, y: 210, size: 120 },
+        { x: 320, y: canvas.height - 150, size: 120 },
+        { x: canvas.width - 320, y: canvas.height - 150, size: 120 },
       ],
       walls: [
-        { x: 150, y: 120, width: 15, height: 100 }, // левая стойка
-        { x: canvas.width - 165, y: 120, width: 15, height: 100 }, // правая стойка
-        { x: canvas.width / 2 - 6, y: 120, width: 15, height: 100 }, // центральная стойка
-        { x: canvas.width / 2 - 120, y: 270, width: 240, height: 15 }, // горизонтальная балка
+        { x: 150, y: 120, width: 15, height: 100 },
+        { x: canvas.width - 165, y: 120, width: 15, height: 100 },
+        { x: canvas.width / 2 - 6, y: 120, width: 15, height: 100 },
+        { x: canvas.width / 2 - 120, y: 270, width: 240, height: 15 },
       ],
       bullets: 5,
       agent: { x: 180, y: canvas.height - 60 },
@@ -435,12 +412,7 @@ window.onload = function () {
       walls: [
         { x: canvas.width / 2 - 100, y: 150, width: 200, height: 15 },
         { x: 150, y: canvas.height / 2 - 50, width: 15, height: 100 },
-        {
-          x: canvas.width - 165,
-          y: canvas.height / 2 - 50,
-          width: 15,
-          height: 100,
-        },
+        { x: canvas.width - 165, y: canvas.height / 2 - 50, width: 15, height: 100 },
       ],
       bullets: 4,
       agent: { x: canvas.width / 2, y: canvas.height - 40 },
@@ -1300,7 +1272,6 @@ window.onload = function () {
 
   function loadLevel(levelIndex) {
     if (levelIndex >= levels.length) {
-      // Вместо алерта покажем финальный экран
       gameState = "victory";
       victoryScreen.style.display = "flex";
       playVictorySound();
@@ -1327,7 +1298,7 @@ window.onload = function () {
       agent.x = canvas.width / 2;
       agent.y = canvas.height - 40;
     }
-    agent.y -= 30; // поднять агента выше
+    agent.y -= 30;
 
     restartButton.style.display = "none";
     levelSelectButton.style.display = "none";
@@ -1345,7 +1316,6 @@ window.onload = function () {
       }
       setTimeout(() => {
         if (currentLevel === levels.length - 1) {
-          // Последний уровень пройден — показываем экран победы
           gameState = "victory";
           victoryScreen.style.display = "flex";
           playVictorySound();
@@ -1404,7 +1374,6 @@ window.onload = function () {
     if (bulletsLeft <= 0) return;
 
     const { x: clickX, y: clickY } = getCanvasCoords(e.clientX, e.clientY);
-    // --- далее идёт тот же код выстрела, НО больше нет строчек с rect ---
     const dx = clickX - lastMuzzle.x;
     const dy = clickY - lastMuzzle.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
@@ -1431,75 +1400,62 @@ window.onload = function () {
   });
 
   // --- TOUCH УПРАВЛЕНИЕ ---
-  canvas.addEventListener(
-    "touchstart",
-    function (e) {
-      if (gameState !== "playing") return;
-      e.preventDefault();
-      const touch = e.touches[0];
-      const { x, y } = getCanvasCoords(touch.clientX, touch.clientY);
-      mouseX = x;
-      mouseY = y;
-      const dx = mouseX - agent.x;
-      const dy = mouseY - agent.y;
-      agentAngle = Math.atan2(-dy, dx);
-    },
-    { passive: false },
-  );
+  canvas.addEventListener("touchstart", function (e) {
+    if (gameState !== "playing") return;
+    e.preventDefault();
+    const touch = e.touches[0];
+    const { x, y } = getCanvasCoords(touch.clientX, touch.clientY);
+    mouseX = x;
+    mouseY = y;
+    const dx = mouseX - agent.x;
+    const dy = mouseY - agent.y;
+    agentAngle = Math.atan2(-dy, dx);
+  }, { passive: false });
 
-  canvas.addEventListener(
-    "touchmove",
-    function (e) {
-      if (gameState !== "playing") return;
-      e.preventDefault();
-      const touch = e.touches[0];
-      const { x, y } = getCanvasCoords(touch.clientX, touch.clientY);
-      mouseX = x;
-      mouseY = y;
-      const dx = mouseX - agent.x;
-      const dy = mouseY - agent.y;
-      agentAngle = Math.atan2(-dy, dx);
-    },
-    { passive: false },
-  );
+  canvas.addEventListener("touchmove", function (e) {
+    if (gameState !== "playing") return;
+    e.preventDefault();
+    const touch = e.touches[0];
+    const { x, y } = getCanvasCoords(touch.clientX, touch.clientY);
+    mouseX = x;
+    mouseY = y;
+    const dx = mouseX - agent.x;
+    const dy = mouseY - agent.y;
+    agentAngle = Math.atan2(-dy, dx);
+  }, { passive: false });
 
-  canvas.addEventListener(
-    "touchend",
-    function (e) {
-      if (gameState !== "playing") return;
-      e.preventDefault();
-      const touch = e.changedTouches[0];
-      const { x, y } = getCanvasCoords(touch.clientX, touch.clientY);
+  canvas.addEventListener("touchend", function (e) {
+    if (gameState !== "playing") return;
+    e.preventDefault();
+    const touch = e.changedTouches[0];
+    const { x, y } = getCanvasCoords(touch.clientX, touch.clientY);
 
-      if (bulletsLeft > 0 && !levelComplete && !gameOver) {
-        const dx = x - lastMuzzle.x;
-        const dy = y - lastMuzzle.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance >= 5) {
-          const dirX = dx / distance;
-          const dirY = dy / distance;
-          const speed = 10;
-          bullets.push({
-            x: lastMuzzle.x,
-            y: lastMuzzle.y,
-            vx: dirX * speed,
-            vy: dirY * speed,
-            radius: 3,
-            active: true,
-            ricochets: 0,
-            trail: [],
-          });
-          bulletsLeft--;
-          shakeAmount = INITIAL_SHAKE;
-          fireSound();
-        }
+    if (bulletsLeft > 0 && !levelComplete && !gameOver) {
+      const dx = x - lastMuzzle.x;
+      const dy = y - lastMuzzle.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      if (distance >= 5) {
+        const dirX = dx / distance;
+        const dirY = dy / distance;
+        const speed = 10;
+        bullets.push({
+          x: lastMuzzle.x,
+          y: lastMuzzle.y,
+          vx: dirX * speed,
+          vy: dirY * speed,
+          radius: 3,
+          active: true,
+          ricochets: 0,
+          trail: [],
+        });
+        bulletsLeft--;
+        shakeAmount = INITIAL_SHAKE;
+        fireSound();
       }
-      // Сбрасываем прицел в исходное положение
-      mouseX = agent.x;
-      mouseY = agent.y;
-    },
-    { passive: false },
-  );
+    }
+    mouseX = agent.x;
+    mouseY = agent.y;
+  }, { passive: false });
 
   // --- ФИЗИКА ---
   function handleWallCollision(bullet, wall) {
@@ -1540,7 +1496,7 @@ window.onload = function () {
     return false;
   }
 
-  // --- ОТРИСОВКА АГЕНТА (с учётом пропорций) ---
+  // --- ОТРИСОВКА АГЕНТА ---
   function drawAgentWithArm() {
     const bodyImg = images.agentBody;
     const armImg = images.agentArm;
@@ -1549,54 +1505,35 @@ window.onload = function () {
 
     if (!bodyImg.complete || !armImg.complete) {
       ctx.fillStyle = "#fff";
-      ctx.fillRect(
-        agent.x - agentWidth / 2,
-        agent.y - agentHeight / 2,
-        agentWidth,
-        agentHeight,
-      );
+      ctx.fillRect(agent.x - agentWidth / 2, agent.y - agentHeight / 2, agentWidth, agentHeight);
       return { x: agent.x + agentWidth / 2, y: agent.y };
     }
 
-    // --- Тело ---
-    ctx.drawImage(
-      bodyImg,
-      agent.x - agentWidth / 2,
-      agent.y - agentHeight / 2,
-      agentWidth,
-      agentHeight,
-    );
+    ctx.drawImage(bodyImg, agent.x - agentWidth / 2, agent.y - agentHeight / 2, agentWidth, agentHeight);
 
-    // --- Плечо (точка, вокруг которой вращается рука) ---
-    const shoulderX = agent.x + agentWidth * -0.05; // 25% ширины вправо от центра
-    const shoulderY = agent.y - agentHeight * 0.12; // 15% высоты вверх от центра
+    const shoulderX = agent.x + agentWidth * -0.05;
+    const shoulderY = agent.y - agentHeight * 0.12;
 
-    // --- Реальные размеры arm.png (замени на свои!) ---
     const realArmWidth = 1024;
     const realArmHeight = 1536;
 
-    // --- Желаемый размер руки на экране ---
-    const armWidth = agentHeight * 0.55; // длина руки (35% от высоты агента)
-    const armHeight = armWidth * (realArmHeight / realArmWidth); // сохраняем пропорции
+    const armWidth = agentHeight * 0.55;
+    const armHeight = armWidth * (realArmHeight / realArmWidth);
 
-    // --- Координаты сустава в оригинале (ты замерил: 312, 787) ---
     const jointX = 312;
     const jointY = 787;
 
-    // --- Пересчитываем смещения для масштабированного изображения ---
     const offsetX = jointX * (armWidth / realArmWidth);
     const offsetY = jointY * (armHeight / realArmHeight);
 
-    // --- Рисуем руку с поворотом ---
     ctx.save();
     ctx.translate(shoulderX, shoulderY);
     ctx.rotate(-agentAngle);
     ctx.drawImage(armImg, -offsetX, -offsetY, armWidth, armHeight);
     ctx.restore();
 
-    // --- Положение дула (конец ствола) ---
-    const muzzleRelX = armWidth - offsetX + 8; // +5 значит прицел сдвинется дальше от плеча
-    const muzzleRelY = armHeight / 2 - offsetY + 24; // -10 поднимет прицел выше  // центр руки по вертикали
+    const muzzleRelX = armWidth - offsetX + 8;
+    const muzzleRelY = armHeight / 2 - offsetY + 24;
     const cos = Math.cos(agentAngle);
     const sin = Math.sin(agentAngle);
     const muzzleX = shoulderX + muzzleRelX * cos - muzzleRelY * sin;
@@ -1605,7 +1542,7 @@ window.onload = function () {
     return { x: muzzleX, y: muzzleY };
   }
 
-  // --- ОТРИСОВКА ВРАГА (с учётом пропорций) ---
+  // --- ОТРИСОВКА ВРАГА ---
   function drawEnemySprite(enemy) {
     const img = images.enemy;
     const height = enemy.size;
@@ -1634,22 +1571,15 @@ window.onload = function () {
           tmpCtx.globalCompositeOperation = "source-in";
           tmpCtx.fillStyle = outlineColor;
           tmpCtx.fillRect(0, 0, width, height);
-          ctx.drawImage(
-            tmpCanvas,
-            x - width / 2 + dx,
-            y - height / 2 + dy,
-            width,
-            height,
-          );
+          ctx.drawImage(tmpCanvas, x - width / 2 + dx, y - height / 2 + dy, width, height);
         }
       }
     }
 
-    // Отрисовка самого спрайта (всегда)
     ctx.drawImage(img, x - width / 2, y - height / 2, width, height);
   }
 
-  // --- ПРОВЕРКА СТОЛКНОВЕНИЯ (прямоугольный хитбокс) ---
+  // --- ПРОВЕРКА СТОЛКНОВЕНИЯ ---
   function circleRectCollision(bullet, rect) {
     const closestX = Math.max(rect.x, Math.min(bullet.x, rect.x + rect.width));
     const closestY = Math.max(rect.y, Math.min(bullet.y, rect.y + rect.height));
@@ -1664,7 +1594,8 @@ window.onload = function () {
       requestAnimationFrame(gameLoop);
       return;
     }
-    // Обновление тряски камеры (всего canvas)
+
+    // Тряска камеры
     if (shakeAmount > 0.5) {
       const shakeX = (Math.random() - 0.5) * shakeAmount * 2;
       const shakeY = (Math.random() - 0.5) * shakeAmount * 2;
@@ -1674,6 +1605,7 @@ window.onload = function () {
       canvas.style.transform = "translate(0, 0)";
       shakeAmount = 0;
     }
+
     // Фон
     if (images.background.complete) {
       ctx.drawImage(images.background, 0, 0, canvas.width, canvas.height);
@@ -1682,11 +1614,17 @@ window.onload = function () {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    // Стены с повторяющейся текстурой (уменьшенной)
-    // Стены с повторяющейся текстурой и контуром
+    // Scanlines (только на ПК)
+    if (!isMobile) {
+      ctx.fillStyle = 'rgba(0, 20, 0, 0.15)';
+      for (let y = 0; y < canvas.height; y += 4) {
+        ctx.fillRect(0, y, canvas.width, 2);
+      }
+    }
+
+    // Стены
     if (images.wall.complete) {
       for (let wall of walls) {
-        // Тайлинг (как и было)
         const tileSize = 64;
         const tileCanvas = document.createElement("canvas");
         tileCanvas.width = tileSize;
@@ -1697,19 +1635,22 @@ window.onload = function () {
         ctx.fillStyle = pattern;
         ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
 
-        // Чёрный контур (тонкий)
-        ctx.strokeStyle = "#000";
-        ctx.lineWidth = 2; // 2 пикселя — не жирный, но заметный
-        ctx.strokeRect(wall.x, wall.y, wall.width, wall.height);
+        // Чёрный контур (только на ПК)
+        if (!isMobile) {
+          ctx.strokeStyle = "#000";
+          ctx.lineWidth = 2;
+          ctx.strokeRect(wall.x, wall.y, wall.width, wall.height);
+        }
       }
     } else {
       for (let wall of walls) {
         ctx.fillStyle = "#444";
         ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
-        // Контур и для серых стен
-        ctx.strokeStyle = "#000";
-        ctx.lineWidth = 2;
-        ctx.strokeRect(wall.x, wall.y, wall.width, wall.height);
+        if (!isMobile) {
+          ctx.strokeStyle = "#000";
+          ctx.lineWidth = 2;
+          ctx.strokeRect(wall.x, wall.y, wall.width, wall.height);
+        }
       }
     }
 
@@ -1742,14 +1683,12 @@ window.onload = function () {
       const bullet = bullets[i];
       if (!bullet.active) continue;
 
-      // Субстеппинг для точных столкновений
-      const substeps = isMobile ? 2 : 4; // можно 3 или 5, чем больше — тем точнее, но чуть медленнее
+      const substeps = isMobile ? 2 : 4;
       let collided = false;
       for (let s = 0; s < substeps; s++) {
         bullet.x += bullet.vx / substeps;
         bullet.y += bullet.vy / substeps;
 
-        // Проверка стен
         for (let wall of walls) {
           if (handleWallCollision(bullet, wall)) {
             bullet.ricochets++;
@@ -1764,18 +1703,18 @@ window.onload = function () {
         if (!bullet.active || collided) break;
       }
 
+      // След пули
+      const maxTrailLength = isMobile ? 6 : 12;
       bullet.trail.push({ x: bullet.x, y: bullet.y });
-      if (bullet.trail.length > 12) bullet.trail.shift();
+      if (bullet.trail.length > maxTrailLength) bullet.trail.shift();
 
       // Попадание во врагов
       for (let enemy of enemies) {
         if (!enemy.active) continue;
 
-        // Ширина врага в пикселях (с учётом пропорций)
         const enemyWidth = enemy.size * ENEMY_ASPECT;
         const enemyHeight = enemy.size;
 
-        // Хитбокс: прямоугольник, плотно облегающий фигуру (без лишнего пространства над головой)
         const rect = {
           x: enemy.x - enemyWidth * 0.28,
           y: enemy.y - enemyHeight * 0.33,
@@ -1793,14 +1732,7 @@ window.onload = function () {
           const particleCount = isMobile ? 6 : 12;
           for (let j = 0; j < particleCount; j++) {
             explosionParticles.push(
-              new Particle(
-                enemy.x,
-                enemy.y,
-                "rgb(207, 31, 0)",
-                3,
-                15 + Math.random() * 10,
-                4,
-              ),
+              new Particle(enemy.x, enemy.y, "rgb(207, 31, 0)", 3, 15 + Math.random() * 10, 4)
             );
           }
           bullet.ricochets++;
@@ -1851,7 +1783,7 @@ window.onload = function () {
         if (bullet.ricochets > MAX_RICOCHETS) bullet.active = false;
       }
 
-      // След пули (жёлтый)
+      // Отрисовка следа пули
       if (bullet.trail.length > 1) {
         ctx.strokeStyle = "#ff0";
         ctx.lineWidth = 2;
@@ -1863,14 +1795,17 @@ window.onload = function () {
         ctx.lineTo(bullet.x, bullet.y);
         ctx.stroke();
       }
-      // Пуля (жёлтая)
+
+      // Отрисовка пули (без теней на мобильных)
       ctx.fillStyle = "#ff0";
       ctx.beginPath();
       ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
+      if (!isMobile) {
+        ctx.shadowColor = "#ff0";
+        ctx.shadowBlur = 8;
+      }
       ctx.fill();
-      ctx.shadowColor = "#ff0";
-      ctx.shadowBlur = 8;
-      ctx.fill();
+      ctx.shadowColor = "transparent";
       ctx.shadowBlur = 0;
     }
 
@@ -1881,11 +1816,16 @@ window.onload = function () {
       if (p.isDead) explosionParticles.splice(i, 1);
       else p.draw(ctx);
     }
-    for (let i = sparkParticles.length - 1; i >= 0; i--) {
-      const p = sparkParticles[i];
-      p.update();
-      if (p.isDead) sparkParticles.splice(i, 1);
-      else p.draw(ctx);
+    // Искры только на ПК (для производительности)
+    if (!isMobile) {
+      for (let i = sparkParticles.length - 1; i >= 0; i--) {
+        const p = sparkParticles[i];
+        p.update();
+        if (p.isDead) sparkParticles.splice(i, 1);
+        else p.draw(ctx);
+      }
+    } else {
+      sparkParticles = []; // очищаем, чтобы не копились
     }
 
     bullets = bullets.filter((b) => b.active);
@@ -1894,22 +1834,22 @@ window.onload = function () {
     // UI
     ctx.fillStyle = "#fff";
     ctx.font = 'bold 20px "Courier New", monospace';
-    ctx.shadowColor = "#000"; // чёрная тень для контраста
+    ctx.shadowColor = "#000";
     ctx.shadowBlur = 4;
     ctx.textAlign = "left";
     ctx.fillText(`УРОВЕНЬ ${currentLevel + 1}`, 20, 35);
-    ctx.fillText(`ПАТРОНЫ ${bulletsLeft}`, 20, 65); // чуть раздвинул, чтобы не слипались
-    ctx.shadowColor = "transparent"; // убираем тень, чтобы не мешала остальному
+    ctx.fillText(`ПАТРОНЫ ${bulletsLeft}`, 20, 65);
+    ctx.shadowColor = "transparent";
     ctx.shadowBlur = 0;
 
     if (levelComplete) {
-      ctx.fillStyle = "rgb(0, 212, 0)"; // ярко-зелёный
-      ctx.font = 'bold 48px "Courier New", monospace'; // жирный и крупный
+      ctx.fillStyle = "rgb(0, 212, 0)";
+      ctx.font = 'bold 48px "Courier New", monospace';
       ctx.textAlign = "center";
       ctx.fillText("УРОВЕНЬ ПРОЙДЕН", canvas.width / 2, canvas.height / 2 - 20);
     }
     if (gameOver) {
-      ctx.fillStyle = "rgb(202, 0, 0)"; // ярко-красный
+      ctx.fillStyle = "rgb(202, 0, 0)";
       ctx.font = 'bold 48px "Courier New", monospace';
       ctx.textAlign = "center";
       ctx.fillText("ПРОВАЛ", canvas.width / 2, canvas.height / 2 - 20);
@@ -1917,7 +1857,8 @@ window.onload = function () {
 
     requestAnimationFrame(gameLoop);
   }
-  // Закрытие финального экрана по клику или нажатию любой клавиши
+
+  // Закрытие финального экрана
   victoryScreen.addEventListener("click", () => {
     victoryScreen.style.display = "none";
     showMenu();
@@ -1929,14 +1870,14 @@ window.onload = function () {
       showMenu();
     }
   });
+
+  // Кнопка фулскрина
   const fullscreenBtn = document.getElementById("fullscreenBtn");
 
-  // Проверяем поддержку Fullscreen API
   if (document.fullscreenEnabled || document.webkitFullscreenEnabled) {
-    fullscreenBtn.style.display = "block"; // показываем кнопку
+    fullscreenBtn.style.display = "block";
   }
 
-  // Запрос фулскрина по клику на кнопку
   fullscreenBtn.addEventListener("click", () => {
     const el = document.documentElement;
     if (el.requestFullscreen) {
@@ -1944,7 +1885,7 @@ window.onload = function () {
     } else if (el.webkitRequestFullscreen) {
       el.webkitRequestFullscreen();
     }
-    fullscreenBtn.style.display = "none"; // прячем кнопку после нажатия
+    fullscreenBtn.style.display = "none";
   });
 
   // --- ЗАПУСК ---
