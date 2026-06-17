@@ -44,9 +44,7 @@ body {
   color: #fff;
   border: 2px solid #fff;
   cursor: pointer;
-  transition:
-    background 0.2s,
-    color 0.2s;
+  transition: background 0.2s, color 0.2s;
 }
 
 #playButton:hover,
@@ -91,9 +89,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition:
-    background 0.2s,
-    color 0.2s;
+  transition: background 0.2s, color 0.2s;
 }
 
 .level-btn:hover:not(:disabled) {
@@ -245,13 +241,13 @@ canvas {
     gap: 4px;
   }
   /* Кнопка НАЗАД – уменьшена и поднята */
-  #backButton {
+    #backButton {
     font-size: 2vw !important;
     padding: 0.8vw 2vw !important;
     position: relative;
-    top: 5px; /* оставь как ты настроил */
+    top: 5px;          /* оставь как ты настроил */
     margin-top: 0;
-  }
+}
 
   /* Кнопки после раунда не трогаем */
   #restartButton,
@@ -279,10 +275,7 @@ canvas {
       flex-direction: column;
     }
   }
-  canvas {
-    position: relative;
-    margin: 0 auto;
-  }
+  
 }
 
 /* Для больших экранов возвращаем фиксированные размеры кнопок */

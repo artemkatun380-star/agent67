@@ -1949,58 +1949,9 @@ window.onload = function () {
     }
     fullscreenBtn.style.display = "none"; // прячем кнопку после нажатия
   });
-  // Надёжный сброс трансформации при любом изменении размера / фулскрине
-  function forceResetCanvasPosition() {
-    // Полностью убираем transform (стираем свойство, а не ставим translate(0,0))
-    canvas.style.transform = "";
-    // Останавливаем тряску, чтобы она не добавила новый transform
-    shakeAmount = 0;
-    cameraShakeX = 0;
-    cameraShakeY = 0;
-    // На всякий случай сбрасываем возможные отступы
-    canvas.style.margin = "0";
-    canvas.style.top = "0";
-    canvas.style.left = "0";
-  }
+  
 
-  // Вызываем при любом изменении полноэкранного режима (с префиксами)
-  document.addEventListener("fullscreenchange", forceResetCanvasPosition);
-  document.addEventListener("webkitfullscreenchange", forceResetCanvasPosition);
-  document.addEventListener("mozfullscreenchange", forceResetCanvasPosition);
-  document.addEventListener("MSFullscreenChange", forceResetCanvasPosition);
 
-  // Вызываем при ресайзе окна (с небольшой задержкой, чтобы браузер завершил перестройку)
-  window.addEventListener("resize", () => {
-    setTimeout(forceResetCanvasPosition, 150);
-  });
-
-  // Также гарантированно сбрасываем при запуске игры
-  forceResetCanvasPosition();
-
-  // Автоматически запросить фулскрин при первом касании/клике на canvas (для телефонов)
-  let fullscreenRequested = false;
-  canvas.addEventListener("click", () => {
-    if (!fullscreenRequested) {
-      fullscreenRequested = true;
-      const el = document.documentElement;
-      if (el.requestFullscreen) {
-        el.requestFullscreen();
-      } else if (el.webkitRequestFullscreen) {
-        el.webkitRequestFullscreen();
-      }
-    }
-  });
-  canvas.addEventListener("touchstart", () => {
-    if (!fullscreenRequested) {
-      fullscreenRequested = true;
-      const el = document.documentElement;
-      if (el.requestFullscreen) {
-        el.requestFullscreen();
-      } else if (el.webkitRequestFullscreen) {
-        el.webkitRequestFullscreen();
-      }
-    }
-  });
 
   // --- ЗАПУСК ---
   loadProgress();
