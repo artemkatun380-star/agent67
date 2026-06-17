@@ -1,9 +1,10 @@
 window.onload = function () {
   const canvas = document.getElementById("gameCanvas");
   const ctx = canvas.getContext("2d");
+  const isMobile = window.innerWidth <= 1000; // тот же порог, что в CSS
   let shakeAmount = 0;
   const SHAKE_DECAY = 0.8; // скорость затухания
-  const INITIAL_SHAKE = 8; // начальная сила (пиксели)
+  const INITIAL_SHAKE = isMobile ? 4 : 8; // начальная сила (пиксели)
 
   // --- Элементы интерфейса ---
   const menuScreen = document.getElementById("menuScreen");
@@ -1618,37 +1619,33 @@ window.onload = function () {
       return;
     }
 
-    const outlineColor = "#dd0000"; // красный
-    const outlineWidth = 1; // толщина контура (можно менять)
-
-    // Рисуем контур: многократно рисуем спрайт с небольшим сдвигом, залитый красным
-    for (let dx = -outlineWidth; dx <= outlineWidth; dx += 2) {
-      for (let dy = -outlineWidth; dy <= outlineWidth; dy += 2) {
-        // Пропускаем центр, чтобы не рисовать лишнего
-        if (dx === 0 && dy === 0) continue;
-
-        // Создаём временный canvas для окрашивания спрайта в красный
-        const tmpCanvas = document.createElement("canvas");
-        tmpCanvas.width = width;
-        tmpCanvas.height = height;
-        const tmpCtx = tmpCanvas.getContext("2d");
-        tmpCtx.drawImage(img, 0, 0, width, height);
-        tmpCtx.globalCompositeOperation = "source-in";
-        tmpCtx.fillStyle = outlineColor;
-        tmpCtx.fillRect(0, 0, width, height);
-
-        // Рисуем окрашенный спрайт со сдвигом
-        ctx.drawImage(
-          tmpCanvas,
-          x - width / 2 + dx,
-          y - height / 2 + dy,
-          width,
-          height,
-        );
+    // На мобильных устройствах не рисуем обводку для производительности
+    if (!isMobile) {
+      const outlineColor = "#dd0000";
+      const outlineWidth = 1;
+      for (let dx = -outlineWidth; dx <= outlineWidth; dx += 2) {
+        for (let dy = -outlineWidth; dy <= outlineWidth; dy += 2) {
+          if (dx === 0 && dy === 0) continue;
+          const tmpCanvas = document.createElement("canvas");
+          tmpCanvas.width = width;
+          tmpCanvas.height = height;
+          const tmpCtx = tmpCanvas.getContext("2d");
+          tmpCtx.drawImage(img, 0, 0, width, height);
+          tmpCtx.globalCompositeOperation = "source-in";
+          tmpCtx.fillStyle = outlineColor;
+          tmpCtx.fillRect(0, 0, width, height);
+          ctx.drawImage(
+            tmpCanvas,
+            x - width / 2 + dx,
+            y - height / 2 + dy,
+            width,
+            height,
+          );
+        }
       }
     }
 
-    // Сверху рисуем оригинальный спрайт (он перекроет внутреннюю часть контура)
+    // Отрисовка самого спрайта (всегда)
     ctx.drawImage(img, x - width / 2, y - height / 2, width, height);
   }
 
@@ -1746,7 +1743,7 @@ window.onload = function () {
       if (!bullet.active) continue;
 
       // Субстеппинг для точных столкновений
-      const substeps = 4; // можно 3 или 5, чем больше — тем точнее, но чуть медленнее
+      const substeps = isMobile ? 2 : 4; // можно 3 или 5, чем больше — тем точнее, но чуть медленнее
       let collided = false;
       for (let s = 0; s < substeps; s++) {
         bullet.x += bullet.vx / substeps;
@@ -1793,8 +1790,8 @@ window.onload = function () {
           const killSoundName = "kill" + Math.min(killCount, 5);
           playSound(killSoundName, 0.9);
 
-          // Жёлтые частицы взрыва
-          for (let j = 0; j < 12; j++) {
+          const particleCount = isMobile ? 6 : 12;
+          for (let j = 0; j < particleCount; j++) {
             explosionParticles.push(
               new Particle(
                 enemy.x,
@@ -1949,9 +1946,6 @@ window.onload = function () {
     }
     fullscreenBtn.style.display = "none"; // прячем кнопку после нажатия
   });
-  
-
-
 
   // --- ЗАПУСК ---
   loadProgress();
