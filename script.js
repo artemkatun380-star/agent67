@@ -269,7 +269,7 @@ window.onload = function () {
           height: 120,
         },
       ],
-      bullets: 6,
+      bullets: 5,
       agent: { x: canvas.width / 2, y: canvas.height - 40 },
     },
     // Уровень 2
@@ -1425,7 +1425,7 @@ window.onload = function () {
 
     const dirX = dx / distance;
     const dirY = dy / distance;
-    const speed = isMobile ? 80 : 10;
+    const speed = isMobile ? 160 : 10;
 
     bullets.push({
       x: lastMuzzle.x,
