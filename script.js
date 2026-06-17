@@ -120,11 +120,11 @@ window.onload = function () {
   let gameOver = false;
   let killCount = 0;
 
-  // Агент и враги стали крупнее
+  // Агент: исходный размер 250, на мобильных визуально увеличится в функциях отрисовки
   const agent = {
     x: canvas.width / 2,
     y: canvas.height - 40,
-    height: 300,   // было 250
+    height: 250,
   };
 
   const AGENT_ASPECT = 1024 / 1536;
@@ -241,10 +241,10 @@ window.onload = function () {
     return wallPattern;
   }
 
-  // --- УРОВНИ (size у врагов увеличен до 140) ---
+  // --- УРОВНИ (без изменений) ---
   const levels = [
     // Уровень 1
-   {
+    {
       enemies: [
         { x: 200, y: 100, size: 120 },
         { x: canvas.width - 200, y: 100, size: 120 },
@@ -1238,52 +1238,6 @@ window.onload = function () {
       bullets: 4,
       agent: { x: 160, y: canvas.height - 40 },
     },
-    // Уровень 65 (агент слева)
-    {
-      enemies: [
-        { x: 200, y: 80, size: 120 },
-        { x: canvas.width - 200, y: 80, size: 120 },
-        { x: canvas.width / 2, y: 180, size: 120 },
-        { x: 200, y: canvas.height - 300, size: 120 },
-        { x: canvas.width - 200, y: canvas.height - 300, size: 120 },
-      ],
-      walls: [
-        { x: 120, y: 130, width: 15, height: 80 },
-        { x: canvas.width - 135, y: 130, width: 15, height: 80 },
-      ],
-      bullets: 4,
-      agent: { x: 160, y: canvas.height - 40 },
-    },
-    // Уровень 66 (агент по центру)
-    {
-      enemies: [
-        { x: 180, y: 100, size: 120 },
-        { x: canvas.width - 180, y: 100, size: 120 },
-        { x: canvas.width / 2, y: 220, size: 120 },
-        { x: 180, y: canvas.height - 280, size: 120 },
-        { x: canvas.width - 180, y: canvas.height - 280, size: 120 },
-      ],
-      walls: [{ x: canvas.width / 2 - 110, y: 160, width: 220, height: 15 }],
-      bullets: 5,
-      agent: { x: canvas.width / 2, y: canvas.height - 40 },
-    },
-    // Уровень 67 (агент левее центра)
-    {
-      enemies: [
-        { x: 250, y: 90, size: 120 },
-        { x: canvas.width - 250, y: 90, size: 120 },
-        { x: canvas.width / 2, y: 200, size: 120 },
-        { x: 250, y: canvas.height - 290, size: 120 },
-        { x: canvas.width - 250, y: canvas.height - 290, size: 120 },
-      ],
-      walls: [
-        { x: 140, y: 140, width: 15, height: 80 },
-        { x: canvas.width - 155, y: 140, width: 15, height: 80 },
-        { x: canvas.width / 2 - 90, y: 240, width: 180, height: 15 },
-      ],
-      bullets: 4,
-      agent: { x: canvas.width / 2 - 120, y: canvas.height - 40 },
-    },
   ];
 
   function loadLevel(levelIndex) {
@@ -1512,11 +1466,12 @@ window.onload = function () {
     return false;
   }
 
-  // --- ОТРИСОВКА АГЕНТА (с увеличенными размерами) ---
+  // --- ОТРИСОВКА АГЕНТА (визуальное увеличение только на мобильных) ---
   function drawAgentWithArm() {
     const bodyImg = images.agentBody;
     const armImg = images.agentArm;
-    const agentHeight = agent.height;
+    const scale = isMobile ? 1.4 : 1.0;   // мобильный множитель
+    const agentHeight = agent.height * scale;
     const agentWidth = agentHeight * AGENT_ASPECT;
 
     if (!bodyImg.complete || !armImg.complete) {
@@ -1558,10 +1513,11 @@ window.onload = function () {
     return { x: muzzleX, y: muzzleY };
   }
 
-  // --- ОТРИСОВКА ВРАГА ---
+  // --- ОТРИСОВКА ВРАГА (визуальное увеличение только на мобильных) ---
   function drawEnemySprite(enemy) {
     const img = images.enemy;
-    const height = enemy.size;
+    const scale = isMobile ? 1.4 : 1.0;
+    const height = enemy.size * scale;
     const width = height * ENEMY_ASPECT;
     const x = enemy.x;
     const y = enemy.y;
@@ -1572,7 +1528,6 @@ window.onload = function () {
       return;
     }
 
-    // Обводка только на ПК
     if (!isMobile) {
       const outlineColor = "#dd0000";
       const outlineWidth = 1;
@@ -1611,7 +1566,6 @@ window.onload = function () {
       return;
     }
 
-    // Тряска камеры
     if (shakeAmount > 0.5) {
       const shakeX = (Math.random() - 0.5) * shakeAmount * 2;
       const shakeY = (Math.random() - 0.5) * shakeAmount * 2;
@@ -1622,7 +1576,6 @@ window.onload = function () {
       shakeAmount = 0;
     }
 
-    // Фон
     if (images.background.complete) {
       ctx.drawImage(images.background, 0, 0, canvas.width, canvas.height);
     } else {
@@ -1630,7 +1583,6 @@ window.onload = function () {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    // Scanlines только на ПК
     if (!isMobile) {
       ctx.fillStyle = 'rgba(0, 20, 0, 0.15)';
       for (let y = 0; y < canvas.height; y += 4) {
@@ -1638,7 +1590,6 @@ window.onload = function () {
       }
     }
 
-    // Стены (используем кэшированный паттерн)
     const pattern = getWallPattern();
     if (pattern) {
       for (let wall of walls) {
@@ -1662,17 +1613,14 @@ window.onload = function () {
       }
     }
 
-    // Враги
     for (let enemy of enemies) {
       if (!enemy.active) continue;
       drawEnemySprite(enemy);
     }
 
-    // Агент
     const muzzle = drawAgentWithArm();
     lastMuzzle = muzzle;
 
-    // Прицел
     if (bulletsLeft > 0 && !levelComplete && !gameOver) {
       ctx.save();
       ctx.strokeStyle = "#ff0";
@@ -1686,7 +1634,6 @@ window.onload = function () {
       ctx.restore();
     }
 
-    // Пули
     for (let i = 0; i < bullets.length; i++) {
       const bullet = bullets[i];
       if (!bullet.active) continue;
@@ -1711,12 +1658,10 @@ window.onload = function () {
         if (!bullet.active || collided) break;
       }
 
-      // След пули – длинный, как раньше
-      const maxTrailLength = 12;   // восстановили 12 для всех устройств
+      const maxTrailLength = 12;
       bullet.trail.push({ x: bullet.x, y: bullet.y });
       if (bullet.trail.length > maxTrailLength) bullet.trail.shift();
 
-      // Попадание во врагов
       for (let enemy of enemies) {
         if (!enemy.active) continue;
 
@@ -1737,7 +1682,7 @@ window.onload = function () {
           const killSoundName = "kill" + Math.min(killCount, 5);
           playSound(killSoundName, 0.9);
 
-          const particleCount = isMobile ? 4 : 12;   // на мобильных 4 частицы
+          const particleCount = isMobile ? 4 : 12;
           for (let j = 0; j < particleCount; j++) {
             explosionParticles.push(
               new Particle(enemy.x, enemy.y, "rgb(207, 31, 0)", 3, 15 + Math.random() * 10, 4)
@@ -1753,7 +1698,6 @@ window.onload = function () {
       }
       if (!bullet.active) continue;
 
-      // Стены
       for (let wall of walls) {
         if (handleWallCollision(bullet, wall)) {
           bullet.ricochets++;
@@ -1764,7 +1708,6 @@ window.onload = function () {
       }
       if (!bullet.active) continue;
 
-      // Границы
       let bounced = false;
       if (bullet.x - bullet.radius <= 0) {
         bullet.x = bullet.radius;
@@ -1791,7 +1734,6 @@ window.onload = function () {
         if (bullet.ricochets > MAX_RICOCHETS) bullet.active = false;
       }
 
-      // Отрисовка следа пули
       if (bullet.trail.length > 1) {
         ctx.strokeStyle = "#ff0";
         ctx.lineWidth = 2;
@@ -1804,7 +1746,6 @@ window.onload = function () {
         ctx.stroke();
       }
 
-      // Отрисовка пули
       ctx.fillStyle = "#ff0";
       ctx.beginPath();
       ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
@@ -1817,7 +1758,6 @@ window.onload = function () {
       ctx.shadowBlur = 0;
     }
 
-    // Частицы
     for (let i = explosionParticles.length - 1; i >= 0; i--) {
       const p = explosionParticles[i];
       p.update();
@@ -1838,7 +1778,6 @@ window.onload = function () {
     bullets = bullets.filter((b) => b.active);
     checkGameOver();
 
-    // UI (тень текста отключаем на мобильных)
     ctx.fillStyle = "#fff";
     ctx.font = 'bold 20px "Courier New", monospace';
     if (!isMobile) {
