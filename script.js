@@ -1425,7 +1425,7 @@ window.onload = function () {
 
     const dirX = dx / distance;
     const dirY = dy / distance;
-    const speed = isMobile ? 18 : 10;
+    const speed = isMobile ? 25 : 10;
 
     bullets.push({
       x: lastMuzzle.x,
@@ -1741,7 +1741,7 @@ window.onload = function () {
       const bullet = bullets[i];
       if (!bullet.active) continue;
 
-      const substeps = isMobile ? 1 : 4;
+      const substeps = isMobile ? 2 : 4;
       let collided = false;
       for (let s = 0; s < substeps; s++) {
         bullet.x += bullet.vx / substeps;
