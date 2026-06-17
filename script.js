@@ -243,7 +243,7 @@ window.onload = function () {
 
   // --- УРОВНИ (без изменений) ---
   const levels = [
-    // Уровень 1
+   // Уровень 1
     {
       enemies: [
         { x: 200, y: 100, size: 120 },
@@ -1238,7 +1238,54 @@ window.onload = function () {
       bullets: 4,
       agent: { x: 160, y: canvas.height - 40 },
     },
+    // Уровень 65 (агент слева)
+    {
+      enemies: [
+        { x: 200, y: 80, size: 120 },
+        { x: canvas.width - 200, y: 80, size: 120 },
+        { x: canvas.width / 2, y: 180, size: 120 },
+        { x: 200, y: canvas.height - 300, size: 120 },
+        { x: canvas.width - 200, y: canvas.height - 300, size: 120 },
+      ],
+      walls: [
+        { x: 120, y: 130, width: 15, height: 80 },
+        { x: canvas.width - 135, y: 130, width: 15, height: 80 },
+      ],
+      bullets: 4,
+      agent: { x: 160, y: canvas.height - 40 },
+    },
+    // Уровень 66 (агент по центру)
+    {
+      enemies: [
+        { x: 180, y: 100, size: 120 },
+        { x: canvas.width - 180, y: 100, size: 120 },
+        { x: canvas.width / 2, y: 220, size: 120 },
+        { x: 180, y: canvas.height - 280, size: 120 },
+        { x: canvas.width - 180, y: canvas.height - 280, size: 120 },
+      ],
+      walls: [{ x: canvas.width / 2 - 110, y: 160, width: 220, height: 15 }],
+      bullets: 5,
+      agent: { x: canvas.width / 2, y: canvas.height - 40 },
+    },
+    // Уровень 67 (агент левее центра)
+    {
+      enemies: [
+        { x: 250, y: 90, size: 120 },
+        { x: canvas.width - 250, y: 90, size: 120 },
+        { x: canvas.width / 2, y: 200, size: 120 },
+        { x: 250, y: canvas.height - 290, size: 120 },
+        { x: canvas.width - 250, y: canvas.height - 290, size: 120 },
+      ],
+      walls: [
+        { x: 140, y: 140, width: 15, height: 80 },
+        { x: canvas.width - 155, y: 140, width: 15, height: 80 },
+        { x: canvas.width / 2 - 90, y: 240, width: 180, height: 15 },
+      ],
+      bullets: 4,
+      agent: { x: canvas.width / 2 - 120, y: canvas.height - 40 },
+    },
   ];
+
 
   function loadLevel(levelIndex) {
     if (levelIndex >= levels.length) {
