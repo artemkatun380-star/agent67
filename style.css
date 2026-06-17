@@ -242,12 +242,12 @@ canvas {
   }
   /* Кнопка НАЗАД – уменьшена и поднята */
     #backButton {
-    font-size: 2.5vw !important;
-    padding: 1vw 2.5vw !important;
+    font-size: 2vw !important;
+    padding: 0.8vw 2vw !important;
     position: relative;
-    top: 4px;       /* опускаем (было -18px, теперь ближе к нулю) */
+    top: 5px;          /* оставь как ты настроил */
     margin-top: 0;
-  }
+}
 
   /* Кнопки после раунда не трогаем */
   #restartButton,
