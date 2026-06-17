@@ -245,7 +245,7 @@ canvas {
     font-size: 2.5vw !important;
     padding: 1vw 2.5vw !important;
     position: relative;
-    top: 8px;       /* опускаем (было -18px, теперь ближе к нулю) */
+    top: 4px;       /* опускаем (было -18px, теперь ближе к нулю) */
     margin-top: 0;
   }
 
