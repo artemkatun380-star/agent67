@@ -1949,6 +1949,22 @@ window.onload = function () {
     }
     fullscreenBtn.style.display = "none"; // прячем кнопку после нажатия
   });
+  // Сброс трансформации при изменении полноэкранного режима
+  function resetCanvasTransform() {
+    canvas.style.transform = "translate(0, 0)";
+    shakeAmount = 0; // чтобы тряска не вернула смещение
+  }
+
+  document.addEventListener("fullscreenchange", resetCanvasTransform);
+  document.addEventListener("webkitfullscreenchange", resetCanvasTransform);
+  document.addEventListener("mozfullscreenchange", resetCanvasTransform);
+  document.addEventListener("MSFullscreenChange", resetCanvasTransform);
+
+  // Также сбросим при загрузке и при ресайзе (на всякий случай)
+  window.addEventListener("resize", () => {
+    // Небольшая задержка, чтобы браузер завершил переход в фулскрин
+    setTimeout(resetCanvasTransform, 100);
+  });
 
   // Автоматически запросить фулскрин при первом касании/клике на canvas (для телефонов)
   let fullscreenRequested = false;
