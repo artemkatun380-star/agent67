@@ -1425,7 +1425,7 @@ window.onload = function () {
 
     const dirX = dx / distance;
     const dirY = dy / distance;
-    const speed = isMobile ? 25 : 10;
+    const speed = isMobile ? 40 : 10;
 
     bullets.push({
       x: lastMuzzle.x,
@@ -1686,7 +1686,14 @@ window.onload = function () {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    if (!isMobile) {
+       if (isMobile) {
+      // Редкие полосы для телефонов (каждые 8 пикселей)
+      ctx.fillStyle = "rgba(0, 20, 0, 0.15)";
+      for (let y = 0; y < canvas.height; y += 8) {
+        ctx.fillRect(0, y, canvas.width, 2);
+      }
+    } else {
+      // Частые полосы для ПК (каждые 4 пикселя)
       ctx.fillStyle = "rgba(0, 20, 0, 0.15)";
       for (let y = 0; y < canvas.height; y += 4) {
         ctx.fillRect(0, y, canvas.width, 2);
