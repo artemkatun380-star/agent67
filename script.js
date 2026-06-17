@@ -253,7 +253,7 @@ window.onload = function () {
           height: 120,
         },
       ],
-      bullets: 8,
+      bullets: 5,
       agent: { x: canvas.width / 2, y: canvas.height - 40 },
     },
     // Уровень 2
@@ -1949,22 +1949,33 @@ window.onload = function () {
     }
     fullscreenBtn.style.display = "none"; // прячем кнопку после нажатия
   });
-  // Сброс трансформации при изменении полноэкранного режима
-  function resetCanvasTransform() {
-    canvas.style.transform = "translate(0, 0)";
-    shakeAmount = 0; // чтобы тряска не вернула смещение
+  // Надёжный сброс трансформации при любом изменении размера / фулскрине
+  function forceResetCanvasPosition() {
+    // Полностью убираем transform (стираем свойство, а не ставим translate(0,0))
+    canvas.style.transform = "";
+    // Останавливаем тряску, чтобы она не добавила новый transform
+    shakeAmount = 0;
+    cameraShakeX = 0;
+    cameraShakeY = 0;
+    // На всякий случай сбрасываем возможные отступы
+    canvas.style.margin = "0";
+    canvas.style.top = "0";
+    canvas.style.left = "0";
   }
 
-  document.addEventListener("fullscreenchange", resetCanvasTransform);
-  document.addEventListener("webkitfullscreenchange", resetCanvasTransform);
-  document.addEventListener("mozfullscreenchange", resetCanvasTransform);
-  document.addEventListener("MSFullscreenChange", resetCanvasTransform);
+  // Вызываем при любом изменении полноэкранного режима (с префиксами)
+  document.addEventListener("fullscreenchange", forceResetCanvasPosition);
+  document.addEventListener("webkitfullscreenchange", forceResetCanvasPosition);
+  document.addEventListener("mozfullscreenchange", forceResetCanvasPosition);
+  document.addEventListener("MSFullscreenChange", forceResetCanvasPosition);
 
-  // Также сбросим при загрузке и при ресайзе (на всякий случай)
+  // Вызываем при ресайзе окна (с небольшой задержкой, чтобы браузер завершил перестройку)
   window.addEventListener("resize", () => {
-    // Небольшая задержка, чтобы браузер завершил переход в фулскрин
-    setTimeout(resetCanvasTransform, 100);
+    setTimeout(forceResetCanvasPosition, 150);
   });
+
+  // Также гарантированно сбрасываем при запуске игры
+  forceResetCanvasPosition();
 
   // Автоматически запросить фулскрин при первом касании/клике на canvas (для телефонов)
   let fullscreenRequested = false;
