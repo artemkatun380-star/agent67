@@ -269,7 +269,7 @@ window.onload = function () {
           height: 120,
         },
       ],
-      bullets: 8,
+      bullets: 5,
       agent: { x: canvas.width / 2, y: canvas.height - 40 },
     },
     // Уровень 2
@@ -1342,8 +1342,8 @@ window.onload = function () {
       agent.y = canvas.height - 40;
     }
     agent.y -= 30;
-    if (isMobile) agent.y -= 10; // дополнительный подъём на телефонах
-
+    agent.y -= 30;
+    if (isMobile) agent.y -= 20; // теперь общее смещение -50 пикселей
     restartButton.style.display = "none";
     levelSelectButton.style.display = "none";
     agentAngle = 0;
@@ -1425,7 +1425,7 @@ window.onload = function () {
 
     const dirX = dx / distance;
     const dirY = dy / distance;
-    const speed = 10;
+    const speed = isMobile ? 14 : 10;
 
     bullets.push({
       x: lastMuzzle.x,
@@ -1491,7 +1491,7 @@ window.onload = function () {
         if (distance >= 5) {
           const dirX = dx / distance;
           const dirY = dy / distance;
-          const speed = 10;
+          const speed = isMobile ? 14 : 10;
           bullets.push({
             x: lastMuzzle.x,
             y: lastMuzzle.y,
