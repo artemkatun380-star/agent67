@@ -120,7 +120,6 @@ window.onload = function () {
   let gameOver = false;
   let killCount = 0;
 
-  // Агент: исходный размер 250, на мобильных визуально увеличится в функциях отрисовки
   const agent = {
     x: canvas.width / 2,
     y: canvas.height - 40,
@@ -169,10 +168,18 @@ window.onload = function () {
   }
   loadSound("click", "sounds/click.mp3");
 
-  function playClickSound() { playSound("click", 0.7); }
-  function playVictorySound() { playSound("victory", 0.6); }
-  function fireSound() { playSound("shot", 0.8); }
-  function ricochetSound() { playSound("ricochet", 0.5); }
+  function playClickSound() {
+    playSound("click", 0.7);
+  }
+  function playVictorySound() {
+    playSound("victory", 0.6);
+  }
+  function fireSound() {
+    playSound("shot", 0.8);
+  }
+  function ricochetSound() {
+    playSound("ricochet", 0.5);
+  }
 
   // =============================================
   // ЗАГРУЗКА ИЗОБРАЖЕНИЙ
@@ -243,7 +250,7 @@ window.onload = function () {
 
   // --- УРОВНИ (без изменений) ---
   const levels = [
-   // Уровень 1
+    // Уровень 1
     {
       enemies: [
         { x: 200, y: 100, size: 120 },
@@ -255,7 +262,12 @@ window.onload = function () {
       walls: [
         { x: canvas.width / 2 - 120, y: 140, width: 240, height: 15 },
         { x: 100, y: canvas.height / 2 - 60, width: 15, height: 120 },
-        { x: canvas.width - 112, y: canvas.height / 2 - 60, width: 15, height: 120 },
+        {
+          x: canvas.width - 112,
+          y: canvas.height / 2 - 60,
+          width: 15,
+          height: 120,
+        },
       ],
       bullets: 5,
       agent: { x: canvas.width / 2, y: canvas.height - 40 },
@@ -272,7 +284,12 @@ window.onload = function () {
       walls: [
         { x: canvas.width / 2 - 100, y: 130, width: 200, height: 15 },
         { x: 110, y: canvas.height / 2 - 40, width: 15, height: 100 },
-        { x: canvas.width - 125, y: canvas.height / 2 - 40, width: 15, height: 100 },
+        {
+          x: canvas.width - 125,
+          y: canvas.height / 2 - 40,
+          width: 15,
+          height: 100,
+        },
       ],
       bullets: 4,
       agent: { x: canvas.width / 2 - 200, y: canvas.height - 60 },
@@ -307,7 +324,12 @@ window.onload = function () {
       ],
       walls: [
         { x: 100, y: canvas.height / 2 - 60, width: 15, height: 120 },
-        { x: canvas.width - 115, y: canvas.height / 2 - 60, width: 15, height: 120 },
+        {
+          x: canvas.width - 115,
+          y: canvas.height / 2 - 60,
+          width: 15,
+          height: 120,
+        },
         { x: canvas.width / 2 - 100, y: 170, width: 200, height: 15 },
       ],
       bullets: 4,
@@ -428,7 +450,12 @@ window.onload = function () {
       walls: [
         { x: canvas.width / 2 - 100, y: 150, width: 200, height: 15 },
         { x: 150, y: canvas.height / 2 - 50, width: 15, height: 100 },
-        { x: canvas.width - 165, y: canvas.height / 2 - 50, width: 15, height: 100 },
+        {
+          x: canvas.width - 165,
+          y: canvas.height / 2 - 50,
+          width: 15,
+          height: 100,
+        },
       ],
       bullets: 4,
       agent: { x: canvas.width / 2, y: canvas.height - 40 },
@@ -1286,7 +1313,6 @@ window.onload = function () {
     },
   ];
 
-
   function loadLevel(levelIndex) {
     if (levelIndex >= levels.length) {
       gameState = "victory";
@@ -1316,6 +1342,7 @@ window.onload = function () {
       agent.y = canvas.height - 40;
     }
     agent.y -= 30;
+    if (isMobile) agent.y -= 10; // дополнительный подъём на телефонах
 
     restartButton.style.display = "none";
     levelSelectButton.style.display = "none";
@@ -1417,62 +1444,74 @@ window.onload = function () {
   });
 
   // --- TOUCH УПРАВЛЕНИЕ ---
-  canvas.addEventListener("touchstart", function (e) {
-    if (gameState !== "playing") return;
-    e.preventDefault();
-    const touch = e.touches[0];
-    const { x, y } = getCanvasCoords(touch.clientX, touch.clientY);
-    mouseX = x;
-    mouseY = y;
-    const dx = mouseX - agent.x;
-    const dy = mouseY - agent.y;
-    agentAngle = Math.atan2(-dy, dx);
-  }, { passive: false });
+  canvas.addEventListener(
+    "touchstart",
+    function (e) {
+      if (gameState !== "playing") return;
+      e.preventDefault();
+      const touch = e.touches[0];
+      const { x, y } = getCanvasCoords(touch.clientX, touch.clientY);
+      mouseX = x;
+      mouseY = y;
+      const dx = mouseX - agent.x;
+      const dy = mouseY - agent.y;
+      agentAngle = Math.atan2(-dy, dx);
+    },
+    { passive: false },
+  );
 
-  canvas.addEventListener("touchmove", function (e) {
-    if (gameState !== "playing") return;
-    e.preventDefault();
-    const touch = e.touches[0];
-    const { x, y } = getCanvasCoords(touch.clientX, touch.clientY);
-    mouseX = x;
-    mouseY = y;
-    const dx = mouseX - agent.x;
-    const dy = mouseY - agent.y;
-    agentAngle = Math.atan2(-dy, dx);
-  }, { passive: false });
+  canvas.addEventListener(
+    "touchmove",
+    function (e) {
+      if (gameState !== "playing") return;
+      e.preventDefault();
+      const touch = e.touches[0];
+      const { x, y } = getCanvasCoords(touch.clientX, touch.clientY);
+      mouseX = x;
+      mouseY = y;
+      const dx = mouseX - agent.x;
+      const dy = mouseY - agent.y;
+      agentAngle = Math.atan2(-dy, dx);
+    },
+    { passive: false },
+  );
 
-  canvas.addEventListener("touchend", function (e) {
-    if (gameState !== "playing") return;
-    e.preventDefault();
-    const touch = e.changedTouches[0];
-    const { x, y } = getCanvasCoords(touch.clientX, touch.clientY);
+  canvas.addEventListener(
+    "touchend",
+    function (e) {
+      if (gameState !== "playing") return;
+      e.preventDefault();
+      const touch = e.changedTouches[0];
+      const { x, y } = getCanvasCoords(touch.clientX, touch.clientY);
 
-    if (bulletsLeft > 0 && !levelComplete && !gameOver) {
-      const dx = x - lastMuzzle.x;
-      const dy = y - lastMuzzle.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      if (distance >= 5) {
-        const dirX = dx / distance;
-        const dirY = dy / distance;
-        const speed = 10;
-        bullets.push({
-          x: lastMuzzle.x,
-          y: lastMuzzle.y,
-          vx: dirX * speed,
-          vy: dirY * speed,
-          radius: 3,
-          active: true,
-          ricochets: 0,
-          trail: [],
-        });
-        bulletsLeft--;
-        shakeAmount = INITIAL_SHAKE;
-        fireSound();
+      if (bulletsLeft > 0 && !levelComplete && !gameOver) {
+        const dx = x - lastMuzzle.x;
+        const dy = y - lastMuzzle.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance >= 5) {
+          const dirX = dx / distance;
+          const dirY = dy / distance;
+          const speed = 10;
+          bullets.push({
+            x: lastMuzzle.x,
+            y: lastMuzzle.y,
+            vx: dirX * speed,
+            vy: dirY * speed,
+            radius: 3,
+            active: true,
+            ricochets: 0,
+            trail: [],
+          });
+          bulletsLeft--;
+          shakeAmount = INITIAL_SHAKE;
+          fireSound();
+        }
       }
-    }
-    mouseX = agent.x;
-    mouseY = agent.y;
-  }, { passive: false });
+      mouseX = agent.x;
+      mouseY = agent.y;
+    },
+    { passive: false },
+  );
 
   // --- ФИЗИКА ---
   function handleWallCollision(bullet, wall) {
@@ -1517,17 +1556,28 @@ window.onload = function () {
   function drawAgentWithArm() {
     const bodyImg = images.agentBody;
     const armImg = images.agentArm;
-    const scale = isMobile ? 1.4 : 1.0;   // мобильный множитель
+    const scale = isMobile ? 1.4 : 1.0; // мобильный множитель
     const agentHeight = agent.height * scale;
     const agentWidth = agentHeight * AGENT_ASPECT;
 
     if (!bodyImg.complete || !armImg.complete) {
       ctx.fillStyle = "#fff";
-      ctx.fillRect(agent.x - agentWidth / 2, agent.y - agentHeight / 2, agentWidth, agentHeight);
+      ctx.fillRect(
+        agent.x - agentWidth / 2,
+        agent.y - agentHeight / 2,
+        agentWidth,
+        agentHeight,
+      );
       return { x: agent.x + agentWidth / 2, y: agent.y };
     }
 
-    ctx.drawImage(bodyImg, agent.x - agentWidth / 2, agent.y - agentHeight / 2, agentWidth, agentHeight);
+    ctx.drawImage(
+      bodyImg,
+      agent.x - agentWidth / 2,
+      agent.y - agentHeight / 2,
+      agentWidth,
+      agentHeight,
+    );
 
     const shoulderX = agent.x + agentWidth * -0.05;
     const shoulderY = agent.y - agentHeight * 0.12;
@@ -1589,7 +1639,13 @@ window.onload = function () {
           tmpCtx.globalCompositeOperation = "source-in";
           tmpCtx.fillStyle = outlineColor;
           tmpCtx.fillRect(0, 0, width, height);
-          ctx.drawImage(tmpCanvas, x - width / 2 + dx, y - height / 2 + dy, width, height);
+          ctx.drawImage(
+            tmpCanvas,
+            x - width / 2 + dx,
+            y - height / 2 + dy,
+            width,
+            height,
+          );
         }
       }
     }
@@ -1631,7 +1687,7 @@ window.onload = function () {
     }
 
     if (!isMobile) {
-      ctx.fillStyle = 'rgba(0, 20, 0, 0.15)';
+      ctx.fillStyle = "rgba(0, 20, 0, 0.15)";
       for (let y = 0; y < canvas.height; y += 4) {
         ctx.fillRect(0, y, canvas.width, 2);
       }
@@ -1685,7 +1741,7 @@ window.onload = function () {
       const bullet = bullets[i];
       if (!bullet.active) continue;
 
-      const substeps = isMobile ? 2 : 4;
+      const substeps = isMobile ? 1 : 4;
       let collided = false;
       for (let s = 0; s < substeps; s++) {
         bullet.x += bullet.vx / substeps;
@@ -1705,9 +1761,9 @@ window.onload = function () {
         if (!bullet.active || collided) break;
       }
 
-      const maxTrailLength = 12;
+      // След пули только на ПК
       bullet.trail.push({ x: bullet.x, y: bullet.y });
-      if (bullet.trail.length > maxTrailLength) bullet.trail.shift();
+      if (bullet.trail.length > 12) bullet.trail.shift();
 
       for (let enemy of enemies) {
         if (!enemy.active) continue;
@@ -1717,9 +1773,9 @@ window.onload = function () {
 
         const rect = {
           x: enemy.x - enemyWidth * 0.28,
-          y: enemy.y - enemyHeight * 0.33,
+          y: enemy.y - enemyHeight * (isMobile ? 0.36 : 0.33),
           width: enemyWidth * 0.53,
-          height: enemyHeight * 0.72,
+          height: enemyHeight * (isMobile ? 0.82 : 0.72),
         };
 
         if (circleRectCollision(bullet, rect)) {
@@ -1732,7 +1788,14 @@ window.onload = function () {
           const particleCount = isMobile ? 4 : 12;
           for (let j = 0; j < particleCount; j++) {
             explosionParticles.push(
-              new Particle(enemy.x, enemy.y, "rgb(207, 31, 0)", 3, 15 + Math.random() * 10, 4)
+              new Particle(
+                enemy.x,
+                enemy.y,
+                "rgb(207, 31, 0)",
+                3,
+                15 + Math.random() * 10,
+                4,
+              ),
             );
           }
           bullet.ricochets++;
@@ -1781,6 +1844,7 @@ window.onload = function () {
         if (bullet.ricochets > MAX_RICOCHETS) bullet.active = false;
       }
 
+      // Отрисовка следа
       if (bullet.trail.length > 1) {
         ctx.strokeStyle = "#ff0";
         ctx.lineWidth = 2;
