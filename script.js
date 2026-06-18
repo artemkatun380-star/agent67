@@ -1425,7 +1425,7 @@ window.onload = function () {
 
     const dirX = dx / distance;
     const dirY = dy / distance;
-    const speed = isMobile ? 22 : 10;
+    const speed = isMobile ? 25 : 10;
 
     bullets.push({
       x: lastMuzzle.x,
@@ -1780,9 +1780,9 @@ window.onload = function () {
 
         const rect = {
           x: enemy.x - enemyWidth * 0.28,
-          y: enemy.y - enemyHeight * (isMobile ? 0.39 : 0.33), // верх: 0.39 вместо 0.36
+          y: enemy.y - enemyHeight * (isMobile ? 0.39 : 0.33), // верх
           width: enemyWidth * 0.53,
-          height: enemyHeight * (isMobile ? 0.88 : 0.72), // высота: 0.88 вместо 0.82
+          height: enemyHeight * (isMobile ? 0.91 : 0.72), // низ стал 0.91 вместо 0.88
         };
 
         if (circleRectCollision(bullet, rect)) {
