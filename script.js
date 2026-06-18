@@ -1425,7 +1425,7 @@ window.onload = function () {
 
     const dirX = dx / distance;
     const dirY = dy / distance;
-    const speed = isMobile ? 160 : 10;
+    const speed = isMobile ? 30 : 10;
 
     bullets.push({
       x: lastMuzzle.x,
@@ -1491,7 +1491,7 @@ window.onload = function () {
         if (distance >= 5) {
           const dirX = dx / distance;
           const dirY = dy / distance;
-          const speed = isMobile ? 14 : 10;
+          const speed = isMobile ? 30 : 10;
           bullets.push({
             x: lastMuzzle.x,
             y: lastMuzzle.y,
