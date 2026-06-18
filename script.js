@@ -1686,7 +1686,7 @@ window.onload = function () {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-       if (isMobile) {
+    if (isMobile) {
       // Редкие полосы для телефонов (каждые 8 пикселей)
       ctx.fillStyle = "rgba(0, 20, 0, 0.15)";
       for (let y = 0; y < canvas.height; y += 8) {
@@ -1780,9 +1780,9 @@ window.onload = function () {
 
         const rect = {
           x: enemy.x - enemyWidth * 0.28,
-          y: enemy.y - enemyHeight * (isMobile ? 0.36 : 0.33),
+          y: enemy.y - enemyHeight * (isMobile ? 0.39 : 0.33), // верх: 0.39 вместо 0.36
           width: enemyWidth * 0.53,
-          height: enemyHeight * (isMobile ? 0.82 : 0.72),
+          height: enemyHeight * (isMobile ? 0.88 : 0.72), // высота: 0.88 вместо 0.82
         };
 
         if (circleRectCollision(bullet, rect)) {
