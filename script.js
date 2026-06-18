@@ -1491,7 +1491,7 @@ window.onload = function () {
         if (distance >= 5) {
           const dirX = dx / distance;
           const dirY = dy / distance;
-          const speed = isMobile ? 22 : 10;
+          const speed = isMobile ? 25 : 10;
           bullets.push({
             x: lastMuzzle.x,
             y: lastMuzzle.y,
@@ -1770,7 +1770,8 @@ window.onload = function () {
 
       // След пули только на ПК
       bullet.trail.push({ x: bullet.x, y: bullet.y });
-      if (bullet.trail.length > 12) bullet.trail.shift();
+      const maxTrail = isMobile ? 12 : 25; // 25 точек на ПК, 12 на телефоне
+      if (bullet.trail.length > maxTrail) bullet.trail.shift();
 
       for (let enemy of enemies) {
         if (!enemy.active) continue;
