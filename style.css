@@ -44,7 +44,9 @@ body {
   color: #fff;
   border: 2px solid #fff;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
 
 #playButton:hover,
@@ -89,7 +91,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
 
 .level-btn:hover:not(:disabled) {
@@ -241,13 +245,13 @@ canvas {
     gap: 4px;
   }
   /* Кнопка НАЗАД – уменьшена и поднята */
-    #backButton {
+  #backButton {
     font-size: 2vw !important;
     padding: 0.8vw 2vw !important;
     position: relative;
-    top: 5px;          /* оставь как ты настроил */
+    top: 5px; /* оставь как ты настроил */
     margin-top: 0;
-}
+  }
 
   /* Кнопки после раунда не трогаем */
   #restartButton,
@@ -275,7 +279,6 @@ canvas {
       flex-direction: column;
     }
   }
-  
 }
 
 /* Для больших экранов возвращаем фиксированные размеры кнопок */
@@ -309,4 +312,46 @@ canvas {
   cursor: pointer;
   display: none;
   z-index: 1000;
+}
+#loadingScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  font-family: "Courier New", monospace;
+  color: #ff0;
+  text-align: center;
+}
+
+.loading-content h2 {
+  font-size: 48px;
+  letter-spacing: 6px;
+  text-shadow: 0 0 10px #ff0;
+  margin-bottom: 30px;
+}
+
+.progress-bar {
+  width: 300px;
+  height: 20px;
+  border: 2px solid #ff0;
+  margin: 0 auto 15px;
+  background: #111;
+}
+
+#progressFill {
+  width: 0%;
+  height: 100%;
+  background: #ff0;
+  transition: width 0.2s;
+}
+
+#loadingText {
+  font-size: 18px;
+  color: #fff;
 }

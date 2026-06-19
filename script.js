@@ -1956,7 +1956,66 @@ window.onload = function () {
   });
 
   // --- ЗАПУСК ---
-  loadProgress();
-  showMenu();
-  gameLoop();
+  // --- ЗАПУСК С ЭКРАНОМ ЗАГРУЗКИ ---
+  const loadingScreen = document.getElementById("loadingScreen");
+  const progressFill = document.getElementById("progressFill");
+  const loadingText = document.getElementById("loadingText");
+
+  // Собираем все ресурсы, которые нужно загрузить
+  const allResources = [
+    // Изображения
+    ...Object.values(images).map(
+      (img) =>
+        new Promise((resolve) => {
+          if (img.complete) resolve();
+          else {
+            img.onload = resolve;
+            img.onerror = resolve;
+          } // ошибку тоже считаем "готово"
+        }),
+    ),
+    // Звуки
+    ...Object.values(soundCache).map(
+      (audio) =>
+        new Promise((resolve) => {
+          if (audio.readyState >= 2)
+            resolve(); // HAVE_CURRENT_DATA
+          else {
+            audio.addEventListener("canplaythrough", resolve, { once: true });
+            audio.addEventListener("error", resolve, { once: true });
+            audio.load();
+          }
+        }),
+    ),
+  ];
+
+  const totalResources = allResources.length;
+  let loadedCount = 0;
+
+  function updateProgress() {
+    loadedCount++;
+    const percent = Math.floor((loadedCount / totalResources) * 100);
+    progressFill.style.width = percent + "%";
+    loadingText.textContent = `Загрузка... ${percent}%`;
+    if (loadedCount >= totalResources) {
+      // Всё загружено – прячем экран загрузки и запускаем игру
+      loadingScreen.style.display = "none";
+      loadProgress();
+      showMenu();
+      gameLoop();
+    }
+  }
+
+  // Запускаем отслеживание всех ресурсов
+  allResources.forEach((promise) => promise.then(updateProgress));
+
+  // Подстраховка: если что-то зависло, через 10 секунд всё равно запускаем
+  setTimeout(() => {
+    if (loadingScreen.style.display !== "none") {
+      loadingScreen.style.display = "none";
+      loadProgress();
+      showMenu();
+      gameLoop();
+    }
+  }, 10000);
 };
