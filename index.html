@@ -11,6 +11,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Agent 67 — Миссия</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="https://yandex.ru/games/sdk/v2"></script>
+    <script>
+      // Минимальная инициализация SDK
+      YaGames.init().then(function (ysdk) {
+        console.log("Яндекс.Игры SDK готов");
+        // Здесь позже можно добавить рекламу или сохранения, если захочешь
+        // Например, сохранить ссылку на ysdk в глобальную переменную
+        window.ysdk = ysdk;
+      });
+    </script>
   </head>
   <body>
     <div id="loadingScreen">
